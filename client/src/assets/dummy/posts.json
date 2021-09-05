@@ -1,0 +1,44 @@
+[
+  {
+    "id": 1,
+    "title": "How to Generate Serverless HTTP API Mocking Using Prism",
+    "slug": "how-to-generate-serverless-http-api-mocking-using-prism",
+    "thumbnail": "/media/images/posts/ror_mvp_blogpost_cover-.jpeg",
+    "excerpt": "Recently, NextJS is gaining more and more popularity as a way to build React applications. Certainly, a major contributor is the fact that NextJS offers several different data fetching strategies."
+  },
+  {
+    "id": 2,
+    "title": "Is Ruby on Rails a Good Technology to Build an MVP?",
+    "slug": "is-ruby-on-rails-a-good-technology-to-build-an-mvp",
+    "thumbnail": "/media/images/posts/thecodest_blog_post_coverproduct_design_agency_cover.jpeg",
+    "excerpt": "A minimum viable product (MVP) is one of the principles of the Lean Startup Methodology. The goal is to help the entrepreneurs start the process of learning as soon as possible. The product is not necessarily meant to be small or of poor quality; an MVP is simply the fastest way to start getting feedback by using a minimum amount of effort and resources."
+  },
+  {
+    "id": 3,
+    "title": "How to Build a Digital Product from Scratch",
+    "slug": "how-to-build-a-digital-product-from-scratch",
+    "thumbnail": "/media/images/posts/product-design-steps.jpeg",
+    "excerpt": "For some of us, the product design process still remains a mystery. You might conclude that it consists of many indescribable and chaotic steps – it surely begins with product idealization and ends with product launch, but the middle part is basically a gigantic question mark."
+  },
+  {
+    "id": 4,
+    "title": "MOM! He Blocked Threads Again!",
+    "slug": "mom-he-blocked-threads-again",
+    "thumbnail": "/media/images/posts/thecodest_blog_post_coverproduct_design_agency_-5-.jpeg",
+    "excerpt": "“Don`t block the event loop…” – you've probably heard this sentence many times… I'm not surprised because it is one of the most important assumptions when working with Node. But there is also a second “thing” which you should refrain from blocking – the Worker Pool. If neglected, it can have a significant impact on application performance and even its security."
+  },
+  {
+    "id": 5,
+    "title": "How to Find the Best Product Design Services Company?",
+    "slug": "how-to-find-the-best-product-design-services-company",
+    "thumbnail": "/media/images/posts/product_design_services_company_cover.jpeg",
+    "excerpt": "Nowadays, clients’ needs grow at an astonishing pace. In order to satisfy your customers and build a product worth their trust, you might want to hire a product design services company. What are the advantages? A well-versed team of specialists can quickly help you achieve your business goals in crafting your idea. This decision might be an amazing way to start building products your targeted group deeply desires."
+  },
+  {
+    "id": 6,
+    "title": "5 Connecticut Startups on the Rise",
+    "slug": "/5-connecticut-startups-on-the-rise",
+    "thumbnail": "/media/images/posts/grafika-art-.jpeg",
+    "excerpt": "Cities like San Francisco, Boston, and New York have always been buzzing with the startup scene. But what about New York’s neighbor, Connecticut?"
+  }
+]
