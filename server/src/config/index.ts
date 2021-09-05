@@ -1,1 +1,2 @@
-export { default as databaseConfig } from './databaseConfig';
+export * from './databaseConfig';
+export * from './jwtConfig';

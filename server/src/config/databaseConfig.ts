@@ -3,7 +3,7 @@ import { MySQL } from '../interfaces';
 const jsEntities = ['out/src/modules/**/models/*.js'];
 const tsEntities = ['src/modules/**/models/*.ts'];
 
-const databaseConfig = (): MySQL => ({
+export const databaseConfig = (): MySQL => ({
   type: process.env.DB_CONNECTION === 'mysql' ? 'mysql' : 'mariadb',
   host: process.env.DB_HOST || 'localhost',
   port: parseInt(process.env.DB_PORT, 10) || 3306,
@@ -14,5 +14,3 @@ const databaseConfig = (): MySQL => ({
   logging: false,
   entities: process.env.NODE_ENV === 'production' ? jsEntities : tsEntities,
 });
-
-export default databaseConfig;

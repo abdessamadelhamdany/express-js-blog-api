@@ -1,9 +1,8 @@
 import cors from 'cors';
 import helmet from 'helmet';
 import express, { Request, Response, NextFunction } from 'express';
-import { Controller } from '@/src/interfaces';
-import { postsController } from './modules/posts';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
+import modules from './modules';
 
 export default class App {
   public origin: string[];
@@ -31,11 +30,11 @@ export default class App {
   }
 
   private resgiterControllers(): void {
-    const controllers: Controller[] = [postsController];
-
-    controllers.forEach((controller) => {
+    modules.controllers.forEach((controller) => {
       controller.forEach((action) => {
         const { path, method, handler, middlewares } = action;
+
+        console.log(method, path);
 
         this.defaultApp[method](`/api/${path}`, middlewares, handler);
       });

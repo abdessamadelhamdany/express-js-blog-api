@@ -1,9 +1,7 @@
-import { Router, Request, Response } from 'express';
+import { Request, Response } from 'express';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import { Controller } from '@/src/interfaces';
 import { getAllPosts } from './posts.service';
-
-const router: Router = Router();
 
 const actions: Controller = [];
 
@@ -20,7 +18,5 @@ actions.push({
   },
   middlewares: [],
 });
-
-router.get('/');
 
 export default actions;
