@@ -2,6 +2,7 @@ require('dotenv').config();
 import 'reflect-metadata';
 import App from './app';
 import { databaseConfig } from './config';
+import logger from './loaders/logger';
 import startDatabase from './loaders/typeorm';
 
 (async () => {
@@ -16,7 +17,7 @@ import startDatabase from './loaders/typeorm';
         throw err;
       }
 
-      console.log(`Server listening on http://localhost:${port}`);
+      logger.info(`Server listening on http://localhost:${port}`);
     });
   } catch (err) {
     console.error(err);

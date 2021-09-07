@@ -14,7 +14,6 @@ export default class App {
   public constructor() {
     this.origin = process.env.ORIGIN.split(',') || ['http://localhost:1774'];
     this.defaultApp = express();
-
     this.registerMiddlewares();
     this.registerModules();
     this.registerDefaultRoutes();
