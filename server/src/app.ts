@@ -1,5 +1,8 @@
+import path from 'path';
 import cors from 'cors';
 import helmet from 'helmet';
+import morgan from 'morgan';
+import * as rfs from 'rotating-file-stream';
 import express, { Request, Response, NextFunction } from 'express';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import modules from './modules';
@@ -27,6 +30,15 @@ export default class App {
     this.defaultApp.use(express.json());
     this.defaultApp.use(cors({ origin: this.origin }));
     this.defaultApp.use(helmet());
+    this.defaultApp.use(
+      morgan('combined', {
+        stream: rfs.createStream('access.log', {
+          interval: '1d',
+          path: path.join(__dirname, '..', 'logs'),
+          teeToStdout: true,
+        }),
+      }),
+    );
   }
 
   private registerModules(): void {

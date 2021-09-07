@@ -1,3 +1,4 @@
+import { __prod__ } from '../constants';
 import { MySQL } from '../interfaces';
 
 const jsEntities = ['build/modules/**/models/*.js'];
@@ -12,5 +13,5 @@ export const databaseConfig = (): MySQL => ({
   password: process.env.DB_PASSWORD,
   synchronize: true,
   logging: false,
-  entities: process.env.NODE_ENV === 'production' ? jsEntities : tsEntities,
+  entities: __prod__ ? jsEntities : tsEntities,
 });
