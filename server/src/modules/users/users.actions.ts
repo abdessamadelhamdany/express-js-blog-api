@@ -1,16 +1,12 @@
 import jwt from 'jsonwebtoken';
 import { Request, Response } from 'express';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
-import { create } from './users.service';
 import { jwtConfig } from '../../config';
-import { Controller } from '@/src/interfaces';
+import { create } from './users.service';
+import { IUsersActions } from './users.interfaces';
 
-const actions: Controller = [];
-
-actions.push({
-  path: 'register',
-  method: 'post',
-  handler: async (req: Request, res: Response) => {
+export default {
+  async register(req: Request, res: Response) {
     try {
       const [user, errors] = await create(req.body);
 
@@ -36,7 +32,4 @@ actions.push({
       });
     }
   },
-  middlewares: [],
-});
-
-export default actions;
+} as IUsersActions;

@@ -1,14 +1,10 @@
 import { Request, Response } from 'express';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
-import { Controller } from '@/src/interfaces';
 import { getAllPosts } from './posts.service';
+import { IPostsActions } from './posts.interfaces';
 
-const actions: Controller = [];
-
-actions.push({
-  path: 'posts',
-  method: 'get',
-  handler: async (_: Request, res: Response) => {
+export default {
+  async index(_: Request, res: Response) {
     const posts = await getAllPosts();
 
     res.status(StatusCodes.OK).json({
@@ -16,7 +12,9 @@ actions.push({
       status: { code: StatusCodes.OK, phrase: ReasonPhrases.OK },
     });
   },
-  middlewares: [],
-});
-
-export default actions;
+  async create(_: Request, res: Response) {
+    res.status(StatusCodes.CREATED).json({
+      status: { code: StatusCodes.CREATED, phrase: ReasonPhrases.CREATED },
+    });
+  },
+} as IPostsActions;

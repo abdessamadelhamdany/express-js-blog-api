@@ -1,3 +1,9 @@
+import express from 'express';
+
+export interface IUsersActions {
+  register: express.Handler;
+}
+
 export enum UserRole {
   ADMIN = 'admin',
   EDITOR = 'editor',

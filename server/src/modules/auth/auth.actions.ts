@@ -1,16 +1,12 @@
 import jwt from 'jsonwebtoken';
 import { Request, Response } from 'express';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
-import { jwtConfig } from '../../config';
-import { Controller } from '@/src/interfaces';
 import { login } from './auth.service';
+import { jwtConfig } from '../../config';
+import { IAuthActions } from './auth.interfaces';
 
-const actions: Controller = [];
-
-actions.push({
-  path: 'login',
-  method: 'post',
-  handler: async (req: Request, res: Response) => {
+export default {
+  async login(req: Request, res: Response) {
     try {
       const [user, errors] = await login(req.body);
 
@@ -42,7 +38,4 @@ actions.push({
       });
     }
   },
-  middlewares: [],
-});
-
-export default actions;
+} as IAuthActions;

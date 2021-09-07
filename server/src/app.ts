@@ -13,7 +13,7 @@ export default class App {
     this.defaultApp = express();
 
     this.registerMiddlewares();
-    this.resgiterControllers();
+    this.registerModules();
     this.registerDefaultRoutes();
   }
 
@@ -29,15 +29,27 @@ export default class App {
     this.defaultApp.use(helmet());
   }
 
-  private resgiterControllers(): void {
-    modules.controllers.forEach((controller) => {
-      controller.forEach((action) => {
-        const { path, method, handler, middlewares } = action;
+  private registerModules(): void {
+    const routes = modules.getRoutes();
 
-        console.log(method, path);
+    routes.forEach((route) => {
+      const { path, method, action } = route;
 
-        this.defaultApp[method](`/api/${path}`, middlewares, handler);
+      if (typeof action === 'string') {
+        throw `Action ${action} should be of type express.Handler.`;
+      }
+
+      const middlewares: express.Handler[] = [];
+
+      route.middlewares.forEach((middleware) => {
+        if (typeof middleware === 'string') {
+          throw `Middleware ${middleware} should be of type express.Handler.`;
+        }
+
+        middlewares.push(middleware);
       });
+
+      this.defaultApp[method](`/api/${path}`, middlewares, action);
     });
   }
 

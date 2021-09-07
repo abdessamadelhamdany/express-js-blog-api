@@ -1,4 +1,7 @@
 Todos
+https://github.com/ocruzv/typescript-typeorm-express-starter/blob/master/src/controller/AuthController.ts
+https://quilljs.com/docs/download/
+
 https://openid.net/connect/
 
 https://github.com/trinhtam/editorjs-hyperlink
