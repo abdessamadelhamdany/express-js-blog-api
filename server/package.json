@@ -5,15 +5,16 @@
   "author": "Abdessamad El Hamdany",
   "private": true,
   "scripts": {
-    "build": "tsc",
-    "start": "node ./build/server.js",
-    "dev": "set debug=* && ts-node-dev --respawn --transpile-only src/server.ts",
-    "prod": "npm run build && npm run start"
+    "build": "cross-env NODE_ENV=production tsc",
+    "start": "cross-env NODE_ENV=production node ./build/server.js",
+    "dev": "cross-env NODE_ENV=development ts-node-dev --respawn --transpile-only src/server.ts",
+    "prod": "rm -rf ./build && npm run build && npm run start"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "class-validator": "^0.13.1",
     "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "helmet": "^4.6.0",

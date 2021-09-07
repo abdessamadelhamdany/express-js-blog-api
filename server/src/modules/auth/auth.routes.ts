@@ -8,4 +8,11 @@ export default [
     description: 'Login users',
     middlewares: [],
   },
+  {
+    path: 'register',
+    method: 'post',
+    action: 'register',
+    description: 'Create new account',
+    middlewares: [],
+  },
 ] as IRoute[];

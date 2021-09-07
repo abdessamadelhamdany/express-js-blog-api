@@ -6,7 +6,7 @@ export default [
     method: 'get',
     action: 'index',
     description: 'Get all public posts',
-    middlewares: ['test'],
+    middlewares: [],
   },
   {
     path: 'posts',

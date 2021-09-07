@@ -7,7 +7,6 @@ import startDatabase from './loaders/typeorm';
 (async () => {
   try {
     await startDatabase(databaseConfig());
-    console.log('Database connected successfully.');
 
     const app = new App();
     const port = parseInt(process.env.PORT, 10) || 3000;

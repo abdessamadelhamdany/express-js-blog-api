@@ -1,10 +1,14 @@
 import express from 'express';
 
-export enum PostStatus {
-  DRAFT = 'draft',
-  PUBLIC = 'public',
+namespace PostsInterfaces {
+  export enum PostStatus {
+    DRAFT = 'draft',
+    PUBLIC = 'public',
+  }
+
+  export interface IPostsActions {
+    index: express.Handler;
+  }
 }
 
-export interface IPostsActions {
-  index: express.Handler;
-}
+export default PostsInterfaces;

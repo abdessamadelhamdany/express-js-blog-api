@@ -1,6 +1,6 @@
 import { MySQL } from '../interfaces';
 
-const jsEntities = ['out/src/modules/**/models/*.js'];
+const jsEntities = ['build/modules/**/models/*.js'];
 const tsEntities = ['src/modules/**/models/*.ts'];
 
 export const databaseConfig = (): MySQL => ({

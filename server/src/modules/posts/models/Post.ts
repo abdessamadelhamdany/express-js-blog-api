@@ -8,7 +8,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { IsOptional, IsNotEmpty, IsEnum } from 'class-validator';
-import { PostStatus } from '../posts.interfaces';
+import PostsInterfaces from '../posts.interfaces';
 
 @Entity()
 @Unique(['slug'])
@@ -48,11 +48,11 @@ export class Post {
 
   @Column({
     type: 'enum',
-    enum: PostStatus,
-    default: PostStatus.DRAFT,
+    enum: PostsInterfaces.PostStatus,
+    default: PostsInterfaces.PostStatus.DRAFT,
   })
-  @IsEnum(PostStatus)
-  status?: PostStatus;
+  @IsEnum(PostsInterfaces.PostStatus)
+  status?: PostsInterfaces.PostStatus;
 
   @CreateDateColumn()
   createdAt?: Date;

@@ -1,10 +1,12 @@
 import { getRepository } from 'typeorm';
 import { Post } from './models/Post';
 
-export async function getAllPosts(): Promise<Post[]> {
-  const postRepository = getRepository(Post);
+export default {
+  async getAllPosts(): Promise<Post[]> {
+    const postRepository = getRepository(Post);
 
-  const posts = await postRepository.find();
+    const posts = await postRepository.find();
 
-  return posts;
-}
+    return posts;
+  },
+};

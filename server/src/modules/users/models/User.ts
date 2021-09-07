@@ -9,7 +9,7 @@ import {
   DeleteDateColumn,
 } from 'typeorm';
 import { Length, IsOptional, IsNotEmpty, IsEmail, IsEnum } from 'class-validator';
-import { UserRole } from '../users.interfaces';
+import UsersInterfaces from '../users.interfaces';
 
 @Entity()
 @Unique(['email', 'username'])
@@ -46,12 +46,12 @@ export default class User {
 
   @Column({
     type: 'enum',
-    enum: UserRole,
-    default: UserRole.GUEST,
+    enum: UsersInterfaces.UserRole,
+    default: UsersInterfaces.UserRole.GUEST,
   })
-  @IsEnum(UserRole)
+  @IsEnum(UsersInterfaces.UserRole)
   @IsOptional()
-  role: UserRole;
+  role: UsersInterfaces.UserRole;
 
   @Column({ nullable: true })
   confirmedAt: Date;

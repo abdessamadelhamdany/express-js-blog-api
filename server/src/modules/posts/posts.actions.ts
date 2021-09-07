@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
-import { getAllPosts } from './posts.service';
-import { IPostsActions } from './posts.interfaces';
+import postsService from './posts.service';
+import PostsInterfaces from './posts.interfaces';
 
 export default {
   async index(_: Request, res: Response) {
-    const posts = await getAllPosts();
+    const posts = await postsService.getAllPosts();
 
     res.status(StatusCodes.OK).json({
       posts,
@@ -17,4 +17,4 @@ export default {
       status: { code: StatusCodes.CREATED, phrase: ReasonPhrases.CREATED },
     });
   },
-} as IPostsActions;
+} as PostsInterfaces.IPostsActions;
