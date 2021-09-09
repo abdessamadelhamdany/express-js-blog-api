@@ -7,13 +7,15 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
+  OneToMany,
 } from 'typeorm';
 import { Length, IsOptional, IsNotEmpty, IsEmail, IsEnum } from 'class-validator';
+import { Post } from '../../posts/models/Post';
 import UsersInterfaces from '../users.interfaces';
 
 @Entity()
 @Unique(['email', 'username'])
-export default class User {
+export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -52,6 +54,9 @@ export default class User {
   @IsEnum(UsersInterfaces.UserRole)
   @IsOptional()
   role: UsersInterfaces.UserRole;
+
+  @OneToMany(() => Post, (post) => post.user)
+  posts: Post[];
 
   @Column({ nullable: true })
   confirmedAt: Date;

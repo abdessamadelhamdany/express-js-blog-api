@@ -1,5 +1,4 @@
 import path from 'path';
-import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import * as rfs from 'rotating-file-stream';
@@ -8,11 +7,9 @@ import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import modules from './modules';
 
 export default class App {
-  public origin: string[];
   public defaultApp: express.Application;
 
   public constructor() {
-    this.origin = process.env.ORIGIN.split(',') || ['http://localhost:1774'];
     this.defaultApp = express();
     this.registerMiddlewares();
     this.registerModules();
@@ -21,13 +18,13 @@ export default class App {
 
   private defaultHandler(_: Request, res: Response) {
     res.status(StatusCodes.OK).json({
+      version: '1.0.0', //Read version from package.json
       status: { code: StatusCodes.OK, phrase: ReasonPhrases.OK },
     });
   }
 
   private registerMiddlewares(): void {
     this.defaultApp.use(express.json());
-    this.defaultApp.use(cors({ origin: this.origin }));
     this.defaultApp.use(helmet());
     this.defaultApp.use(
       morgan('combined', {
@@ -60,13 +57,12 @@ export default class App {
         middlewares.push(middleware);
       });
 
-      this.defaultApp[method](`/api/${path}`, middlewares, action);
+      this.defaultApp[method](`/${path}`, middlewares, action);
     });
   }
 
   private registerDefaultRoutes(): void {
     this.defaultApp.get('/', this.defaultHandler);
-    this.defaultApp.get('/api', this.defaultHandler);
 
     /** Handler unhandled requests */
     this.defaultApp.use((_: Request, res: Response, __: NextFunction) => {

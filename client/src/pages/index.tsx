@@ -1,4 +1,6 @@
 import styled from 'styled-components';
+import { DefaultLayout } from '@/src/layouts/Default';
+import { Container } from '@/src/core-ui';
 
 const Title = styled.h1`
   font-size: 50px;
@@ -6,5 +8,11 @@ const Title = styled.h1`
 `;
 
 export default function Home() {
-  return <Title>Welcome</Title>;
+  return (
+    <DefaultLayout>
+      <Container>
+        <Title>Welcome</Title>
+      </Container>
+    </DefaultLayout>
+  );
 }

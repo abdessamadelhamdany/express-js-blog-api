@@ -6,8 +6,10 @@ import {
   DeleteDateColumn,
   UpdateDateColumn,
   PrimaryGeneratedColumn,
+  ManyToOne,
 } from 'typeorm';
 import { IsOptional, IsNotEmpty, IsEnum } from 'class-validator';
+import { User } from '../../users/models/User';
 import PostsInterfaces from '../posts.interfaces';
 
 @Entity()
@@ -53,6 +55,9 @@ export class Post {
   })
   @IsEnum(PostsInterfaces.PostStatus)
   status?: PostsInterfaces.PostStatus;
+
+  @ManyToOne(() => User, (user) => user.posts)
+  user: User;
 
   @CreateDateColumn()
   createdAt?: Date;

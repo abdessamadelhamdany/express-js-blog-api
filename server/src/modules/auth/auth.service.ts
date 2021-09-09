@@ -1,6 +1,6 @@
 import { getRepository, Repository } from 'typeorm';
 import { isNotEmpty, isEmail, ValidationError } from 'class-validator';
-import User from '../users/models/User';
+import { User } from '../users/models/User';
 import AuthInterfaces from './auth.interfaces';
 import usersService from '../users/users.service';
 import UsersInterfaces from '../users/users.interfaces';
