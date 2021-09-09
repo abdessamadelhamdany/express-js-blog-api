@@ -7,11 +7,11 @@ interface Props extends SVGAttributes<SVGElement> {
 
 const Logo: FC<Props> = (props) => {
   const { height = '100%', variant = 'dark', href = '/' } = props;
-  const logoSvg = require(`@/src/assets/logo/${variant}.svg`).default;
+  const LogoSvg = require(`@/src/assets/logo/${variant}.svg`).default;
 
   return (
     <Link href={href}>
-      <a>{logoSvg({ ...props, height, href: undefined, variant: undefined })}</a>
+      <a>{LogoSvg({ ...props, height, href: undefined, variant: undefined })}</a>
     </Link>
   );
 };

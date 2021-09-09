@@ -16,7 +16,7 @@ const Navbar = () => {
       <Section>
         <Menu>
           <Link href="/dashboard" passHref>
-            <MenuItem className={pathname === '/dashboard' && 'active'}>
+            <MenuItem className={pathname === '/dashboard' ? 'active' : undefined}>
               <MenuItemContent>
                 <HomeIcon />
                 <span>Home</span>
@@ -25,7 +25,7 @@ const Navbar = () => {
           </Link>
 
           <Link href="/dashboard/posts" passHref>
-            <MenuItem className={pathname.startsWith('/dashboard/posts') && 'active'}>
+            <MenuItem className={pathname.startsWith('/dashboard/posts') ? 'active' : undefined}>
               <MenuItemContent>
                 <DocumentTextIcon />
                 <span>Posts</span>
@@ -37,7 +37,7 @@ const Navbar = () => {
         <Footer>
           <Menu>
             <Link href="/" passHref>
-              <MenuItem className={pathname.startsWith('/dashboard/profile') && 'active'}>
+              <MenuItem className={pathname.startsWith('/dashboard/profile') ? 'active' : undefined}>
                 <MenuItemContent>
                   <UserCircleIcon />
                   <span>Profile</span>
@@ -45,7 +45,7 @@ const Navbar = () => {
               </MenuItem>
             </Link>
             <Link href="/" passHref>
-              <MenuItem className={pathname.startsWith('/dashboard/profile/preferences') && 'active'}>
+              <MenuItem className={pathname.startsWith('/dashboard/profile/preferences') ? 'active' : undefined}>
                 <MenuItemContent>
                   <CogIcon />
                   <span>Preferences</span>
@@ -53,7 +53,7 @@ const Navbar = () => {
               </MenuItem>
             </Link>
             <Link href="/dashboard/settings" passHref>
-              <MenuItem className={pathname.startsWith('/dashboard/settings') && 'active'}>
+              <MenuItem className={pathname.startsWith('/dashboard/settings') ? 'active' : undefined}>
                 <MenuItemContent>
                   <AdjustmentsIcon />
                   <span>Project Settings</span>

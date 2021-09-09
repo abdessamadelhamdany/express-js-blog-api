@@ -1,5 +1,5 @@
 import { slugify } from '@/src/lib/helpers';
-import { FC, useContext, useEffect, useState } from 'react';
+import { FC, useContext, ChangeEvent } from 'react';
 import { TextArea } from '@/src/styles/common/TextArea';
 import { RefreshIcon } from '@heroicons/react/outline';
 import { Flex, IconAction } from '@/src/core-ui';
@@ -10,13 +10,13 @@ import { PostFormContext } from '@/src/contexts';
 
 interface Props {
   isOpen?: boolean;
-  setIsOpen?: (isOpen: boolean) => void;
+  setIsOpen: (isOpen: boolean) => void;
 }
 
 const PostSettings: FC<Props> = ({ isOpen = false, setIsOpen }) => {
   const { postForm, setPostForm } = useContext(PostFormContext);
 
-  const onSlugChange = ({ target: { value } }) => {
+  const onSlugChange = ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
     setPostForm({ ...postForm, slug: value === '-' ? value : slugify(value), slugEditedByUser: true });
   };
 

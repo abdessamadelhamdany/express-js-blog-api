@@ -1,3 +1,7 @@
+if (!process.env.NODE_ENV) {
+  process.env.NODE_ENV = 'production';
+}
+
 require('dotenv').config();
 import 'reflect-metadata';
 import App from './app';
@@ -10,7 +14,7 @@ import startDatabase from './loaders/typeorm';
     await startDatabase(databaseConfig());
 
     const app = new App();
-    const port = parseInt(process.env.PORT, 10) || 3000;
+    const port = parseInt(process.env.PORT || '1773', 10);
 
     app.defaultApp.listen(port, (err?: any) => {
       if (err) {

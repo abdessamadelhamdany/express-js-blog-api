@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
-import React, { FC, useMemo, useState } from 'react';
+import React, { FC, ChangeEvent, useMemo, useState } from 'react';
 
 import { ChevronLeftIcon } from '@heroicons/react/outline';
 import { SidebarToggleIcon } from '@/src/components/icons';
@@ -10,8 +10,8 @@ import PostSettings from '@/src/views/dashboard/PostSettings';
 import { Status, TitleInput, WritingSpace } from './New.styled';
 import { Flex, ActionsWrapper, LinkAction, IconAction } from '@/src/core-ui';
 import { Layout, Main, ContainerFluid, Header, Section, Container } from '@/src/views/dashboard/Layout';
+import { Post } from '@/src/interfaces';
 import { PostFormContext } from '@/src/contexts';
-import { Post } from 'server/blog/posts/models/Post';
 import { slugify } from '@/src/lib/helpers';
 
 const W3Editor = dynamic(() => import('@/src/components/W3Editor'), { ssr: false });
@@ -31,7 +31,7 @@ const NewPost: FC = () => {
   const [postForm, setPostForm] = useState(initialState);
   const value = useMemo(() => ({ postForm, setPostForm }), [postForm, setPostForm]);
 
-  const updateTitle = ({ target: { value } }) => {
+  const updateTitle = ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
     if (!postForm.slugEditedByUser) {
       setPostForm({ ...postForm, title: value, slug: slugify(value) });
     } else {

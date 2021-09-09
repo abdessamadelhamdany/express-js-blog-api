@@ -1,8 +1,8 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { Post } from '@/src/interfaces';
 import { Wrapper, CardHeader, Title, CardContent } from './PostCard.styled';
-import { Post } from 'server/blog/posts/models/Post';
 
 type Props = {
   post: Post;

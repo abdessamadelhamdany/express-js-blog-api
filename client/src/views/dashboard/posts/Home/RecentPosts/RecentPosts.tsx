@@ -1,6 +1,6 @@
 import React from 'react';
-import { Post } from 'server/blog/posts/models/Post';
 import { PostCard } from '..';
+import { Post } from '@/src/interfaces';
 import { Wrapper, Title, WrapperContent } from './RecentPosts.styled';
 
 type Props = {

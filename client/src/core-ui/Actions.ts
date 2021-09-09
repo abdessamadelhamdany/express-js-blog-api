@@ -62,7 +62,7 @@ export const IconAction = styled.button<IconActionAttrs>`
   }
 `;
 
-function getVariantInfo(variant: Variants, theme: DefaultTheme): string {
+function getVariantInfo(variant: Variants | undefined, theme: DefaultTheme): string {
   return {
     secondary: theme.color.gray[900],
     info: theme.color.others.info[500],
@@ -70,7 +70,7 @@ function getVariantInfo(variant: Variants, theme: DefaultTheme): string {
     danger: theme.color.others.danger[500],
     success: theme.color.others.success[500],
     primary: theme.color.blurredCircle.lightBlue,
-  }[variant];
+  }[variant || 'primary'];
 }
 
 // height: 34px;
