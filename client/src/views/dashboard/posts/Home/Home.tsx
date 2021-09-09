@@ -1,6 +1,6 @@
 import { RecentPosts } from '.';
 import { Props } from '@/src/pages/dashboard/posts';
-import NavLinks from '@/src/components/dashboard/posts/NavLinks';
+import { NavLinks } from '@/src/views/dashboard/components/posts';
 import { Layout, Main, Container, Header, Section } from '@/src/views/dashboard/Layout';
 
 export default function PostsHome({ recentPosts }: Props) {
