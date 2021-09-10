@@ -24,7 +24,7 @@ export const LinkAction = styled.a<LinkActionAttrs>`
   font-size: 15px;
   align-items: center;
   font-weight: ${({ theme }) => theme.font.weight.bold};
-  color: ${({ theme, variant }) => getVariantInfo(variant, theme)};
+  color: ${({ theme, variant }) => getVariantInfo(theme, variant)};
 
   &:hover {
     background-color: ${({ theme }) => theme.color.gray[200]};
@@ -47,7 +47,7 @@ export const IconAction = styled.button<IconActionAttrs>`
   display: flex;
   align-items: center;
   background-color: transparent;
-  color: ${({ theme, variant }) => getVariantInfo(variant, theme)};
+  color: ${({ theme, variant }) => getVariantInfo(theme, variant)};
 
   &:hover {
     background-color: ${({ theme }) => theme.color.gray[200]};
@@ -62,7 +62,7 @@ export const IconAction = styled.button<IconActionAttrs>`
   }
 `;
 
-function getVariantInfo(variant: Variants | undefined, theme: DefaultTheme): string {
+function getVariantInfo(theme: DefaultTheme, variant?: Variants): string {
   return {
     secondary: theme.color.gray[900],
     info: theme.color.others.info[500],

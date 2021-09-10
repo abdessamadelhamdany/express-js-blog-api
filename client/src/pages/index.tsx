@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { DefaultLayout } from '@/src/layouts/Default';
-import { Container } from '@/src/core-ui';
+import { Container } from '@/src/core-ui/layouts';
 
 const Title = styled.h1`
   font-size: 50px;

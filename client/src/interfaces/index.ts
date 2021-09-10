@@ -1,1 +1,2 @@
-export * from './models/Post';
+export * from './models';
+export * from './forms';

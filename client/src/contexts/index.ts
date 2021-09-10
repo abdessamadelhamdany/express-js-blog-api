@@ -1,1 +1,1 @@
-export * from './dashboard/posts/post-form-context';
+export * from './dashboard/posts/post-form.context';

@@ -20,6 +20,7 @@ declare module 'styled-components' {
         h5: { size: string; lineHeight: string; weight: { [key: string]: number } };
         h6: { size: string; lineHeight: string; weight: { [key: string]: number } };
         sm: { size: string; lineHeight: string; weight: { [key: string]: number } };
+        xs: { size: string; lineHeight: string; weight: { [key: string]: number } };
         p: { size: string; lineHeight: string; weight: { [key: string]: number } };
       };
     };

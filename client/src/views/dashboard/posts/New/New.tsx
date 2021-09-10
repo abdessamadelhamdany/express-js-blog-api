@@ -8,7 +8,7 @@ import { SidebarToggleIcon } from '@/src/components/icons';
 import PostSettings from '@/src/views/dashboard/PostSettings';
 
 import { Status, TitleInput, WritingSpace } from './New.styled';
-import { Flex, ActionsWrapper, LinkAction, IconAction } from '@/src/core-ui';
+import { Flex, ActionsWrapper, LinkAction, IconAction } from '@/src/core-ui/actions';
 import { Layout, Main, ContainerFluid, Header, Section, Container } from '@/src/views/dashboard/Layout';
 import { Post } from '@/src/interfaces';
 import { PostFormContext } from '@/src/contexts';

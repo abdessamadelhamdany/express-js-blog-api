@@ -7,8 +7,3 @@ export const Container = styled.div`
   padding: 0 20px;
   max-width: ${size.laptopL};
 `;
-
-export const ContainerFluid = styled.div`
-  width: 100%;
-  padding: 0 20px;
-`;

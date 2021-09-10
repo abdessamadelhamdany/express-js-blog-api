@@ -18,8 +18,9 @@ const defaultTheme: DefaultTheme = {
       h4: { size: '23px', lineHeight: '28px', weight: { 500: 500, 700: 700 } },
       h5: { size: '16px', lineHeight: '30px', weight: { 400: 400, 500: 500 } },
       h6: { size: '14px', lineHeight: '24px', weight: { 400: 400, 500: 500, 700: 700 } },
-      p: { size: '12px', lineHeight: '16px', weight: { 400: 400 } },
-      sm: { size: '14px', lineHeight: '16px', weight: { 400: 400 } },
+      sm: { size: '14px', lineHeight: '16px', weight: { 400: 400, 500: 500 } },
+      xs: { size: '12px', lineHeight: '16px', weight: { 400: 400, 500: 500 } },
+      p: { size: '16px', lineHeight: '18px', weight: { 400: 400 } },
     },
   },
   color: {
