@@ -9,7 +9,7 @@ import {
   DeleteDateColumn,
   OneToMany,
 } from 'typeorm';
-import { Length, IsOptional, IsNotEmpty, IsEmail, IsEnum } from 'class-validator';
+import { Length, IsOptional, IsNotEmpty, IsEmail, IsEnum, ValidationArguments } from 'class-validator';
 import { Post } from '../../posts/models/Post';
 import UsersInterfaces from '../users.interfaces';
 

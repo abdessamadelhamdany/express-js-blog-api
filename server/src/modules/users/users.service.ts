@@ -16,7 +16,7 @@ const service = {
   async create(params: User): Promise<UsersInterfaces.SafeUser> {
     const user = service.repositories.user.create(params);
 
-    const errors = await validate(user, { validationError: { target: false } });
+    const errors = await validate(user, { validationError: { value: false, target: false } });
     if (errors.length > 0) {
       throw new ResourceValidationError('user', errors);
     }

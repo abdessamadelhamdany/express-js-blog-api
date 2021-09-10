@@ -13,7 +13,7 @@ export interface User {
   lastName: string;
   username: string;
   email: string;
-  role: UserRole;
+  role?: UserRole;
   posts?: Post[];
   confirmedAt?: Date;
   createdAt?: Date;

@@ -18,3 +18,13 @@ export class ResourceValidationError extends BaseError {
     this.errors = errors;
   }
 }
+
+export class ResourceNotFoundError extends BaseError {
+  public errors: ValidationError[] = [];
+
+  constructor(resource: string, errors: ValidationError[]) {
+    super();
+    this.message = `Resource ${resource} was not found.`;
+    this.errors = errors;
+  }
+}

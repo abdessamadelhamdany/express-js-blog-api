@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 import { FormEvent, useState } from 'react';
 import { DefaultLayout } from '@/src/layouts';
 import { Container } from '@/src/core-ui/layouts';
@@ -14,14 +14,10 @@ import {
   FormFooter,
   FormSubmit,
 } from '@/src/core-ui/forms';
-
-interface Props {
-  email?: string;
-  password?: string;
-}
+import { useValidationState } from '@/src/hooks';
 
 export default function Register() {
-  const [errors, setErrors] = useState<Props>({});
+  const [hasError, getError, setErrors] = useValidationState([]);
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -29,11 +25,13 @@ export default function Register() {
 
     axios
       .post('/api/login', data)
-      .then((response) => {
-        console.log(response);
+      .then((res: AxiosResponse) => {
+        console.log('user loggedin', res.data);
       })
-      .catch((err: any) => {
-        console.error(err);
+      .catch((err: AxiosError) => {
+        if (err.response && [400, 404].includes(err.response.status) && err.response.data.errors) {
+          setErrors(err.response.data.errors);
+        }
       });
   };
 
@@ -46,17 +44,17 @@ export default function Register() {
           <FormSection>
             <FormRow>
               <FormGroup>
-                <Label htmlFor="email">Email</Label>
-                <Input invalid={!!errors.email} type="email" name="email" placeholder="Email" />
-                <FormError invalid={!!errors.email}>{errors.email || 'no error, congrats!'}</FormError>
+                <Label htmlFor="username">Email</Label>
+                <Input invalid={hasError('username')} type="email" name="username" placeholder="Email" />
+                <FormError invalid={hasError('username')}>{getError('username') || 'no error, congrats!'}</FormError>
               </FormGroup>
             </FormRow>
 
             <FormRow>
               <FormGroup>
                 <Label htmlFor="password">Password</Label>
-                <Input invalid={!!errors.password} type="password" name="password" placeholder="Password" />
-                <FormError invalid={!!errors.password}>{errors.password || 'no error, congrats!'}</FormError>
+                <Input invalid={hasError('password')} type="password" name="password" placeholder="Password" />
+                <FormError invalid={hasError('password')}>{getError('password') || 'no error, congrats!'}</FormError>
               </FormGroup>
             </FormRow>
           </FormSection>
