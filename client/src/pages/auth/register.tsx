@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 import { FormEvent, useState } from 'react';
 import { DefaultLayout } from '@/src/layouts';
 import { Container } from '@/src/core-ui/layouts';
@@ -26,17 +26,20 @@ interface Props {
 export default function Register() {
   const [errors, setErrors] = useState<Props>({});
 
-  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = Object.fromEntries(new FormData(event.currentTarget));
 
+    const data = Object.fromEntries(new FormData(event.currentTarget));
     axios
       .post('/api/register', data)
-      .then((response) => {
-        console.log(response);
+      .then((res: AxiosResponse) => {
+        console.log('user registred', res.data);
       })
-      .catch((err: any) => {
-        console.error(err);
+      .catch((err: AxiosError) => {
+        if (err.response && err.response.status === 400 && err.response.data.errors) {
+          console.log('errors:', err.response.data.errors);
+          setErrors(err.response.data.errors);
+        }
       });
   };
 

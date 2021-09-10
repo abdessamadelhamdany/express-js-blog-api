@@ -13,10 +13,6 @@
     "noImplicitThis": true,
     "strictNullChecks": true,
     "resolveJsonModule": true,
-    "sourceMap": true,
-    "paths": {
-      "@/src/*": ["src/*"]
-    }
-  },
-  "exclude": ["node_modules"]
+    "sourceMap": true
+  }
 }

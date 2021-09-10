@@ -6,11 +6,13 @@ import usersService from '../users/users.service';
 import UsersInterfaces from '../users/users.interfaces';
 
 export default {
-  async login(params: AuthInterfaces.LoginParams): Promise<[UsersInterfaces.SafeUser, ValidationError[]]> {
+  async login(
+    params: AuthInterfaces.LoginParams,
+  ): Promise<[UsersInterfaces.SafeUser | undefined, ValidationError[] | undefined]> {
     const errors = this.validate(params);
 
     if (errors.length > 0) {
-      return [null, errors];
+      return [undefined, errors];
     }
 
     const { username, password } = params;
@@ -19,13 +21,13 @@ export default {
     const user = await userRepository.findOne({ email: username });
     if (user) {
       if (!user.verifyPassword(password)) {
-        return [null, null];
+        return [undefined, undefined];
       }
 
-      return [usersService.safeUser(user), null];
+      return [usersService.safeUser(user), undefined];
     }
 
-    return [null, null];
+    return [undefined, undefined];
   },
 
   validate(params: AuthInterfaces.LoginParams): ValidationError[] {
@@ -34,7 +36,6 @@ export default {
 
     if (!isNotEmpty(username)) {
       errors.push({
-        target: params,
         property: 'username',
         constraints: {
           isNotEmpty: 'username should not be empty',
@@ -42,7 +43,6 @@ export default {
       });
     } else if (!isEmail(username)) {
       errors.push({
-        target: params,
         property: 'username',
         constraints: {
           isEmail: 'username must be an email',
@@ -52,7 +52,6 @@ export default {
 
     if (!isNotEmpty(password)) {
       errors.push({
-        target: params,
         property: 'password',
         constraints: {
           isNotEmpty: 'password should not be empty',

@@ -1,23 +1,54 @@
-import { validate, ValidationError } from 'class-validator';
+import { validate } from 'class-validator';
 import { getRepository, Repository } from 'typeorm';
 import { User } from './models/User';
 import UsersInterfaces from './users.interfaces';
+import { ResourceValidationError } from '../../exceptions';
 
-export default {
-  async create(params: User): Promise<[UsersInterfaces.SafeUser | undefined, ValidationError[] | undefined]> {
-    const userRepository: Repository<User> = getRepository(User);
+const service = {
+  repositories: { user: getRepository(User) },
 
-    const user = userRepository.create(params);
+  helpers: {
+    async isAlreadyExist(key: 'email' | 'username', value: string, isUpdate = false): Promise<boolean> {
+      return (await service.repositories.user.count({ where: { [key]: [value] } })) > 1;
+    },
+  },
 
-    const errors = await validate(user);
+  async create(params: User): Promise<UsersInterfaces.SafeUser> {
+    const user = service.repositories.user.create(params);
+
+    const errors = await validate(user, { validationError: { target: false } });
     if (errors.length > 0) {
-      return [undefined, errors];
+      throw new ResourceValidationError('user', errors);
+    }
+
+    const isAlreadyExistsByEmail = await service.helpers.isAlreadyExist('email', params.email);
+    if (isAlreadyExistsByEmail) {
+      errors.push({
+        property: 'email',
+        constraints: {
+          alreadyExists: 'That email is taken.',
+        },
+      });
+
+      throw new ResourceValidationError('user', errors);
+    }
+
+    const isAlreadyExistsByUsername = await service.helpers.isAlreadyExist('username', params.username);
+    if (isAlreadyExistsByUsername) {
+      errors.push({
+        property: 'username',
+        constraints: {
+          alreadyExists: 'That username is taken.',
+        },
+      });
+
+      throw new ResourceValidationError('user', errors);
     }
 
     user.hashPassword();
-    await userRepository.save(user);
+    await service.repositories.user.save(user);
 
-    return [this.safeUser(user), undefined];
+    return service.safeUser(user);
   },
 
   safeUser(user: User): UsersInterfaces.SafeUser {
@@ -36,3 +67,5 @@ export default {
     };
   },
 };
+
+export default service;

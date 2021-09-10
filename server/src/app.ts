@@ -5,6 +5,7 @@ import * as rfs from 'rotating-file-stream';
 import express, { Request, Response, NextFunction } from 'express';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import modules from './modules';
+import { __prod__ } from './constants';
 
 export default class App {
   public defaultApp: express.Application;
@@ -27,7 +28,7 @@ export default class App {
     this.defaultApp.use(express.json());
     this.defaultApp.use(helmet());
     this.defaultApp.use(
-      morgan('combined', {
+      morgan(__prod__ ? 'combined' : 'dev', {
         stream: rfs.createStream('access.log', {
           interval: '1d',
           path: path.join(__dirname, '..', 'logs'),

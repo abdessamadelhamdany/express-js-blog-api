@@ -1,29 +1,29 @@
 import { Debugger } from 'debug';
 import colors from 'colors';
-import dateFormat from 'dateformat';
+import * as dateFn from 'date-fns';
 
 const debug: Debugger = require('debug')('APP');
 
 export default {
-  info: (message: any) => {
+  info: (...args: any[]) => {
     const now = new Date();
-    const timestamp = dateFormat(now, 'HH:MM:ss');
-    console.log(colors.green('[INFO]'), colors.bold(colors.grey(timestamp)), message);
+    const timestamp = dateFn.format(now, 'HH:MM:ss');
+    console.log(colors.green('[INFO]'), colors.bold(colors.grey(timestamp)), ...args);
   },
 
-  warn: (message: any) => {
+  warn: (...args: any[]) => {
     const now = new Date();
-    const timestamp = dateFormat(now, 'HH:MM:ss');
-    console.log(colors.yellow('[WARN]'), colors.bold(colors.grey(timestamp)), message);
+    const timestamp = dateFn.format(now, 'HH:MM:ss');
+    console.log(colors.yellow('[WARN]'), colors.bold(colors.grey(timestamp)), ...args);
   },
 
-  debug(message) {
-    debug(colors.magenta('[DEBUG]'), message);
+  debug(...args: any[]) {
+    debug(colors.magenta('[DEBUG]'), ...args);
   },
 
-  error: (message: any) => {
+  error: (...args: any[]) => {
     const now = new Date();
-    const timestamp = dateFormat(now, 'HH:MM:ss');
-    console.log(colors.red('[ERROR]'), colors.bold(colors.grey(timestamp)), message);
+    const timestamp = dateFn.format(now, 'HH:MM:ss');
+    console.log(colors.red('[ERROR]'), colors.bold(colors.grey(timestamp)), ...args);
   },
 };
