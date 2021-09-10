@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import express from 'express';
-import { IRoute } from '@/src/interfaces';
+import { IRoute } from '../interfaces';
 
 export default {
   getRoutes: (): IRoute[] => {

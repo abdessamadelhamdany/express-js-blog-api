@@ -1,4 +1,4 @@
-import { IRoute } from '@/src/interfaces';
+import { IRoute } from '../../interfaces';
 
 export default [
   {
@@ -6,6 +6,13 @@ export default [
     method: 'post',
     action: 'login',
     description: 'Login users',
+    middlewares: [],
+  },
+  {
+    path: 'logout',
+    method: 'post',
+    action: 'logout',
+    description: 'Logout users',
     middlewares: [],
   },
   {

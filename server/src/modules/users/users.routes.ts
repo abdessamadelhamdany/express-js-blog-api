@@ -1,3 +1,3 @@
-import { IRoute } from '@/src/interfaces';
+import { IRoute } from '../../interfaces';
 
 export default [] as IRoute[];

@@ -21,8 +21,10 @@ export default function Register() {
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = Object.fromEntries(new FormData(event.currentTarget));
 
+    setErrors([]);
+
+    const data = Object.fromEntries(new FormData(event.currentTarget));
     axios
       .post('/api/login', data)
       .then((res: AxiosResponse) => {

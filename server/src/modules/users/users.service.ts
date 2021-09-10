@@ -9,7 +9,7 @@ const service = {
 
   helpers: {
     async isAlreadyExist(key: 'email' | 'username', value: string, isUpdate = false): Promise<boolean> {
-      return (await service.repositories.user.count({ where: { [key]: [value] } })) > 1;
+      return (await service.repositories.user.count({ where: { [key]: [value] } })) > 0;
     },
   },
 
@@ -21,24 +21,24 @@ const service = {
       throw new ResourceValidationError('user', errors);
     }
 
-    const isAlreadyExistsByEmail = await service.helpers.isAlreadyExist('email', params.email);
-    if (isAlreadyExistsByEmail) {
-      errors.push({
-        property: 'email',
-        constraints: {
-          alreadyExists: 'That email is taken.',
-        },
-      });
-
-      throw new ResourceValidationError('user', errors);
-    }
-
     const isAlreadyExistsByUsername = await service.helpers.isAlreadyExist('username', params.username);
     if (isAlreadyExistsByUsername) {
       errors.push({
         property: 'username',
         constraints: {
           alreadyExists: 'That username is taken.',
+        },
+      });
+
+      throw new ResourceValidationError('user', errors);
+    }
+
+    const isAlreadyExistsByEmail = await service.helpers.isAlreadyExist('email', params.email);
+    if (isAlreadyExistsByEmail) {
+      errors.push({
+        property: 'email',
+        constraints: {
+          alreadyExists: 'That email is taken.',
         },
       });
 

@@ -3,6 +3,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { APP_TITLE } from '@/src/lib/constants';
 import { AppWrapper, Navbar } from './Default.styled';
+import LogoutLink from '@/src/components/common/LogoutLink';
 import { Container } from '@/src/views/dashboard/Layout/Layout.styled';
 
 const Layout: FC = ({ children }) => {
@@ -17,6 +18,9 @@ const Layout: FC = ({ children }) => {
           <Link href="/auth/login">
             <a>Login</a>
           </Link>
+
+          <LogoutLink />
+
           <Link href="/auth/register">
             <a>Register</a>
           </Link>

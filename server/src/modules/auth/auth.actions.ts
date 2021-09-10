@@ -36,12 +36,26 @@ export default {
       }
 
       if (error instanceof ResourceNotFoundError) {
-        res.status(StatusCodes.NOT_FOUND).json({
+        return res.status(StatusCodes.NOT_FOUND).json({
           errors: error.errors,
           status: { code: StatusCodes.NOT_FOUND, phrase: ReasonPhrases.NOT_FOUND },
         });
       }
 
+      logger.error(error);
+
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+        status: { code: StatusCodes.INTERNAL_SERVER_ERROR, phrase: ReasonPhrases.INTERNAL_SERVER_ERROR },
+      });
+    }
+  },
+
+  async logout(req: Request, res: Response) {
+    try {
+      res.clearCookie('token').json({
+        status: { code: StatusCodes.OK, phrase: ReasonPhrases.OK },
+      });
+    } catch (error) {
       logger.error(error);
 
       res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
