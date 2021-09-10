@@ -22,6 +22,7 @@ export const FormSubmit = styled.button.attrs({ type: 'submit' })`
 
   &:focus {
     outline: none;
+    box-shadow: ${({ theme }) => theme.shadow.base};
     border-color: ${({ theme }) => theme.color.brand.primary};
   }
 `;

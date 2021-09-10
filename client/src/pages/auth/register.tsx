@@ -50,13 +50,13 @@ export default function Register() {
             <FormRow>
               <FormGroup>
                 <Label htmlFor="firstName">First name</Label>
-                <Input type="text" name="firstName" placeholder="First name" />
+                <Input invalid={!!errors.firstName} type="text" name="firstName" placeholder="First name" />
                 <FormError invalid={!!errors.firstName}>{errors.firstName || 'no error, congrats!'}</FormError>
               </FormGroup>
 
               <FormGroup>
                 <Label htmlFor="lastName">Last name</Label>
-                <Input type="text" name="lastName" placeholder="Last name" />
+                <Input invalid={!!errors.lastName} type="text" name="lastName" placeholder="Last name" />
                 <FormError invalid={!!errors.lastName}>{errors.lastName || 'no error, congrats!'}</FormError>
               </FormGroup>
             </FormRow>
@@ -64,7 +64,7 @@ export default function Register() {
             <FormRow>
               <FormGroup>
                 <Label htmlFor="username">Username</Label>
-                <Input type="text" name="username" placeholder="Username" />
+                <Input invalid={!!errors.username} type="text" name="username" placeholder="Username" />
                 <FormError invalid={!!errors.username}>{errors.username || 'no error, congrats!'}</FormError>
               </FormGroup>
             </FormRow>
@@ -72,7 +72,7 @@ export default function Register() {
             <FormRow>
               <FormGroup>
                 <Label htmlFor="email">Email</Label>
-                <Input type="email" name="email" placeholder="Email" />
+                <Input invalid={!!errors.email} type="email" name="email" placeholder="Email" />
                 <FormError invalid={!!errors.email}>{errors.email || 'no error, congrats!'}</FormError>
               </FormGroup>
             </FormRow>
@@ -80,7 +80,7 @@ export default function Register() {
             <FormRow>
               <FormGroup>
                 <Label htmlFor="password">Password</Label>
-                <Input type="password" name="password" placeholder="Password" />
+                <Input invalid={!!errors.password} type="password" name="password" placeholder="Password" />
                 <FormError invalid={!!errors.password}>{errors.password || 'no error, congrats!'}</FormError>
               </FormGroup>
             </FormRow>
