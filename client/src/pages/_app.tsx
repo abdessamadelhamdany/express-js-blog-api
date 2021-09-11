@@ -1,5 +1,7 @@
 import 'normalize.css';
+import hljs from 'highlight.js';
 import Head from 'next/head';
+import { useEffect } from 'react';
 import type { AppProps } from 'next/app';
 import { AuthProvider } from '@/src/contexts/auth';
 import { ThemeProvider } from 'styled-components';
@@ -8,6 +10,10 @@ import { APP_NAME, APP_TITLE } from '@/src/lib/constants';
 import GoogleAnalytics from '@/src/components/GoogleAnalytics';
 
 export default function App({ Component, pageProps }: AppProps) {
+  useEffect(() => {
+    window.hljs = hljs;
+  }, []);
+
   return (
     <>
       <Head>

@@ -13,3 +13,19 @@ export const ABOUT_ME = `Hey, I'm the Fullstack developer you're looking for. Wi
 export const AUTHOR_AVATAR = `/images/avatars/1623056484707.jpeg`;
 
 export const ANALYTICS_MEASUREMENT_ID = 'G-J9N2909HEW';
+
+export const HLJS_LANGUAGES = [
+  'css',
+  'scss',
+  'go',
+  'html',
+  'xml',
+  'json',
+  'javascript',
+  'markdown',
+  'php',
+  'sql',
+  'plain text',
+  'typescript',
+  'yaml',
+];

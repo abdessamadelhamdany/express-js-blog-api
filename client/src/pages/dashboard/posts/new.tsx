@@ -52,7 +52,7 @@ export default function NewPost({ user }: { user: User }) {
                     <ActionsWrapper>
                       <LinkAction variant="info">Preview</LinkAction>
                       <LinkAction variant="primary">Publish</LinkAction>
-                      <LinkAction variant="secondary">Draft</LinkAction>
+                      <LinkAction variant="secondary">Save Draft</LinkAction>
                       {!isSidebarOpen && (
                         <IconAction variant="secondary" isActive={isSidebarOpen} onClick={() => setIsSidebarOpen(true)}>
                           <SidebarToggleIcon />
@@ -63,8 +63,6 @@ export default function NewPost({ user }: { user: User }) {
                 </Flex>
               </ContainerFluid>
             </Header>
-
-            <pre>{JSON.stringify(postForm)}</pre>
 
             <Section canGrow={true}>
               <Container>

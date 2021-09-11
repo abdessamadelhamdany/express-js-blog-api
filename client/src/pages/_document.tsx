@@ -1,3 +1,4 @@
+import hljs from 'highlight.js';
 import { ServerStyleSheet } from 'styled-components';
 import Document, { DocumentContext, Html, Head, Main, NextScript } from 'next/document';
 
