@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
 import { FormEvent, useState } from 'react';
 import axios, { AxiosError, AxiosResponse } from 'axios';
@@ -18,6 +19,7 @@ import {
 import { useValidationState } from '@/src/hooks';
 
 export default function Register() {
+  const router = useRouter();
   const [hasError, getError, setErrors] = useValidationState([]);
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -29,7 +31,7 @@ export default function Register() {
     axios
       .post('/api/login', data)
       .then((res: AxiosResponse) => {
-        console.log('user loggedin', res.data);
+        router.push('/dashboard');
       })
       .catch((err: AxiosError) => {
         if (err.response && [400, 404].includes(err.response.status) && err.response.data.errors) {

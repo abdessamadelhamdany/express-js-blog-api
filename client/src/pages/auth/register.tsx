@@ -1,5 +1,6 @@
-import { GetServerSideProps } from 'next';
 import { FormEvent } from 'react';
+import { useRouter } from 'next/router';
+import { GetServerSideProps } from 'next';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import {
   Form,
@@ -18,6 +19,7 @@ import { Container } from '@/src/core-ui/layouts';
 import { useValidationState } from '@/src/hooks';
 
 export default function Register() {
+  const router = useRouter();
   const [hasError, getError, setErrors] = useValidationState([]);
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -27,7 +29,7 @@ export default function Register() {
     axios
       .post('/api/register', data)
       .then((res: AxiosResponse) => {
-        console.log('user registred', res.data);
+        router.push('/dashboard');
       })
       .catch((err: AxiosError) => {
         if (err.response && [400].includes(err.response.status) && err.response.data.errors) {

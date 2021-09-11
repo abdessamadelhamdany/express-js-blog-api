@@ -1,13 +1,17 @@
-import { User } from '@/src/interfaces';
 import { createContext, Dispatch, FC, SetStateAction, useContext, useMemo, useState } from 'react';
+import { User } from '@/src/interfaces';
 
 export interface IAuthContext {
   loggedInUser: User | null;
   setLoggedInUser: Dispatch<SetStateAction<User | null>>;
 }
 
-const AuthContext = createContext<IAuthContext>({ loggedInUser: null, setLoggedInUser: () => {} });
+const initialState: IAuthContext = {
+  loggedInUser: null,
+  setLoggedInUser: () => {},
+};
 
+const AuthContext = createContext<IAuthContext>(initialState);
 interface Props {
   user: User | null;
 }
