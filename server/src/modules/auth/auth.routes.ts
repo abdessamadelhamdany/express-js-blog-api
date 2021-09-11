@@ -2,6 +2,7 @@ import { IRoute } from '../../interfaces';
 
 export default [
   {
+    name: 'Login',
     path: 'login',
     method: 'post',
     action: 'login',
@@ -9,6 +10,7 @@ export default [
     middlewares: [],
   },
   {
+    name: 'Logout',
     path: 'logout',
     method: 'post',
     action: 'logout',
@@ -16,6 +18,7 @@ export default [
     middlewares: [],
   },
   {
+    name: 'Register',
     path: 'register',
     method: 'post',
     action: 'register',

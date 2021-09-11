@@ -2,6 +2,7 @@ import path from 'path';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import * as rfs from 'rotating-file-stream';
+import cookieParser from 'cookie-parser';
 import express, { Request, Response, NextFunction } from 'express';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import modules from './modules';
@@ -25,6 +26,7 @@ export default class App {
   }
 
   private registerMiddlewares(): void {
+    this.defaultApp.use(cookieParser());
     this.defaultApp.use(express.json());
     this.defaultApp.use(helmet());
     this.defaultApp.use(
@@ -67,7 +69,7 @@ export default class App {
 
     /** Handler unhandled requests */
     this.defaultApp.use((_: Request, res: Response, __: NextFunction) => {
-      res.status(StatusCodes.NOT_FOUND).send({ status: ReasonPhrases.NOT_FOUND });
+      res.status(StatusCodes.NOT_FOUND).json({ status: ReasonPhrases.NOT_FOUND });
     });
   }
 }

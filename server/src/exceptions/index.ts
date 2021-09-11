@@ -22,9 +22,16 @@ export class ResourceValidationError extends BaseError {
 export class ResourceNotFoundError extends BaseError {
   public errors: ValidationError[] = [];
 
-  constructor(resource: string, errors: ValidationError[]) {
+  constructor(resource: string, errors: ValidationError[] = []) {
     super();
     this.message = `Resource ${resource} was not found.`;
     this.errors = errors;
+  }
+}
+
+export class InvalidTokenError extends BaseError {
+  constructor() {
+    super();
+    this.message = `Invalid token.`;
   }
 }

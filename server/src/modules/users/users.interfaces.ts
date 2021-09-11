@@ -1,3 +1,5 @@
+import express from 'express';
+
 namespace UsersInterfaces {
   export enum UserRole {
     ADMIN = 'admin',
@@ -5,7 +7,9 @@ namespace UsersInterfaces {
     GUEST = 'guest',
   }
 
-  export interface IUsersActions {}
+  export interface IUsersActions {
+    me: express.Handler;
+  }
 
   export interface SafeUser {
     id: number;

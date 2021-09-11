@@ -61,7 +61,7 @@ const service = {
       throw new ResourceNotFoundError('user', errors);
     }
 
-    return usersService.safeUser(user);
+    return usersService.helpers.safeUser(user);
   },
 };
 
