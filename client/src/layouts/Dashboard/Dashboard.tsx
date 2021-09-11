@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import Head from 'next/head';
-import { AppWrapper } from './Layout.styled';
-import { Navbar } from '@/src/views/dashboard/Layout';
+import Navbar from './Navbar';
+import { AppWrapper } from './Dashboard.styled';
 
 interface Props {
   hasNavbar?: boolean;

@@ -1,8 +1,7 @@
 import 'normalize.css';
-import axios from 'axios';
 import Head from 'next/head';
 import type { AppProps } from 'next/app';
-import { AuthProvider } from '@/src/contexts';
+import { AuthProvider } from '@/src/contexts/auth';
 import { ThemeProvider } from 'styled-components';
 import { GlobalStyle, defaultTheme } from '@/src/styles';
 import { APP_NAME, APP_TITLE } from '@/src/lib/constants';

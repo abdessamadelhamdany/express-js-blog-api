@@ -1,8 +1,9 @@
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import { GetServerSideProps } from 'next';
 import { FormEvent, useState } from 'react';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 import { DefaultLayout } from '@/src/layouts';
-import { Container } from '@/src/core-ui/layouts';
 import { Title } from '@/src/core-ui/typography';
+import { Container } from '@/src/core-ui/layouts';
 import {
   Form,
   FormSection,
@@ -69,3 +70,18 @@ export default function Register() {
     </DefaultLayout>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  if (context.req.cookies.token) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+};

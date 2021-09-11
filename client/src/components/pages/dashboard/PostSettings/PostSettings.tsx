@@ -1,12 +1,12 @@
 import { slugify } from '@/src/lib/helpers';
-import { FC, useContext, ChangeEvent } from 'react';
+import { FC, ChangeEvent } from 'react';
+import usePostForm from '@/src/contexts/dashboard';
 import { TextArea } from '@/src/styles/common/TextArea';
 import { RefreshIcon } from '@heroicons/react/outline';
-import { Flex, IconAction } from '@/src/core-ui';
-import { Header, Section } from '@/src/views/dashboard/Layout';
+import { Header, Section } from '@/src/core-ui/layouts';
+import { IconAction, Flex } from '@/src/core-ui/actions';
 import { SidebarToggleIcon } from '@/src/components/icons';
 import { Wrapper, Title, InputWrapper, SlugInput, Toggler } from './PostSettings.styled';
-import { PostFormContext } from '@/src/contexts';
 
 interface Props {
   isOpen?: boolean;
@@ -14,7 +14,7 @@ interface Props {
 }
 
 const PostSettings: FC<Props> = ({ isOpen = false, setIsOpen }) => {
-  const { postForm, setPostForm } = useContext(PostFormContext);
+  const { postForm, setPostForm } = usePostForm();
 
   const onSlugChange = ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
     setPostForm({ ...postForm, slug: value === '-' ? value : slugify(value), slugEditedByUser: true });

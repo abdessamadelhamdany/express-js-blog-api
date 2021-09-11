@@ -2,9 +2,9 @@ import { FC } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { APP_TITLE } from '@/src/lib/constants';
+import { Container } from '@/src/core-ui/layouts';
 import { AppWrapper, Navbar } from './Default.styled';
 import LogoutLink from '@/src/components/common/LogoutLink';
-import { Container } from '@/src/views/dashboard/Layout/Layout.styled';
 
 const Layout: FC = ({ children }) => {
   return (

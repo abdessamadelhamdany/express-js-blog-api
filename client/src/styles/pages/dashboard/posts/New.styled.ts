@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { Input } from '@/src/styles/common/Input';
 import { size } from '@/src/styles/screens';
 
 export const Status = styled.span`

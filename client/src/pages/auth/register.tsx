@@ -1,6 +1,6 @@
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import { GetServerSideProps } from 'next';
 import { FormEvent } from 'react';
-import { DefaultLayout } from '@/src/layouts';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 import {
   Form,
   FormSection,
@@ -12,8 +12,9 @@ import {
   FormFooter,
   FormSubmit,
 } from '@/src/core-ui/forms';
-import { Container } from '@/src/core-ui/layouts';
+import { DefaultLayout } from '@/src/layouts';
 import { Title } from '@/src/core-ui/typography';
+import { Container } from '@/src/core-ui/layouts';
 import { useValidationState } from '@/src/hooks';
 
 export default function Register() {
@@ -89,3 +90,18 @@ export default function Register() {
     </DefaultLayout>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  if (context.req.cookies.token) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+};

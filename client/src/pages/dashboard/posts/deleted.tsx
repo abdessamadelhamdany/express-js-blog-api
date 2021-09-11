@@ -1,1 +1,39 @@
-export { default } from '@/src/views/dashboard/posts/Deleted';
+import { GetServerSideProps } from 'next';
+import { User } from '@/src/interfaces';
+import { DashboardLayout } from '@/src/layouts';
+import { initAuth, Protected } from '@/src/hocs';
+import NavLinks from '@/src/components/pages/dashboard/posts/NavLinks';
+import { Main, Container, Header, Title, Section } from '@/src/core-ui/layouts';
+
+export default function PostsDeleted({ user }: { user: User }) {
+  return (
+    <Protected user={user}>
+      <DashboardLayout>
+        <Main>
+          <Header>
+            <Container>
+              <NavLinks />
+            </Container>
+          </Header>
+          <Section>
+            <Container>
+              <Title>Deleted Posts</Title>
+            </Container>
+          </Section>
+        </Main>
+      </DashboardLayout>
+    </Protected>
+  );
+}
+
+export const getServerSideProps: GetServerSideProps = async function (context) {
+  const { user, redirect } = await initAuth(context.req.cookies.token);
+
+  return redirect
+    ? {
+        redirect,
+      }
+    : {
+        props: { user },
+      };
+};

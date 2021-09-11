@@ -23,9 +23,12 @@ export default async function auth(req: Request, res: Response, next: NextFuncti
       return next();
     }
 
-    res.status(StatusCodes.UNAUTHORIZED).json({
-      status: { code: StatusCodes.UNAUTHORIZED, phrase: ReasonPhrases.UNAUTHORIZED },
-    });
+    res
+      .clearCookie('token')
+      .status(StatusCodes.UNAUTHORIZED)
+      .json({
+        status: { code: StatusCodes.UNAUTHORIZED, phrase: ReasonPhrases.UNAUTHORIZED },
+      });
   } catch (error) {
     logger.error(error);
 
