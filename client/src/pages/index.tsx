@@ -1,6 +1,7 @@
 import styled from 'styled-components';
-import { DefaultLayout } from '@/src/layouts/Default';
+import { GetServerSideProps } from 'next';
 import { Container } from '@/src/core-ui/layouts';
+import { DefaultLayout } from '@/src/layouts/Default';
 
 const Title = styled.h1`
   font-size: 50px;
@@ -16,3 +17,9 @@ export default function Home() {
     </DefaultLayout>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async function () {
+  return {
+    props: {},
+  };
+};

@@ -2,34 +2,31 @@ import { createContext, Dispatch, FC, SetStateAction, useContext, useMemo, useSt
 import { User } from '@/src/interfaces';
 
 export interface IAuthContext {
-  loggedInUser: User | null;
-  setLoggedInUser: Dispatch<SetStateAction<User | null>>;
+  authUser: User | null;
+  setAuthUser: Dispatch<SetStateAction<User | null>>;
 }
 
 const initialState: IAuthContext = {
-  loggedInUser: null,
-  setLoggedInUser: () => {},
+  authUser: null,
+  setAuthUser: () => {},
 };
 
-const AuthContext = createContext<IAuthContext>(initialState);
+export const AuthContext = createContext<IAuthContext>(initialState);
+
 interface Props {
   user: User | null;
 }
 
 export const AuthProvider: FC<Props> = ({ children, user }) => {
-  const [loggedInUser, setLoggedInUser] = useState<User | null>(user);
+  const [authUser, setAuthUser] = useState<User | null>(user);
 
   const memoedValue = useMemo(
     () => ({
-      loggedInUser,
-      setLoggedInUser,
+      authUser,
+      setAuthUser,
     }),
-    [loggedInUser]
+    [authUser]
   );
 
   return <AuthContext.Provider value={memoedValue}>{children}</AuthContext.Provider>;
 };
-
-export default function useAuth() {
-  return useContext(AuthContext);
-}

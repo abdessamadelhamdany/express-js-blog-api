@@ -16,7 +16,7 @@ const initialState: Post = {
   content: '',
 };
 
-const PostFormContext = React.createContext<IPostFormContext>({
+export const PostFormContext = React.createContext<IPostFormContext>({
   postForm: initialState,
   setPostForm: () => {},
 });
@@ -28,7 +28,3 @@ export const PostFormProvider: FC = ({ children }) => {
 
   return <PostFormContext.Provider value={memoedValue}>{children}</PostFormContext.Provider>;
 };
-
-export default function usePostForm() {
-  return useContext(PostFormContext);
-}

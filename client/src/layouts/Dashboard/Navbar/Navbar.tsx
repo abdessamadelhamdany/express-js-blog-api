@@ -1,18 +1,20 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import axios, { AxiosError, AxiosResponse } from 'axios';
+import { useAuth } from '@/src/hooks';
 import Logo from '@/src/components/Logo';
 import { Wrapper, Header, Section, Menu, MenuItem, MenuItemContent, Footer } from './Navbar.styled';
 import { HomeIcon, DocumentTextIcon, LogoutIcon, UserCircleIcon, AdjustmentsIcon } from '@heroicons/react/outline';
 
 const Navbar = () => {
   const router = useRouter();
+  const { setAuthUser } = useAuth();
   const { pathname } = useRouter();
 
   return (
     <Wrapper>
       <Header>
-        <Logo variant="dark" href="/dashboard" />
+        <Logo variant="dark" href="/" />
       </Header>
 
       <Section>
@@ -55,6 +57,7 @@ const Navbar = () => {
                   .post('/api/logout')
                   .then((_: AxiosResponse) => {
                     router.push('/');
+                    setAuthUser(null);
                   })
                   .catch((_: AxiosError) => {
                     console.error('Sorry something went wrong!');

@@ -16,10 +16,11 @@ import {
 import { DefaultLayout } from '@/src/layouts';
 import { Title } from '@/src/core-ui/typography';
 import { Container } from '@/src/core-ui/layouts';
-import { useValidationState } from '@/src/hooks';
+import { useAuth, useValidationState } from '@/src/hooks';
 
 export default function Register() {
   const router = useRouter();
+  const { setAuthUser } = useAuth();
   const [hasError, getError, setErrors] = useValidationState([]);
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -29,6 +30,7 @@ export default function Register() {
     axios
       .post('/api/register', data)
       .then((res: AxiosResponse) => {
+        setAuthUser(res.data.data.user);
         router.push('/dashboard');
       })
       .catch((err: AxiosError) => {

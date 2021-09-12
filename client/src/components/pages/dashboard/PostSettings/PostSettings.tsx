@@ -1,6 +1,6 @@
 import { slugify } from '@/src/lib/helpers';
 import { FC, ChangeEvent } from 'react';
-import usePostForm from '@/src/contexts/dashboard';
+import { usePostForm } from '@/src/hooks';
 import { TextArea } from '@/src/styles/common/TextArea';
 import { RefreshIcon } from '@heroicons/react/outline';
 import { Header, Section } from '@/src/core-ui/layouts';

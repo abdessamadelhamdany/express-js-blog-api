@@ -1,39 +1,29 @@
 import { GetServerSideProps } from 'next';
-import { User } from '@/src/interfaces';
 import { DashboardLayout } from '@/src/layouts';
-import { initAuth, Protected } from '@/src/hocs';
 import NavLinks from '@/src/components/pages/dashboard/posts/NavLinks';
 import { Main, Container, Header, Title, Section } from '@/src/core-ui/layouts';
 
-export default function PostsDrafted({ user }: { user: User }) {
+export default function PostsDrafted() {
   return (
-    <Protected user={user}>
-      <DashboardLayout>
-        <Main>
-          <Header>
-            <Container>
-              <NavLinks />
-            </Container>
-          </Header>
-          <Section>
-            <Container>
-              <Title>Drafted Posts</Title>
-            </Container>
-          </Section>
-        </Main>
-      </DashboardLayout>
-    </Protected>
+    <DashboardLayout>
+      <Main>
+        <Header>
+          <Container>
+            <NavLinks />
+          </Container>
+        </Header>
+        <Section>
+          <Container>
+            <Title>Drafted Posts</Title>
+          </Container>
+        </Section>
+      </Main>
+    </DashboardLayout>
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async function (context) {
-  const { user, redirect } = await initAuth(context.req.cookies.token);
-
-  return redirect
-    ? {
-        redirect,
-      }
-    : {
-        props: { user },
-      };
+export const getServerSideProps: GetServerSideProps = async function () {
+  return {
+    props: {},
+  };
 };

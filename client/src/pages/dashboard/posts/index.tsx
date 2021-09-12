@@ -4,43 +4,31 @@ import { Post, PostStatus, User } from '@/src/interfaces';
 import NavLinks from '@/src/components/pages/dashboard/posts/NavLinks';
 import { Main, Container, Header, Section } from '@/src/core-ui/layouts';
 import RecentPosts from '@/src/components/pages/dashboard/posts/RecentPosts/RecentPosts';
-import { initAuth, Protected } from '@/src/hocs';
 
 export type Props = {
-  user: User;
   recentPosts: Post[];
 };
 
-export default function PostsHome({ recentPosts, user }: Props) {
+export default function PostsHome({ recentPosts }: Props) {
   return (
-    <Protected user={user}>
-      <DashboardLayout>
-        <Main>
-          <Header>
-            <Container>
-              <NavLinks />
-            </Container>
-          </Header>
-          <Section>
-            <Container>
-              <RecentPosts posts={recentPosts} />
-            </Container>
-          </Section>
-        </Main>
-      </DashboardLayout>
-    </Protected>
+    <DashboardLayout>
+      <Main>
+        <Header>
+          <Container>
+            <NavLinks />
+          </Container>
+        </Header>
+        <Section>
+          <Container>
+            <RecentPosts posts={recentPosts} />
+          </Container>
+        </Section>
+      </Main>
+    </DashboardLayout>
   );
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { user, redirect } = await initAuth(context.req.cookies.token);
-
-  if (redirect) {
-    return {
-      redirect,
-    };
-  }
-
   let recentPosts: any[] = require('@/src/assets/dummy/posts.json');
 
   function getRandomInt(min: number, max: number) {
@@ -61,7 +49,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   return {
     props: {
-      user,
       recentPosts,
     },
   };

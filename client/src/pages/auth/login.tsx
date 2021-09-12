@@ -16,10 +16,11 @@ import {
   FormFooter,
   FormSubmit,
 } from '@/src/core-ui/forms';
-import { useValidationState } from '@/src/hooks';
+import { useAuth, useValidationState } from '@/src/hooks';
 
 export default function Register() {
   const router = useRouter();
+  const { setAuthUser } = useAuth();
   const [hasError, getError, setErrors] = useValidationState([]);
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -31,6 +32,7 @@ export default function Register() {
     axios
       .post('/api/login', data)
       .then((res: AxiosResponse) => {
+        setAuthUser(res.data.data.user);
         router.push('/dashboard');
       })
       .catch((err: AxiosError) => {
@@ -73,15 +75,15 @@ export default function Register() {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  if (context.req.cookies.token) {
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
-    };
-  }
+export const getServerSideProps: GetServerSideProps = async () => {
+  // if (context.req.cookies.token) {
+  //   return {
+  //     redirect: {
+  //       destination: '/',
+  //       permanent: false,
+  //     },
+  //   };
+  // }
 
   return {
     props: {},

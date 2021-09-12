@@ -1,9 +1,9 @@
-import useAuth from '@/src/contexts/auth/auth.context';
+import { useAuth } from '@/src/hooks';
 
 export default function Suggestions() {
-  const { loggedInUser } = useAuth();
+  const { authUser } = useAuth();
 
-  return <div>Suggestions widget: {`${loggedInUser?.firstName} ${loggedInUser?.lastName}`}</div>;
+  return <div>Suggestions widget: {`${authUser?.firstName} ${authUser?.lastName}`}</div>;
 }
 
 // https://www.blueclaw.co.uk/2020/02/06/keyword-suggestions-using-the-google-suggest-api-and-google-apps-script/
