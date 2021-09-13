@@ -9,6 +9,20 @@ export default [
     middlewares: [],
   },
   {
+    path: 'posts/drafted',
+    method: 'get',
+    action: 'drafted',
+    description: 'Get all drafted posts',
+    middlewares: ['global::admin'],
+  },
+  {
+    path: 'posts/deleted',
+    method: 'get',
+    action: 'deleted',
+    description: 'Get all deleted posts',
+    middlewares: ['global::admin'],
+  },
+  {
     path: 'posts/:id',
     method: 'get',
     action: 'show',

@@ -8,6 +8,11 @@ namespace PostsInterfaces {
 
   export interface IPostsActions {
     index: express.Handler;
+    drafted: express.Handler;
+    deleted: express.Handler;
+    show: express.Handler;
+    create: express.Handler;
+    update: express.Handler;
   }
 }
 

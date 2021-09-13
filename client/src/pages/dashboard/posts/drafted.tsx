@@ -1,9 +1,16 @@
+import axios, { AxiosError } from 'axios';
 import { GetServerSideProps } from 'next';
+import { Post } from '@/src/interfaces';
 import { DashboardLayout } from '@/src/layouts';
 import NavLinks from '@/src/components/pages/dashboard/posts/NavLinks';
-import { Main, Container, Header, Title, Section } from '@/src/core-ui/layouts';
+import { Main, Container, Header, Section } from '@/src/core-ui/layouts';
+import PostsList from '@/src/components/pages/dashboard/posts/PostsList/PostsList';
 
-export default function PostsDrafted() {
+export type Props = {
+  posts: Post[];
+};
+
+export default function PostsDrafted({ posts }: Props) {
   return (
     <DashboardLayout>
       <Main>
@@ -14,7 +21,7 @@ export default function PostsDrafted() {
         </Header>
         <Section>
           <Container>
-            <Title>Drafted Posts</Title>
+            <PostsList title="Drafted Post" posts={posts} />
           </Container>
         </Section>
       </Main>
@@ -22,8 +29,30 @@ export default function PostsDrafted() {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async function () {
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+  let posts: Post[] = [];
+
+  try {
+    const { data } = await axios.get(`${process.env.APP_URL}/api/posts/drafted`, {
+      headers: {
+        Authorization: `Bearer ${req.cookies.token}`,
+      },
+    });
+    posts = data.data.posts;
+  } catch (error: any) {
+    if (error.response && error.response.status === 401) {
+      return {
+        redirect: {
+          destination: '/dashboard/posts',
+          permanent: false,
+        },
+      };
+    }
+  }
+
   return {
-    props: {},
+    props: {
+      posts,
+    },
   };
 };

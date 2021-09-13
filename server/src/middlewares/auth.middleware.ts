@@ -1,9 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
-import { User } from '../../src/modules/users/models/User';
-import { ResourceNotFoundError, InvalidTokenError } from '../exceptions';
 import { logger } from '../loaders';
 import usersService from '../modules/users/users.service';
+import { ResourceNotFoundError, InvalidTokenError } from '../exceptions';
 
 /**
  * Verify that a valid token was provided

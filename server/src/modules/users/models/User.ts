@@ -80,4 +80,12 @@ export class User {
   verifyPassword(hashedPassword: string) {
     return bcrypt.compareSync(hashedPassword, this.password);
   }
+
+  isAdmin() {
+    return this.role === UsersInterfaces.UserRole.ADMIN;
+  }
+
+  isEditor() {
+    return this.role === UsersInterfaces.UserRole.EDITOR;
+  }
 }

@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { IS_NUMBER } from 'class-validator';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import postsService from './posts.service';
 import PostsInterfaces from './posts.interfaces';
@@ -7,7 +8,25 @@ import { ResourceNotFoundError, ResourceValidationError } from '../../exceptions
 
 export default {
   async index(_: Request, res: Response) {
-    const posts = await postsService.findAll();
+    const posts = await postsService.findAll({ status: PostsInterfaces.PostStatus.PUBLIC });
+
+    res.status(StatusCodes.OK).json({
+      data: { posts },
+      status: { code: StatusCodes.OK, phrase: ReasonPhrases.OK },
+    });
+  },
+
+  async drafted(_: Request, res: Response) {
+    const posts = await postsService.findAll({ status: PostsInterfaces.PostStatus.DRAFT });
+
+    res.status(StatusCodes.OK).json({
+      data: { posts },
+      status: { code: StatusCodes.OK, phrase: ReasonPhrases.OK },
+    });
+  },
+
+  async deleted(_: Request, res: Response) {
+    const posts = await postsService.findAll({ deleted: true });
 
     res.status(StatusCodes.OK).json({
       data: { posts },
@@ -18,6 +37,17 @@ export default {
   async show(req: Request, res: Response) {
     try {
       const id = parseInt(req.params.id || '0', 10);
+      if (isNaN(id)) {
+        throw new ResourceValidationError('post', [
+          {
+            property: 'id',
+            constraints: {
+              [IS_NUMBER]: 'id must be a number.',
+            },
+          },
+        ]);
+      }
+
       const post = await postsService.findOne(id);
 
       res.status(StatusCodes.OK).json({
@@ -25,6 +55,13 @@ export default {
         status: { code: StatusCodes.OK, phrase: ReasonPhrases.OK },
       });
     } catch (error) {
+      if (error instanceof ResourceValidationError) {
+        return res.status(StatusCodes.BAD_REQUEST).json({
+          errors: error.errors,
+          status: { code: StatusCodes.BAD_REQUEST, phrase: ReasonPhrases.BAD_REQUEST },
+        });
+      }
+
       if (error instanceof ResourceNotFoundError) {
         return res.status(StatusCodes.NOT_FOUND).json({
           errors: error.errors,

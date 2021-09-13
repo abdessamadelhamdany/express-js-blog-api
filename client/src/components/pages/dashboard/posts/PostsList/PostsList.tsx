@@ -1,16 +1,17 @@
 import React from 'react';
+import PostCard from '../PostCard';
 import { Post } from '@/src/interfaces';
-import PostCard from '../PostCard/PostCard';
-import { Wrapper, Title, WrapperContent } from './RecentPosts.styled';
+import { Wrapper, Title, WrapperContent } from './PostsList.styled';
 
 type Props = {
+  title?: string;
   posts: Post[];
 };
 
-export default function RecentPosts({ posts }: Props) {
+export default function PostsList({ title, posts }: Props) {
   return (
     <Wrapper>
-      <Title>Recent posts</Title>
+      <Title>{title || 'Posts'}</Title>
 
       <WrapperContent>
         {posts.map((post) => {

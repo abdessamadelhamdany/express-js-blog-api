@@ -1,15 +1,16 @@
+import axios from 'axios';
 import { GetServerSideProps } from 'next';
+import { Post } from '@/src/interfaces';
 import { DashboardLayout } from '@/src/layouts';
-import { Post, PostStatus, User } from '@/src/interfaces';
 import NavLinks from '@/src/components/pages/dashboard/posts/NavLinks';
 import { Main, Container, Header, Section } from '@/src/core-ui/layouts';
-import RecentPosts from '@/src/components/pages/dashboard/posts/RecentPosts/RecentPosts';
+import PostsList from '@/src/components/pages/dashboard/posts/PostsList/PostsList';
 
 export type Props = {
-  recentPosts: Post[];
+  posts: Post[];
 };
 
-export default function PostsHome({ recentPosts }: Props) {
+export default function PostsHome({ posts }: Props) {
   return (
     <DashboardLayout>
       <Main>
@@ -20,7 +21,7 @@ export default function PostsHome({ recentPosts }: Props) {
         </Header>
         <Section>
           <Container>
-            <RecentPosts posts={recentPosts} />
+            <PostsList title="Published Post" posts={posts} />
           </Container>
         </Section>
       </Main>
@@ -28,28 +29,12 @@ export default function PostsHome({ recentPosts }: Props) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  let recentPosts: any[] = require('@/src/assets/dummy/posts.json');
-
-  function getRandomInt(min: number, max: number) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min) + min);
-  }
-
-  recentPosts = recentPosts
-    .map((post) => ({
-      status: PostStatus.PUBLIC,
-      viewCount: getRandomInt(50, 5000),
-      updatedAt: new Date().toString(),
-      createdAt: new Date().toString(),
-      ...post,
-    }))
-    .slice(0, 4);
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+  const { data } = await axios.get(`${process.env.APP_URL}/api/posts`, {});
 
   return {
     props: {
-      recentPosts,
+      posts: data.data.posts,
     },
   };
 };

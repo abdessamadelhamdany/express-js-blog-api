@@ -1,7 +1,13 @@
-import { getRepository } from 'typeorm';
 import { validate } from 'class-validator';
+import { FindConditions, FindManyOptions, getRepository, IsNull, Not } from 'typeorm';
 import { Post } from './models/Post';
+import PostsInterfaces from './posts.interfaces';
 import { ResourceNotFoundError, ResourceValidationError } from '../../../src/exceptions';
+
+interface FindAllFilters {
+  status?: PostsInterfaces.PostStatus;
+  deleted?: boolean;
+}
 
 const service = {
   helpers: {
@@ -12,10 +18,20 @@ const service = {
 
   repositories: { post: getRepository(Post) },
 
-  async findAll(): Promise<Post[]> {
-    const posts = await service.repositories.post.find();
+  async findAll(filters?: FindAllFilters): Promise<Post[]> {
+    const findConditions: FindConditions<Post> = {};
 
-    return posts;
+    if (typeof filters?.status !== 'undefined') {
+      findConditions.status = filters?.status;
+    }
+
+    if (typeof filters?.deleted !== 'undefined') {
+      findConditions.deletedAt = filters.deleted ? Not(IsNull()) : IsNull();
+    }
+
+    const findManyOptions: FindManyOptions<Post> = { where: findConditions, withDeleted: filters?.deleted };
+
+    return await service.repositories.post.find(findManyOptions);
   },
 
   async findOne(id: number): Promise<Post> {

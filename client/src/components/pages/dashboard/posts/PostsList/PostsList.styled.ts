@@ -5,7 +5,6 @@ export const Wrapper = styled.div`
   border-radius: 4px;
   background-color: ${({ theme }) => theme.color.global.white};
 `;
-/* box-shadow: ${({ theme: { boxShadow } }) => boxShadow.shadow1}; */
 
 export const Title = styled.h2`
   font-size: 20px;
