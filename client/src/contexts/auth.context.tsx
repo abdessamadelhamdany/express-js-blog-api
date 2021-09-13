@@ -1,4 +1,4 @@
-import { createContext, Dispatch, FC, SetStateAction, useContext, useMemo, useState } from 'react';
+import { createContext, Dispatch, FC, SetStateAction, useMemo, useState } from 'react';
 import { User } from '@/src/interfaces';
 
 export interface IAuthContext {
