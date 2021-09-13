@@ -8,6 +8,7 @@ export const Editor = styled.div`
   background-color: ${({ theme }) => theme.color.global.white};
 
   .ql-editor {
-    padding: 20px 16px;
+    margin: -10px 0;
+    padding: 30px 16px;
   }
 `;

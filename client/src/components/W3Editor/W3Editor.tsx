@@ -4,6 +4,7 @@ import Quill, { QuillOptionsStatic } from 'quill';
 import React, { useEffect, useState } from 'react';
 import { HLJS_LANGUAGES } from '@/src/lib/constants';
 import { Editor } from './W3Editor.styled';
+import { randomQuote } from '@/src/lib/quotes';
 
 var quillOptions: QuillOptionsStatic = {
   theme: 'bubble',
@@ -12,11 +13,11 @@ var quillOptions: QuillOptionsStatic = {
     toolbar: [
       ['bold', 'italic', 'underline'],
       ['link', 'image'],
-      [{ header: 1 }, { header: 2 }],
+      [{ header: [1, 2, 3, 4, 5, 6, false] }],
       ['blockquote', 'code-block'],
     ],
   },
-  placeholder: 'Compose an epic...',
+  placeholder: randomQuote(),
 };
 
 window.hljs.configure({
@@ -25,13 +26,18 @@ window.hljs.configure({
 
 interface Props {
   content: string;
+  placeholder?: string;
   setContent?: (content: string) => void;
 }
 
-export default function W3Editor({ content, setContent }: Props) {
+export default function W3Editor({ content, placeholder, setContent }: Props) {
   const [editor, setEditor] = useState<Quill>();
 
   useEffect(() => {
+    if (placeholder) {
+      quillOptions.placeholder = placeholder;
+    }
+
     const quill = new Quill('#w3-editor', quillOptions);
 
     quill.on(
@@ -43,7 +49,7 @@ export default function W3Editor({ content, setContent }: Props) {
     );
 
     setEditor(quill);
-  }, [setContent]);
+  }, [setContent, placeholder]);
 
-  return <Editor id="w3-editor">{content}</Editor>;
+  return <Editor id="w3-editor" dangerouslySetInnerHTML={{ __html: content }}></Editor>;
 }
