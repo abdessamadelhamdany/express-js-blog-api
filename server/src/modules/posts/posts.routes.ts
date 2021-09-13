@@ -9,6 +9,13 @@ export default [
     middlewares: [],
   },
   {
+    path: 'posts/:id',
+    method: 'get',
+    action: 'show',
+    description: 'Get single post',
+    middlewares: [],
+  },
+  {
     path: 'posts',
     method: 'post',
     action: 'create',

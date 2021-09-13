@@ -12,19 +12,24 @@ const service = {
 
   repositories: { post: getRepository(Post) },
 
-  async getAllPosts(): Promise<Post[]> {
+  async findAll(): Promise<Post[]> {
     const posts = await service.repositories.post.find();
 
     return posts;
   },
 
+  async findOne(id: number): Promise<Post> {
+    const post = await service.repositories.post.findOne(id);
+
+    if (typeof post === 'undefined') {
+      throw new ResourceNotFoundError('post');
+    }
+
+    return post;
+  },
+
   async update(id: number, params: Post): Promise<Post> {
     params.id = id;
-
-    // const isAlreadyExistsById = await service.helpers.isAlreadyExists('id', params.id);
-    // if (isAlreadyExistsById) {
-    //   throw new ResourceNotFoundError('post');
-    // }
 
     const post = await service.repositories.post.preload(params);
     if (typeof post === 'undefined') {

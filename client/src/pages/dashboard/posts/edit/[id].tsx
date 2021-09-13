@@ -1,34 +1,25 @@
-import { useRouter } from 'next/router';
+import axios from 'axios';
 import { GetServerSideProps } from 'next';
+import { Post } from '@/src/interfaces';
+import { PostProvider } from '@/src/contexts';
 import { DashboardLayout } from '@/src/layouts';
-import NavLinks from '@/src/components/pages/dashboard/posts/NavLinks';
-import { Main, Container, Header, Title, Section } from '@/src/core-ui/layouts';
+import PostForm from '@/src/components/pages/dashboard/posts/PostForm';
 
-export default function PostsEdit() {
-  const {
-    query: { id },
-  } = useRouter();
-
+export default function EditPost({ originalPost }: { originalPost: Post }) {
   return (
-    <DashboardLayout>
-      <Main>
-        <Header>
-          <Container>
-            <NavLinks />
-          </Container>
-        </Header>
-        <Section>
-          <Container>
-            <Title>Posts edit: {id}</Title>;
-          </Container>
-        </Section>
-      </Main>
-    </DashboardLayout>
+    <PostProvider>
+      <DashboardLayout hasNavbar={false}>
+        <PostForm originalPost={originalPost} />
+      </DashboardLayout>
+    </PostProvider>
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async function () {
+export const getServerSideProps: GetServerSideProps<{ originalPost: Post }> = async function ({ req, query }) {
+  const { data } = await axios.get(`${process.env.APP_URL}/api/posts/${query.id}`);
   return {
-    props: {},
+    props: {
+      originalPost: data.data.post,
+    },
   };
 };

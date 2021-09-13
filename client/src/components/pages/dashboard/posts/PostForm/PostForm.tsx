@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { usePost } from '@/src/hooks';
 import { Status } from './PostForm.styled';
 import { ChevronLeftIcon } from '@heroicons/react/outline';
@@ -8,10 +8,20 @@ import { Main, ContainerFluid, Header, Section } from '@/src/core-ui/layouts';
 import { Flex, ActionsWrapper, LinkAction, IconAction } from '@/src/core-ui/actions';
 import PostSettings from '@/src/components/pages/dashboard/posts/PostForm/PostSettings';
 import PostWritingSpace from '@/src/components/pages/dashboard/posts/PostForm/PostWritingSpace';
+import { Post, PostStatus } from '@/src/interfaces';
 
-export default function PostForm() {
-  const { post, saveDraft, savePublic } = usePost();
+interface Props {
+  originalPost?: Post;
+}
+
+export default function PostForm({ originalPost }: Props) {
+  const { post, setPost, saveDraft, savePublic } = usePost();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  useEffect(() => {
+    originalPost && setPost(originalPost);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
@@ -40,7 +50,7 @@ export default function PostForm() {
                   Publish
                 </LinkAction>
                 <LinkAction variant="secondary" onClick={saveDraft}>
-                  Save Draft
+                  {post.status && post.status === PostStatus.PUBLIC ? 'Revert Draft' : 'Save Draft'}
                 </LinkAction>
                 {!isSidebarOpen && (
                   <IconAction variant="secondary" isActive={isSidebarOpen} onClick={() => setIsSidebarOpen(true)}>
