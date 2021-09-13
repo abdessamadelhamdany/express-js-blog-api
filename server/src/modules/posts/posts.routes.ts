@@ -15,4 +15,11 @@ export default [
     description: 'Create a new post',
     middlewares: ['global::auth'],
   },
+  {
+    path: 'posts/:id',
+    method: 'put',
+    action: 'update',
+    description: 'Update a post',
+    middlewares: ['global::auth'],
+  },
 ] as IRoute[];

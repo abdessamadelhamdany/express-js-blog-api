@@ -8,7 +8,7 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
 } from 'typeorm';
-import { IsOptional, IsNotEmpty, IsEnum } from 'class-validator';
+import { IsNotEmpty, IsEnum } from 'class-validator';
 import { User } from '../../users/models/User';
 import PostsInterfaces from '../posts.interfaces';
 
@@ -29,9 +29,7 @@ export class Post {
   @Column({ default: false })
   slugEditedByUser?: boolean;
 
-  @Column()
-  @IsNotEmpty()
-  @IsOptional()
+  @Column({ nullable: true })
   thumbnail: string;
 
   @Column({ nullable: true })
@@ -41,8 +39,6 @@ export class Post {
   excerpt: string;
 
   @Column({ type: 'longtext', nullable: true })
-  @IsNotEmpty()
-  @IsOptional()
   content: string;
 
   @Column({ default: 0 })

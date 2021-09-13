@@ -1,16 +1,16 @@
 import Link from 'next/link';
 import React, { useState } from 'react';
 import { usePost } from '@/src/hooks';
+import { Status } from './PostForm.styled';
 import { ChevronLeftIcon } from '@heroicons/react/outline';
 import { SidebarToggleIcon } from '@/src/components/icons';
-import { Status } from '@/src/styles/pages/dashboard/posts/New.styled';
 import { Main, ContainerFluid, Header, Section } from '@/src/core-ui/layouts';
 import { Flex, ActionsWrapper, LinkAction, IconAction } from '@/src/core-ui/actions';
 import PostSettings from '@/src/components/pages/dashboard/posts/PostForm/PostSettings';
 import PostWritingSpace from '@/src/components/pages/dashboard/posts/PostForm/PostWritingSpace';
 
 export default function PostForm() {
-  const { post, saveDraft } = usePost();
+  const { post, saveDraft, savePublic } = usePost();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
@@ -30,20 +30,24 @@ export default function PostForm() {
                 <Status>{post.status || 'New'}</Status>
               </ActionsWrapper>
 
-              {!post.id && (
-                <ActionsWrapper>
-                  <LinkAction variant="info">Preview</LinkAction>
-                  <LinkAction variant="primary">Publish</LinkAction>
-                  <LinkAction variant="secondary" onClick={saveDraft}>
-                    Save Draft
+              <ActionsWrapper>
+                {post.id && (
+                  <LinkAction href={`/dashboard/posts/preview/${post.slug}`} target="_blank" variant="info">
+                    Preview
                   </LinkAction>
-                  {!isSidebarOpen && (
-                    <IconAction variant="secondary" isActive={isSidebarOpen} onClick={() => setIsSidebarOpen(true)}>
-                      <SidebarToggleIcon />
-                    </IconAction>
-                  )}
-                </ActionsWrapper>
-              )}
+                )}
+                <LinkAction variant="primary" onClick={savePublic}>
+                  Publish
+                </LinkAction>
+                <LinkAction variant="secondary" onClick={saveDraft}>
+                  Save Draft
+                </LinkAction>
+                {!isSidebarOpen && (
+                  <IconAction variant="secondary" isActive={isSidebarOpen} onClick={() => setIsSidebarOpen(true)}>
+                    <SidebarToggleIcon />
+                  </IconAction>
+                )}
+              </ActionsWrapper>
             </Flex>
           </ContainerFluid>
         </Header>

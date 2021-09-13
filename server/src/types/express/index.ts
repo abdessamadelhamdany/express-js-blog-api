@@ -1,4 +1,4 @@
-import UsersInterfaces from 'src/modules/users/users.interfaces';
+import UsersInterfaces from '../../modules/users/users.interfaces';
 
 declare global {
   namespace Express {

@@ -7,10 +7,8 @@ import UsersInterfaces from './users.interfaces';
 import { InvalidTokenError, ResourceNotFoundError, ResourceValidationError } from '../../exceptions';
 
 const service = {
-  repositories: { user: getRepository(User) },
-
   helpers: {
-    async isAlreadyExist(key: 'email' | 'username', value: string, isUpdate = false): Promise<boolean> {
+    async isAlreadyExists(key: 'email' | 'username', value: string, isUpdate = false): Promise<boolean> {
       return (await service.repositories.user.count({ where: { [key]: [value] } })) > 0;
     },
     safeUser(user: User): UsersInterfaces.SafeUser {
@@ -29,6 +27,8 @@ const service = {
       };
     },
   },
+
+  repositories: { user: getRepository(User) },
 
   async me(token: string): Promise<UsersInterfaces.SafeUser> {
     let _id;
@@ -56,7 +56,7 @@ const service = {
       throw new ResourceValidationError('user', errors);
     }
 
-    const isAlreadyExistsByUsername = await service.helpers.isAlreadyExist('username', params.username);
+    const isAlreadyExistsByUsername = await service.helpers.isAlreadyExists('username', params.username);
     if (isAlreadyExistsByUsername) {
       errors.push({
         property: 'username',
@@ -68,7 +68,7 @@ const service = {
       throw new ResourceValidationError('user', errors);
     }
 
-    const isAlreadyExistsByEmail = await service.helpers.isAlreadyExist('email', params.email);
+    const isAlreadyExistsByEmail = await service.helpers.isAlreadyExists('email', params.email);
     if (isAlreadyExistsByEmail) {
       errors.push({
         property: 'email',

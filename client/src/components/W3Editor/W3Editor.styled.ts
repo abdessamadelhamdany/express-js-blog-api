@@ -9,6 +9,11 @@ export const Editor = styled.div`
 
   .ql-editor {
     margin: -10px 0;
-    padding: 30px 16px;
+    padding: 30px 24px;
+
+    &.ql-blank::before {
+      left: 24px;
+      right: 24px;
+    }
   }
 `;

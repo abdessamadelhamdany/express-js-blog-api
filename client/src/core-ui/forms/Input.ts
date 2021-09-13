@@ -11,6 +11,10 @@ export const Input = styled.input<Props>`
   border: 1px solid ${({ invalid, theme }) => (invalid ? theme.color.others.danger[500] : theme.color.gray[700])};
   background-color: ${({ theme }) => theme.color.global.white};
 
+  &::placeholder {
+    color: ${({ theme }) => theme.color.gray[400]};
+  }
+
   &:focus {
     outline: none;
     border-color: ${({ theme }) => theme.color.brand.primary};
