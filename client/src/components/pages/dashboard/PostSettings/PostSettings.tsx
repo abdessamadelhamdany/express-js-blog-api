@@ -1,6 +1,6 @@
 import { slugify } from '@/src/lib/helpers';
 import { FC, ChangeEvent } from 'react';
-import { usePostForm } from '@/src/hooks';
+import { usePost } from '@/src/hooks';
 import { TextArea } from '@/src/styles/common/TextArea';
 import { RefreshIcon } from '@heroicons/react/outline';
 import { Header, Section } from '@/src/core-ui/layouts';
@@ -14,14 +14,14 @@ interface Props {
 }
 
 const PostSettings: FC<Props> = ({ isOpen = false, setIsOpen }) => {
-  const { postForm, setPostForm } = usePostForm();
+  const { post, setPost } = usePost();
 
   const onSlugChange = ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
-    setPostForm({ ...postForm, slug: value === '-' ? value : slugify(value), slugEditedByUser: true });
+    setPost((post) => ({ ...post, slug: value.endsWith('-') ? value : slugify(value), slugEditedByUser: true }));
   };
 
   const onSlugRefresh = () => {
-    setPostForm({ ...postForm, slug: slugify(postForm.title), slugEditedByUser: false });
+    setPost((post) => ({ ...post, slug: slugify(post.title), slugEditedByUser: false }));
   };
 
   return (
@@ -38,7 +38,7 @@ const PostSettings: FC<Props> = ({ isOpen = false, setIsOpen }) => {
           </Header>
           <Section>
             <InputWrapper className="has-toggler">
-              <SlugInput type="text" placeholder="URL Slug" value={postForm.slug} onChange={onSlugChange} />
+              <SlugInput type="text" placeholder="URL Slug" value={post.slug} onChange={onSlugChange} />
 
               <Toggler onClick={onSlugRefresh}>{<RefreshIcon />}</Toggler>
             </InputWrapper>
@@ -46,8 +46,8 @@ const PostSettings: FC<Props> = ({ isOpen = false, setIsOpen }) => {
             <InputWrapper>
               <TextArea
                 rows={3}
-                value={postForm.excerpt}
-                onChange={({ target: { value } }) => setPostForm({ ...postForm, excerpt: value })}
+                value={post.excerpt}
+                onChange={({ target: { value } }) => setPost((post) => ({ ...post, excerpt: value }))}
                 placeholder="Excerpt"
               ></TextArea>
             </InputWrapper>
@@ -55,8 +55,8 @@ const PostSettings: FC<Props> = ({ isOpen = false, setIsOpen }) => {
             <InputWrapper>
               <TextArea
                 rows={3}
-                value={postForm.description}
-                onChange={({ target: { value } }) => setPostForm({ ...postForm, description: value })}
+                value={post.description}
+                onChange={({ target: { value } }) => setPost((post) => ({ ...post, description: value }))}
                 placeholder="Description"
               ></TextArea>
             </InputWrapper>

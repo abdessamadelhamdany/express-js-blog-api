@@ -1,35 +1,23 @@
 import Link from 'next/link';
-import dynamic from 'next/dynamic';
 import { GetServerSideProps } from 'next';
-import React, { ChangeEvent, useState } from 'react';
-
-import { usePostForm } from '@/src/hooks';
-import { slugify } from '@/src/lib/helpers';
+import React, { useState } from 'react';
+import { usePost } from '@/src/hooks';
 import { DashboardLayout } from '@/src/layouts';
-import { PostFormProvider } from '@/src/contexts';
+import { PostProvider } from '@/src/contexts';
 import { ChevronLeftIcon } from '@heroicons/react/outline';
 import { SidebarToggleIcon } from '@/src/components/icons';
+import { Status } from '@/src/styles/pages/dashboard/posts/New.styled';
 import PostSettings from '@/src/components/pages/dashboard/PostSettings';
 import { Flex, ActionsWrapper, LinkAction, IconAction } from '@/src/core-ui/actions';
-import { Main, ContainerFluid, Header, Section, Container } from '@/src/core-ui/layouts';
-import { Status, TitleInput, WritingSpace } from '@/src/styles/pages/dashboard/posts/New.styled';
-
-const W3Editor = dynamic(() => import('@/src/components/W3Editor'), { ssr: false });
+import { Main, ContainerFluid, Header, Section } from '@/src/core-ui/layouts';
+import PostWritingSpace from '@/src/components/pages/dashboard/PostWritingSpace';
 
 export default function NewPost() {
-  const { postForm, setPostForm } = usePostForm();
+  const { post } = usePost();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const updateTitle = ({ target: { value } }: ChangeEvent<HTMLInputElement>) => {
-    if (!postForm.slugEditedByUser) {
-      setPostForm({ ...postForm, title: value, slug: slugify(value) });
-    } else {
-      setPostForm({ ...postForm, title: value });
-    }
-  };
-
   return (
-    <PostFormProvider>
+    <PostProvider>
       <DashboardLayout hasNavbar={false}>
         <Main>
           <Header p="24px 0 36px">
@@ -43,10 +31,10 @@ export default function NewPost() {
                     </LinkAction>
                   </Link>
 
-                  <Status>{postForm.status || 'New'}</Status>
+                  <Status>{post.status || 'New'}</Status>
                 </ActionsWrapper>
 
-                {!postForm.id && (
+                {!post.id && (
                   <ActionsWrapper>
                     <LinkAction variant="info">Preview</LinkAction>
                     <LinkAction variant="primary">Publish</LinkAction>
@@ -63,19 +51,13 @@ export default function NewPost() {
           </Header>
 
           <Section bgColor="gray.300" canGrow={true} style={{ display: 'flex', flexDirection: 'column' }}>
-            <Container>
-              <TitleInput value={postForm.title} onChange={updateTitle} />
-            </Container>
-
-            <WritingSpace>
-              <W3Editor content={postForm.content} setContent={(content) => setPostForm({ ...postForm, content })} />
-            </WritingSpace>
+            <PostWritingSpace />
           </Section>
         </Main>
 
         <PostSettings isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
       </DashboardLayout>
-    </PostFormProvider>
+    </PostProvider>
   );
 }
 

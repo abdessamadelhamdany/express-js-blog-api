@@ -1,4 +1,4 @@
 export * from './contexts/useAuth';
-export * from './contexts/usePostForm';
+export * from './contexts/usePost';
 
 export * from './useValidationState';

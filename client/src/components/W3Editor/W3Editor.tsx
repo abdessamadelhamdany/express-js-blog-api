@@ -1,10 +1,10 @@
 import { debounce } from 'lodash';
 import 'quill/dist/quill.bubble.css';
+import React, { useEffect, useRef } from 'react';
 import Quill, { QuillOptionsStatic } from 'quill';
-import React, { useEffect, useState } from 'react';
-import { HLJS_LANGUAGES } from '@/src/lib/constants';
 import { Editor } from './W3Editor.styled';
 import { randomQuote } from '@/src/lib/quotes';
+import { HLJS_LANGUAGES } from '@/src/lib/constants';
 
 var quillOptions: QuillOptionsStatic = {
   theme: 'bubble',
@@ -31,14 +31,15 @@ interface Props {
 }
 
 export default function W3Editor({ content, placeholder, setContent }: Props) {
-  const [editor, setEditor] = useState<Quill>();
+  const ref = useRef(null);
 
   useEffect(() => {
     if (placeholder) {
       quillOptions.placeholder = placeholder;
     }
 
-    const quill = new Quill('#w3-editor', quillOptions);
+    const quill = new Quill(ref.current || '', quillOptions);
+    quill.clipboard.dangerouslyPasteHTML(0, content);
 
     quill.on(
       'text-change',
@@ -48,8 +49,8 @@ export default function W3Editor({ content, placeholder, setContent }: Props) {
       }, 500)
     );
 
-    setEditor(quill);
-  }, [setContent, placeholder]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  return <Editor id="w3-editor" dangerouslySetInnerHTML={{ __html: content }}></Editor>;
+  return <Editor ref={ref} />;
 }
