@@ -13,6 +13,9 @@ namespace PostsInterfaces {
     show: express.Handler;
     create: express.Handler;
     update: express.Handler;
+    remove: express.Handler;
+    softRemove: express.Handler;
+    recover: express.Handler;
   }
 }
 

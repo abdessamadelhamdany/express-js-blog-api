@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { GetServerSideProps } from 'next';
 import { Post } from '@/src/interfaces';
+import { PostProvider } from '@/src/contexts';
 import { DashboardLayout } from '@/src/layouts';
 import NavLinks from '@/src/components/pages/dashboard/posts/NavLinks';
 import { Main, Container, Header, Section } from '@/src/core-ui/layouts';
@@ -12,20 +13,22 @@ export type Props = {
 
 export default function PostsDeleted({ posts }: Props) {
   return (
-    <DashboardLayout>
-      <Main>
-        <Header>
-          <Container>
-            <NavLinks />
-          </Container>
-        </Header>
-        <Section>
-          <Container>
-            <PostsList title="Deleted Post" posts={posts} />
-          </Container>
-        </Section>
-      </Main>
-    </DashboardLayout>
+    <PostProvider>
+      <DashboardLayout>
+        <Main>
+          <Header>
+            <Container>
+              <NavLinks />
+            </Container>
+          </Header>
+          <Section>
+            <Container>
+              <PostsList title="Deleted Post" posts={posts} />
+            </Container>
+          </Section>
+        </Main>
+      </DashboardLayout>
+    </PostProvider>
   );
 }
 

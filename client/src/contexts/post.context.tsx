@@ -7,8 +7,13 @@ import { Post, PostStatus } from '@/src/interfaces';
 export interface IPostContext {
   post: Post;
   setPost: Dispatch<SetStateAction<Post>>;
+  posts: Post[];
+  setPosts: Dispatch<SetStateAction<Post[]>>;
   saveDraft: () => void;
   savePublic: () => void;
+  remove: (id: number) => void;
+  softRemove: (id: number) => void;
+  recover: (id: number) => void;
 
   hasError: (key: string) => boolean;
   getError: (key: string) => string | undefined;
@@ -27,8 +32,13 @@ const initialPostState: Post = {
 const initialState: IPostContext = {
   post: initialPostState,
   setPost: () => {},
+  posts: [],
+  setPosts: () => {},
   saveDraft: () => {},
   savePublic: () => {},
+  remove: () => {},
+  softRemove: () => {},
+  recover: () => {},
 
   hasError: () => false,
   getError: () => '',
@@ -39,6 +49,7 @@ export const PostContext = React.createContext<IPostContext>(initialState);
 export const PostProvider: FC = ({ children }) => {
   const router = useRouter();
   const [post, setPost] = useState<Post>(initialPostState);
+  const [posts, setPosts] = useState<Post[]>([]);
   const [hasError, getError, setErrors] = useValidationState([]);
 
   const updateOrCreatePost = (status: PostStatus) => {
@@ -71,8 +82,49 @@ export const PostProvider: FC = ({ children }) => {
     updateOrCreatePost(PostStatus.PUBLIC);
   };
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const memoedValue = useMemo(() => ({ post, setPost, saveDraft, savePublic, hasError, getError }), [post]);
+  const deletePost = async (id: number, softDelete: boolean = true): Promise<void> => {
+    const url = softDelete ? `/api/posts/${id}/soft-delete` : `/api/posts/${id}`;
+
+    try {
+      await axios.delete(url);
+    } catch (err: any) {
+      console.error(err.message);
+    }
+  };
+
+  const remove = async (id: number): Promise<void> => {
+    if (confirm('Are you sure❓\n⚠️ You cannot revert this action')) {
+      await deletePost(id, false);
+      setPosts((posts) => posts.filter((post) => post.id !== id));
+    }
+  };
+
+  const softRemove = async (id: number): Promise<void> => {
+    if (confirm('Are you sure❓')) {
+      await deletePost(id, true);
+      setPosts((posts) => posts.filter((post) => post.id !== id));
+    }
+  };
+
+  const recover = async (id: number): Promise<void> => {
+    if (confirm('Are you sure❓')) {
+      try {
+        const { data } = await axios.post(`/api/posts/${id}/recover`);
+        const recoveredPost: Post = data.data.post;
+        setPosts((posts) => posts.filter((post) => post.id !== recoveredPost.id));
+      } catch (err: any) {
+        console.error(err.message);
+      }
+    }
+  };
+
+  const memoedValue = useMemo(
+    () => {
+      return { post, setPost, posts, setPosts, saveDraft, savePublic, remove, softRemove, recover, hasError, getError };
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [post, posts]
+  );
 
   return <PostContext.Provider value={memoedValue}>{children}</PostContext.Provider>;
 };

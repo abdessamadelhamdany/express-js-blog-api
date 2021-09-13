@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { GetServerSideProps } from 'next';
 import { Post } from '@/src/interfaces';
+import { PostProvider } from '@/src/contexts';
 import { DashboardLayout } from '@/src/layouts';
 import NavLinks from '@/src/components/pages/dashboard/posts/NavLinks';
 import { Main, Container, Header, Section } from '@/src/core-ui/layouts';
@@ -12,24 +13,26 @@ export type Props = {
 
 export default function PostsHome({ posts }: Props) {
   return (
-    <DashboardLayout>
-      <Main>
-        <Header>
-          <Container>
-            <NavLinks />
-          </Container>
-        </Header>
-        <Section>
-          <Container>
-            <PostsList title="Published Post" posts={posts} />
-          </Container>
-        </Section>
-      </Main>
-    </DashboardLayout>
+    <PostProvider>
+      <DashboardLayout>
+        <Main>
+          <Header>
+            <Container>
+              <NavLinks />
+            </Container>
+          </Header>
+          <Section>
+            <Container>
+              <PostsList title="Published Post" posts={posts} />
+            </Container>
+          </Section>
+        </Main>
+      </DashboardLayout>
+    </PostProvider>
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+export const getServerSideProps: GetServerSideProps = async () => {
   const { data } = await axios.get(`${process.env.APP_URL}/api/posts`, {});
 
   return {

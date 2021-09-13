@@ -3,6 +3,7 @@ import { FindConditions, FindManyOptions, getRepository, IsNull, Not } from 'typ
 import { Post } from './models/Post';
 import PostsInterfaces from './posts.interfaces';
 import { ResourceNotFoundError, ResourceValidationError } from '../../../src/exceptions';
+import { remove } from 'lodash';
 
 interface FindAllFilters {
   status?: PostsInterfaces.PostStatus;
@@ -44,24 +45,6 @@ const service = {
     return post;
   },
 
-  async update(id: number, params: Post): Promise<Post> {
-    params.id = id;
-
-    const post = await service.repositories.post.preload(params);
-    if (typeof post === 'undefined') {
-      throw new ResourceNotFoundError('post');
-    }
-
-    const errors = await validate(post, { validationError: { value: false, target: false } });
-    if (errors.length > 0) {
-      throw new ResourceValidationError('post', errors);
-    }
-
-    await service.repositories.post.save(post);
-
-    return post;
-  },
-
   async create(params: Post): Promise<Post> {
     const post = service.repositories.post.create(params);
 
@@ -86,5 +69,54 @@ const service = {
 
     return post;
   },
+
+  async update(id: number, params: Post): Promise<Post> {
+    params.id = id;
+
+    const post = await service.repositories.post.preload(params);
+    if (typeof post === 'undefined') {
+      throw new ResourceNotFoundError('post');
+    }
+
+    const errors = await validate(post, { validationError: { value: false, target: false } });
+    if (errors.length > 0) {
+      throw new ResourceValidationError('post', errors);
+    }
+
+    await service.repositories.post.save(post);
+
+    return post;
+  },
+
+  async remove(id: number): Promise<void> {
+    const post = await service.repositories.post.findOne(id);
+
+    if (typeof post === 'undefined') {
+      throw new ResourceNotFoundError('post');
+    }
+
+    await service.repositories.post.remove(post);
+  },
+
+  async softRemove(id: number): Promise<Post> {
+    const post = await service.repositories.post.findOne(id);
+
+    if (typeof post === 'undefined') {
+      throw new ResourceNotFoundError('post');
+    }
+
+    return await service.repositories.post.softRemove(post);
+  },
+
+  async recover(id: number): Promise<Post> {
+    const post = await service.repositories.post.findOne(id, { withDeleted: true });
+
+    if (typeof post === 'undefined') {
+      throw new ResourceNotFoundError('post');
+    }
+
+    return await service.repositories.post.recover(post);
+  },
 };
+
 export default service;

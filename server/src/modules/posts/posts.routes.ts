@@ -43,4 +43,25 @@ export default [
     description: 'Update a post',
     middlewares: ['global::auth'],
   },
+  {
+    path: 'posts/:id',
+    method: 'delete',
+    action: 'remove',
+    description: 'Remove a single post',
+    middlewares: [],
+  },
+  {
+    path: 'posts/:id/soft-delete',
+    method: 'delete',
+    action: 'softRemove',
+    description: 'Soft remove a single post',
+    middlewares: [],
+  },
+  {
+    path: 'posts/:id/recover',
+    method: 'post',
+    action: 'recover',
+    description: 'Recover a single post',
+    middlewares: [],
+  },
 ] as IRoute[];

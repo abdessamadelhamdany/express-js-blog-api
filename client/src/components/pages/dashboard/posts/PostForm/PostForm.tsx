@@ -1,14 +1,14 @@
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
+import { ChevronLeftIcon } from '@heroicons/react/outline';
 import { usePost } from '@/src/hooks';
 import { Status } from './PostForm.styled';
-import { ChevronLeftIcon } from '@heroicons/react/outline';
+import { Post, PostStatus } from '@/src/interfaces';
 import { SidebarToggleIcon } from '@/src/components/icons';
 import { Main, ContainerFluid, Header, Section } from '@/src/core-ui/layouts';
 import { Flex, ActionsWrapper, LinkAction, IconAction } from '@/src/core-ui/actions';
 import PostSettings from '@/src/components/pages/dashboard/posts/PostForm/PostSettings';
 import PostWritingSpace from '@/src/components/pages/dashboard/posts/PostForm/PostWritingSpace';
-import { Post, PostStatus } from '@/src/interfaces';
 
 interface Props {
   originalPost?: Post;

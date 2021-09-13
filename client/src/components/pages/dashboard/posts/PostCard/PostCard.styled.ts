@@ -3,6 +3,7 @@ import styled from 'styled-components';
 export const Wrapper = styled.a`
   display: block;
   border: 1px solid ${({ theme }) => theme.color.gray[200]};
+  border-bottom: none;
   background-color: ${({ theme }) => theme.color.global.white};
 `;
 
@@ -11,6 +12,12 @@ export const CardHeader = styled.div`
 `;
 
 export const CardContent = styled.div``;
+
+export const CardFooter = styled.footer`
+  display: flex;
+  justify-content: end;
+  border: 1px solid ${({ theme }) => theme.color.gray[200]};
+`;
 
 export const Title = styled.h3`
   color: ${({ theme }) => theme.color.gray[900]};

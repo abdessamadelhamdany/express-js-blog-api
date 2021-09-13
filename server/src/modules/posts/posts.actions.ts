@@ -132,4 +132,78 @@ export default {
       });
     }
   },
+
+  async remove(req: Request, res: Response) {
+    try {
+      const id = parseInt(req.params.id || '0', 10);
+      await postsService.remove(id);
+
+      res.status(StatusCodes.NO_CONTENT).json({
+        status: { code: StatusCodes.NO_CONTENT, phrase: ReasonPhrases.NO_CONTENT },
+      });
+    } catch (error) {
+      if (error instanceof ResourceNotFoundError) {
+        return res.status(StatusCodes.NOT_FOUND).json({
+          errors: error.errors,
+          status: { code: StatusCodes.NOT_FOUND, phrase: ReasonPhrases.NOT_FOUND },
+        });
+      }
+
+      logger.error(error);
+
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+        status: { code: StatusCodes.INTERNAL_SERVER_ERROR, phrase: ReasonPhrases.INTERNAL_SERVER_ERROR },
+      });
+    }
+  },
+
+  async softRemove(req: Request, res: Response) {
+    try {
+      const id = parseInt(req.params.id || '0', 10);
+      const post = await postsService.softRemove(id);
+
+      res.status(StatusCodes.OK).json({
+        data: { post },
+        status: { code: StatusCodes.OK, phrase: ReasonPhrases.OK },
+      });
+    } catch (error) {
+      if (error instanceof ResourceNotFoundError) {
+        return res.status(StatusCodes.NOT_FOUND).json({
+          errors: error.errors,
+          status: { code: StatusCodes.NOT_FOUND, phrase: ReasonPhrases.NOT_FOUND },
+        });
+      }
+
+      logger.error(error);
+
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+        status: { code: StatusCodes.INTERNAL_SERVER_ERROR, phrase: ReasonPhrases.INTERNAL_SERVER_ERROR },
+      });
+    }
+  },
+
+  async recover(req: Request, res: Response) {
+    try {
+      const id = parseInt(req.params.id || '0', 10);
+      const post = await postsService.recover(id);
+
+      res.status(StatusCodes.OK).json({
+        data: { post },
+        status: { code: StatusCodes.OK, phrase: ReasonPhrases.OK },
+      });
+    } catch (error) {
+      if (error instanceof ResourceNotFoundError) {
+        return res.status(StatusCodes.NOT_FOUND).json({
+          errors: error.errors,
+          status: { code: StatusCodes.NOT_FOUND, phrase: ReasonPhrases.NOT_FOUND },
+        });
+      }
+
+      logger.error(error);
+
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+        status: { code: StatusCodes.INTERNAL_SERVER_ERROR, phrase: ReasonPhrases.INTERNAL_SERVER_ERROR },
+      });
+    }
+  },
 } as PostsInterfaces.IPostsActions;
