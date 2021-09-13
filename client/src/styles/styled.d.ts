@@ -27,6 +27,7 @@ declare module 'styled-components' {
     color: {
       global: {
         white: string;
+        transparent: string;
         opacitiedGray: string;
         opacitiedWhite: string;
       };

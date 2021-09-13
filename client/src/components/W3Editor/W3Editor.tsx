@@ -1,13 +1,9 @@
+import { debounce } from 'lodash';
 import 'quill/dist/quill.bubble.css';
 import Quill, { QuillOptionsStatic } from 'quill';
 import React, { useEffect, useState } from 'react';
 import { HLJS_LANGUAGES } from '@/src/lib/constants';
 import { Editor } from './W3Editor.styled';
-
-interface Props {
-  content: string;
-  setContent?: (content: string) => void;
-}
 
 var quillOptions: QuillOptionsStatic = {
   theme: 'bubble',
@@ -27,14 +23,27 @@ window.hljs.configure({
   languages: HLJS_LANGUAGES,
 });
 
+interface Props {
+  content: string;
+  setContent?: (content: string) => void;
+}
+
 export default function W3Editor({ content, setContent }: Props) {
   const [editor, setEditor] = useState<Quill>();
 
   useEffect(() => {
     const quill = new Quill('#w3-editor', quillOptions);
 
-    setEditor(quill);
-  }, []);
+    quill.on(
+      'text-change',
+      debounce(() => {
+        const html = quill.root.innerHTML;
+        setContent && setContent(html);
+      }, 500)
+    );
 
-  return <Editor id="w3-editor">Editor</Editor>;
+    setEditor(quill);
+  }, [setContent]);
+
+  return <Editor id="w3-editor">{content}</Editor>;
 }

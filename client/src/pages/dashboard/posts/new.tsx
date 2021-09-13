@@ -62,7 +62,7 @@ export default function NewPost() {
             </ContainerFluid>
           </Header>
 
-          <Section canGrow={true}>
+          <Section bgColor="gray.300" canGrow={true} style={{ display: 'flex', flexDirection: 'column' }}>
             <Container>
               <TitleInput value={postForm.title} onChange={updateTitle} />
             </Container>

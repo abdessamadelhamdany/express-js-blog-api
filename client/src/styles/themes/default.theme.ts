@@ -26,6 +26,7 @@ const defaultTheme: DefaultTheme = {
   color: {
     global: {
       white: '#ffffff',
+      transparent: 'transparent',
       opacitiedGray: 'rgba(161, 164, 165, 0.4)',
       opacitiedWhite: 'rgba(255, 255, 255, 0.32)',
     },

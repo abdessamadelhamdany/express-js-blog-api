@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { DefaultTheme } from 'styled-components';
 
 export const Main = styled.main`
   display: flex;
@@ -21,7 +21,30 @@ export const Title = styled.h2`
   margin-bottom: 0;
 `;
 
-export const Section = styled.section<{ canGrow?: boolean }>`
+export const Section = styled.section<{ canGrow?: boolean; bgColor?: string }>`
   padding: 16px 0;
   ${({ canGrow = false }) => (canGrow ? 'flex-grow: 1;' : '')}
+  ${({ theme, bgColor }) => `background-color: ${extractThemeColor(theme, bgColor)}`}
 `;
+
+function extractThemeColor(theme: DefaultTheme, bgColor?: string) {
+  if (!bgColor) {
+    return '';
+  }
+
+  const colorPath = bgColor.split('.');
+  if (colorPath.length === 1) {
+    return bgColor;
+  }
+
+  let color: any = theme['color'];
+  colorPath.forEach((path) => {
+    if (path === 'color') {
+      return;
+    }
+
+    color = color[path];
+  });
+
+  return color;
+}
