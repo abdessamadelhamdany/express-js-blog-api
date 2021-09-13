@@ -55,3 +55,20 @@ export const DropdownMenuItemContent = styled.div`
     margin-left: 4px;
   }
 `;
+
+export const DropdownMenuDevider = styled.div`
+  height: 7px;
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+
+  &::after {
+    width: calc(100% - 20px);
+    height: 1px;
+    content: '';
+    display: block;
+    position: absolute;
+    background-color: ${({ theme }) => theme.color.gray[300]};
+  }
+`;

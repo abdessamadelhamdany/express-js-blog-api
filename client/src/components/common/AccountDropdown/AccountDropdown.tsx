@@ -1,13 +1,17 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import { useAuth } from '@/src/hooks';
 import { motion } from 'framer-motion';
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 import { fadeVariants } from '@/src/lib/motions';
-import { UserCircleIcon, CogIcon } from '@heroicons/react/outline';
+import { UserCircleIcon, LogoutIcon } from '@heroicons/react/outline';
 import {
   Avatar,
   Dropdown,
   DropdownMenu,
+  DropdownMenuDevider,
   DropdownMenuItem,
   DropdownMenuItemContent,
   Wrapper,
@@ -18,6 +22,8 @@ type Props = {
 };
 
 export default function AccountDropdown({ avatar }: Props) {
+  const router = useRouter();
+  const { setAuthUser } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -45,7 +51,7 @@ export default function AccountDropdown({ avatar }: Props) {
       >
         <Dropdown>
           <DropdownMenu>
-            <Link href="/" passHref>
+            <Link href="/dashboard" passHref>
               <DropdownMenuItem>
                 <DropdownMenuItemContent>
                   <UserCircleIcon />
@@ -54,14 +60,28 @@ export default function AccountDropdown({ avatar }: Props) {
               </DropdownMenuItem>
             </Link>
 
-            <Link href="/" passHref>
-              <DropdownMenuItem>
-                <DropdownMenuItemContent>
-                  <CogIcon />
-                  <span>Preferences</span>
-                </DropdownMenuItemContent>
-              </DropdownMenuItem>
-            </Link>
+            <DropdownMenuDevider />
+
+            <DropdownMenuItem
+              href="#"
+              onClick={(event) => {
+                event.preventDefault();
+                axios
+                  .post('/api/logout')
+                  .then((_: AxiosResponse) => {
+                    router.push('/');
+                    setAuthUser(null);
+                  })
+                  .catch((_: AxiosError) => {
+                    console.error('Sorry something went wrong!');
+                  });
+              }}
+            >
+              <DropdownMenuItemContent>
+                <LogoutIcon />
+                <span>Logout</span>
+              </DropdownMenuItemContent>
+            </DropdownMenuItem>
           </DropdownMenu>
         </Dropdown>
       </motion.div>

@@ -50,7 +50,6 @@ const Navbar = () => {
             </Link>
             <MenuItem
               href="#"
-              className={pathname.startsWith('/dashboard/profile') ? 'active' : undefined}
               onClick={(event) => {
                 event.preventDefault();
                 axios
