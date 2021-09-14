@@ -1,8 +1,8 @@
 import path from 'path';
 import helmet from 'helmet';
 import morgan from 'morgan';
-import * as rfs from 'rotating-file-stream';
 import cookieParser from 'cookie-parser';
+import * as rfs from 'rotating-file-stream';
 import express, { Request, Response, NextFunction } from 'express';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import modules from './modules';
