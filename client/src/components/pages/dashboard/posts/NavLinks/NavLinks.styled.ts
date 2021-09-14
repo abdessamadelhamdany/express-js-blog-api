@@ -12,6 +12,14 @@ export const NavLink = styled.a`
   font-weight: ${({ theme }) => theme.font.weight.medium};
   color: ${({ theme }) => theme.color.gray[700]};
 
+  &:first-child {
+    padding-left: 0;
+  }
+
+  &:last-child {
+    padding-right: 0;
+  }
+
   &.active {
     color: ${({ theme }) => theme.color.gray[900]};
     font-weight: ${({ theme }) => theme.font.weight.bold};

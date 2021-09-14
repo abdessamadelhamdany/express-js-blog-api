@@ -1,40 +1,51 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { IS_NUMBER } from 'class-validator';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import postsService from './posts.service';
 import PostsInterfaces from './posts.interfaces';
-import { logger } from '../../../src/loaders';
-import { ResourceNotFoundError, ResourceValidationError } from '../../exceptions';
+import { ResourceValidationError } from '../../exceptions';
 
 export default {
-  async index(_: Request, res: Response) {
-    const posts = await postsService.findAll({ status: PostsInterfaces.PostStatus.PUBLIC });
+  async index(_: Request, res: Response, next: NewableFunction) {
+    try {
+      const posts = await postsService.findAll({ status: PostsInterfaces.PostStatus.PUBLIC });
 
-    res.status(StatusCodes.OK).json({
-      data: { posts },
-      status: { code: StatusCodes.OK, phrase: ReasonPhrases.OK },
-    });
+      res.status(StatusCodes.OK).json({
+        data: { posts },
+        status: { code: StatusCodes.OK, phrase: ReasonPhrases.OK },
+      });
+    } catch (error) {
+      next(error);
+    }
   },
 
-  async drafted(_: Request, res: Response) {
-    const posts = await postsService.findAll({ status: PostsInterfaces.PostStatus.DRAFT });
+  async drafted(_: Request, res: Response, next: NewableFunction) {
+    try {
+      const posts = await postsService.findAll({ status: PostsInterfaces.PostStatus.DRAFT });
 
-    res.status(StatusCodes.OK).json({
-      data: { posts },
-      status: { code: StatusCodes.OK, phrase: ReasonPhrases.OK },
-    });
+      res.status(StatusCodes.OK).json({
+        data: { posts },
+        status: { code: StatusCodes.OK, phrase: ReasonPhrases.OK },
+      });
+    } catch (error) {
+      next(error);
+    }
   },
 
-  async deleted(_: Request, res: Response) {
-    const posts = await postsService.findAll({ deleted: true });
+  async deleted(_: Request, res: Response, next: NewableFunction) {
+    try {
+      const posts = await postsService.findAll({ deleted: true });
 
-    res.status(StatusCodes.OK).json({
-      data: { posts },
-      status: { code: StatusCodes.OK, phrase: ReasonPhrases.OK },
-    });
+      res.status(StatusCodes.OK).json({
+        data: { posts },
+        status: { code: StatusCodes.OK, phrase: ReasonPhrases.OK },
+      });
+    } catch (error) {
+      next(error);
+    }
   },
 
-  async show(req: Request, res: Response) {
+  async show(req: Request, res: Response, next: NewableFunction) {
     try {
       const id = parseInt(req.params.id || '0', 10);
       if (isNaN(id)) {
@@ -55,29 +66,11 @@ export default {
         status: { code: StatusCodes.OK, phrase: ReasonPhrases.OK },
       });
     } catch (error) {
-      if (error instanceof ResourceValidationError) {
-        return res.status(StatusCodes.BAD_REQUEST).json({
-          errors: error.errors,
-          status: { code: StatusCodes.BAD_REQUEST, phrase: ReasonPhrases.BAD_REQUEST },
-        });
-      }
-
-      if (error instanceof ResourceNotFoundError) {
-        return res.status(StatusCodes.NOT_FOUND).json({
-          errors: error.errors,
-          status: { code: StatusCodes.NOT_FOUND, phrase: ReasonPhrases.NOT_FOUND },
-        });
-      }
-
-      logger.error(error);
-
-      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-        status: { code: StatusCodes.INTERNAL_SERVER_ERROR, phrase: ReasonPhrases.INTERNAL_SERVER_ERROR },
-      });
+      next(error);
     }
   },
 
-  async create(req: Request, res: Response) {
+  async create(req: Request, res: Response, next: NextFunction) {
     try {
       const post = await postsService.create(req.body);
 
@@ -86,22 +79,11 @@ export default {
         status: { code: StatusCodes.CREATED, phrase: ReasonPhrases.CREATED },
       });
     } catch (error) {
-      if (error instanceof ResourceValidationError) {
-        return res.status(StatusCodes.BAD_REQUEST).json({
-          errors: error.errors,
-          status: { code: StatusCodes.BAD_REQUEST, phrase: ReasonPhrases.BAD_REQUEST },
-        });
-      }
-
-      logger.error(error);
-
-      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-        status: { code: StatusCodes.INTERNAL_SERVER_ERROR, phrase: ReasonPhrases.INTERNAL_SERVER_ERROR },
-      });
+      next(error);
     }
   },
 
-  async update(req: Request, res: Response) {
+  async update(req: Request, res: Response, next: NextFunction) {
     try {
       const id = parseInt(req.params.id || '0', 10);
       const post = await postsService.update(id, req.body);
@@ -111,29 +93,11 @@ export default {
         status: { code: StatusCodes.OK, phrase: ReasonPhrases.OK },
       });
     } catch (error) {
-      if (error instanceof ResourceValidationError) {
-        return res.status(StatusCodes.BAD_REQUEST).json({
-          errors: error.errors,
-          status: { code: StatusCodes.BAD_REQUEST, phrase: ReasonPhrases.BAD_REQUEST },
-        });
-      }
-
-      if (error instanceof ResourceNotFoundError) {
-        return res.status(StatusCodes.NOT_FOUND).json({
-          errors: error.errors,
-          status: { code: StatusCodes.NOT_FOUND, phrase: ReasonPhrases.NOT_FOUND },
-        });
-      }
-
-      logger.error(error);
-
-      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-        status: { code: StatusCodes.INTERNAL_SERVER_ERROR, phrase: ReasonPhrases.INTERNAL_SERVER_ERROR },
-      });
+      next(error);
     }
   },
 
-  async remove(req: Request, res: Response) {
+  async remove(req: Request, res: Response, next: NextFunction) {
     try {
       const id = parseInt(req.params.id || '0', 10);
       await postsService.remove(id);
@@ -142,22 +106,11 @@ export default {
         status: { code: StatusCodes.NO_CONTENT, phrase: ReasonPhrases.NO_CONTENT },
       });
     } catch (error) {
-      if (error instanceof ResourceNotFoundError) {
-        return res.status(StatusCodes.NOT_FOUND).json({
-          errors: error.errors,
-          status: { code: StatusCodes.NOT_FOUND, phrase: ReasonPhrases.NOT_FOUND },
-        });
-      }
-
-      logger.error(error);
-
-      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-        status: { code: StatusCodes.INTERNAL_SERVER_ERROR, phrase: ReasonPhrases.INTERNAL_SERVER_ERROR },
-      });
+      next(error);
     }
   },
 
-  async softRemove(req: Request, res: Response) {
+  async softRemove(req: Request, res: Response, next: NextFunction) {
     try {
       const id = parseInt(req.params.id || '0', 10);
       const post = await postsService.softRemove(id);
@@ -167,22 +120,11 @@ export default {
         status: { code: StatusCodes.OK, phrase: ReasonPhrases.OK },
       });
     } catch (error) {
-      if (error instanceof ResourceNotFoundError) {
-        return res.status(StatusCodes.NOT_FOUND).json({
-          errors: error.errors,
-          status: { code: StatusCodes.NOT_FOUND, phrase: ReasonPhrases.NOT_FOUND },
-        });
-      }
-
-      logger.error(error);
-
-      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-        status: { code: StatusCodes.INTERNAL_SERVER_ERROR, phrase: ReasonPhrases.INTERNAL_SERVER_ERROR },
-      });
+      next(error);
     }
   },
 
-  async recover(req: Request, res: Response) {
+  async recover(req: Request, res: Response, next: NextFunction) {
     try {
       const id = parseInt(req.params.id || '0', 10);
       const post = await postsService.recover(id);
@@ -192,18 +134,7 @@ export default {
         status: { code: StatusCodes.OK, phrase: ReasonPhrases.OK },
       });
     } catch (error) {
-      if (error instanceof ResourceNotFoundError) {
-        return res.status(StatusCodes.NOT_FOUND).json({
-          errors: error.errors,
-          status: { code: StatusCodes.NOT_FOUND, phrase: ReasonPhrases.NOT_FOUND },
-        });
-      }
-
-      logger.error(error);
-
-      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-        status: { code: StatusCodes.INTERNAL_SERVER_ERROR, phrase: ReasonPhrases.INTERNAL_SERVER_ERROR },
-      });
+      next(error);
     }
   },
 } as PostsInterfaces.IPostsActions;

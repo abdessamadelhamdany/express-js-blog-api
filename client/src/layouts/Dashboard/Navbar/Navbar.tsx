@@ -4,7 +4,14 @@ import axios, { AxiosError, AxiosResponse } from 'axios';
 import { useAuth } from '@/src/hooks';
 import Logo from '@/src/components/Logo';
 import { Wrapper, Header, Section, Menu, MenuItem, MenuItemContent, Footer } from './Navbar.styled';
-import { HomeIcon, DocumentTextIcon, LogoutIcon, UserCircleIcon, AdjustmentsIcon } from '@heroicons/react/outline';
+import {
+  HomeIcon,
+  DocumentTextIcon,
+  LogoutIcon,
+  UserCircleIcon,
+  AdjustmentsIcon,
+  PhotographIcon,
+} from '@heroicons/react/outline';
 
 const Navbar = () => {
   const router = useRouter();
@@ -33,6 +40,15 @@ const Navbar = () => {
               <MenuItemContent>
                 <DocumentTextIcon />
                 <span>Posts</span>
+              </MenuItemContent>
+            </MenuItem>
+          </Link>
+
+          <Link href="/dashboard/media-library" passHref>
+            <MenuItem className={pathname.startsWith('/dashboard/media-library') ? 'active' : undefined}>
+              <MenuItemContent>
+                <PhotographIcon />
+                <span>Media Library</span>
               </MenuItemContent>
             </MenuItem>
           </Link>

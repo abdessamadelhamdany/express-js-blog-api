@@ -1,16 +1,14 @@
 import jwt from 'jsonwebtoken';
 import * as dateFn from 'date-fns';
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import { jwtConfig } from '../../config';
-import { logger } from '../../loaders';
-import AuthInterfaces from './auth.interfaces';
 import authService from './auth.service';
+import AuthInterfaces from './auth.interfaces';
 import usersService from '../users/users.service';
-import { ResourceValidationError, ResourceNotFoundError } from '../../exceptions';
 
 export default {
-  async login(req: Request, res: Response) {
+  async login(req: Request, res: Response, next: NextFunction) {
     try {
       const user = await authService.getLoggedInUser(req.body);
 
@@ -28,43 +26,21 @@ export default {
         status: { code: StatusCodes.OK, phrase: ReasonPhrases.OK },
       });
     } catch (error) {
-      if (error instanceof ResourceValidationError) {
-        return res.status(StatusCodes.BAD_REQUEST).json({
-          errors: error.errors,
-          status: { code: StatusCodes.BAD_REQUEST, phrase: ReasonPhrases.BAD_REQUEST },
-        });
-      }
-
-      if (error instanceof ResourceNotFoundError) {
-        return res.status(StatusCodes.NOT_FOUND).json({
-          errors: error.errors,
-          status: { code: StatusCodes.NOT_FOUND, phrase: ReasonPhrases.NOT_FOUND },
-        });
-      }
-
-      logger.error(error);
-
-      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-        status: { code: StatusCodes.INTERNAL_SERVER_ERROR, phrase: ReasonPhrases.INTERNAL_SERVER_ERROR },
-      });
+      next(error);
     }
   },
 
-  async logout(req: Request, res: Response) {
+  async logout(_: Request, res: Response, next: NextFunction) {
     try {
       res.clearCookie('token').json({
         status: { code: StatusCodes.OK, phrase: ReasonPhrases.OK },
       });
     } catch (error) {
-      logger.error(error);
-
-      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-        status: { code: StatusCodes.INTERNAL_SERVER_ERROR, phrase: ReasonPhrases.INTERNAL_SERVER_ERROR },
-      });
+      next(error);
     }
   },
 
-  async register(req: Request, res: Response) {
+  async register(req: Request, res: Response, next: NextFunction) {
     try {
       const user = await usersService.create(req.body);
 
@@ -79,18 +55,7 @@ export default {
         status: { code: StatusCodes.CREATED, phrase: ReasonPhrases.CREATED },
       });
     } catch (error) {
-      if (error instanceof ResourceValidationError) {
-        return res.status(StatusCodes.BAD_REQUEST).json({
-          errors: error.errors,
-          status: { code: StatusCodes.BAD_REQUEST, phrase: ReasonPhrases.BAD_REQUEST },
-        });
-      }
-
-      logger.error(error);
-
-      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-        status: { code: StatusCodes.INTERNAL_SERVER_ERROR, phrase: ReasonPhrases.INTERNAL_SERVER_ERROR },
-      });
+      next(error);
     }
   },
 } as AuthInterfaces.IAuthActions;

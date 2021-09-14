@@ -7,6 +7,8 @@ import express, { Request, Response, NextFunction } from 'express';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import modules from './modules';
 import { __prod__ } from './constants';
+import { logger } from './loaders';
+import { InvalidTokenError, ResourceNotFoundError, ResourceValidationError } from './exceptions';
 
 export default class App {
   public defaultApp: express.Application;
@@ -22,6 +24,38 @@ export default class App {
     res.status(StatusCodes.OK).json({
       version: '1.0.0', //Read version from package.json
       status: { code: StatusCodes.OK, phrase: ReasonPhrases.OK },
+    });
+  }
+
+  private notFoundHandler(_: Request, res: Response, __: NextFunction) {
+    res.status(StatusCodes.NOT_FOUND).json({ status: ReasonPhrases.NOT_FOUND });
+  }
+
+  private errorHandler(err: any, __: Request, res: Response, ___: NextFunction) {
+    if (err instanceof InvalidTokenError) {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        status: { code: StatusCodes.BAD_REQUEST, phrase: ReasonPhrases.BAD_REQUEST },
+      });
+    }
+
+    if (err instanceof ResourceValidationError) {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        errors: err.errors,
+        status: { code: StatusCodes.BAD_REQUEST, phrase: ReasonPhrases.BAD_REQUEST },
+      });
+    }
+
+    if (err instanceof ResourceNotFoundError) {
+      return res.status(StatusCodes.NOT_FOUND).json({
+        errors: err.errors,
+        status: { code: StatusCodes.NOT_FOUND, phrase: ReasonPhrases.NOT_FOUND },
+      });
+    }
+
+    logger.error(err);
+
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      status: { code: StatusCodes.INTERNAL_SERVER_ERROR, phrase: ReasonPhrases.INTERNAL_SERVER_ERROR },
     });
   }
 
@@ -66,10 +100,7 @@ export default class App {
 
   private registerDefaultRoutes(): void {
     this.defaultApp.get('/', this.defaultHandler);
-
-    /** Handler unhandled requests */
-    this.defaultApp.use((_: Request, res: Response, __: NextFunction) => {
-      res.status(StatusCodes.NOT_FOUND).json({ status: ReasonPhrases.NOT_FOUND });
-    });
+    this.defaultApp.use(this.notFoundHandler);
+    this.defaultApp.use(this.errorHandler);
   }
 }
