@@ -1,18 +1,9 @@
-import {
-  Column,
-  Unique,
-  Entity,
-  CreateDateColumn,
-  DeleteDateColumn,
-  UpdateDateColumn,
-  PrimaryGeneratedColumn,
-  ManyToOne,
-} from 'typeorm';
+import { Column, Entity, CreateDateColumn, DeleteDateColumn, UpdateDateColumn, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class MediaLibrary {
   @PrimaryGeneratedColumn()
-  id?: number;
+  id: number;
 
   @Column({ nullable: true })
   alt: string;
@@ -22,12 +13,6 @@ export class MediaLibrary {
 
   @Column({ nullable: true })
   fieldname: string;
-
-  @Column({ nullable: true })
-  originalname: string;
-
-  @Column({ nullable: true })
-  encoding: string;
 
   @Column({ nullable: true })
   mimetype: string;
@@ -47,10 +32,6 @@ export class MediaLibrary {
   @Column({ default: 'local' })
   provider: string;
 
-  // use url to map public to
-  @Column({ nullable: true })
-  url: string;
-
   @Column({ nullable: true })
   width: number;
 
@@ -58,11 +39,11 @@ export class MediaLibrary {
   height: number;
 
   @CreateDateColumn()
-  createdAt?: Date;
+  createdAt: Date;
 
   @UpdateDateColumn()
-  updatedAt?: Date;
+  updatedAt: Date;
 
   @DeleteDateColumn()
-  deletedAt?: Date;
+  deletedAt: Date;
 }

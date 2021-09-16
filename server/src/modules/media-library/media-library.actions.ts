@@ -3,7 +3,6 @@ import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import mediaLibraryService from './media-library.service';
 import MediaLibraryInterfaces from './media-library.interfaces';
 import localProvider from './providers/local.provider';
-import multer from 'multer';
 
 export default {
   async index(_: Request, res: Response, next: NextFunction) {
@@ -19,20 +18,18 @@ export default {
   async upload(req: Request, res: Response, next: NextFunction) {
     const middleware = localProvider.single('photo');
 
-    return middleware(req, res, (error) => {
+    return middleware(req, res, async (error) => {
       if (error) {
         next(error);
         return;
       }
 
       try {
-        const file = mediaLibraryService.validateFile('photo', req.file);
+        const mediaLibrary = await mediaLibraryService.create(req.file);
 
-        // call service to save file to database
-
-        res.status(StatusCodes.OK).json({
-          data: { file },
-          status: { code: StatusCodes.OK, phrase: ReasonPhrases.OK },
+        res.status(StatusCodes.CREATED).json({
+          data: { mediaLibrary },
+          status: { code: StatusCodes.CREATED, phrase: ReasonPhrases.CREATED },
         });
       } catch (error) {
         next(error);

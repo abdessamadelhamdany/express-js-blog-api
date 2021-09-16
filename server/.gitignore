@@ -13,6 +13,9 @@ logs/
 tmp/
 temp/
 
+# Static media
+static/media-library/
+
 # misc
 .DS_Store
 *.pem

@@ -12,11 +12,11 @@ export default {
       return fs.lstatSync(filePath).isDirectory();
     });
 
-    const globalMiddlewares: string[] | express.Handler[] = require(`../middlewares`).default;
+    const globalMiddlewares: { [key: string]: express.Handler } = require(`../middlewares`).default;
 
     moduleDirs.forEach((module) => {
       const moduleRoutes: IRoute[] = require(`./${module}/${module}.routes`).default;
-      const moduleActions: Object = require(`./${module}/${module}.actions`).default;
+      const moduleActions: { [key: string]: express.Handler } = require(`./${module}/${module}.actions`).default;
       const moduleMiddlewares: { [key: string]: express.Handler } =
         require(`./${module}/${module}.middlewares`).default;
 
@@ -65,5 +65,3 @@ export default {
     return routes;
   },
 };
-
-// Export list of routes

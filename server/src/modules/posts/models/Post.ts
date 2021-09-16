@@ -16,7 +16,7 @@ import PostsInterfaces from '../posts.interfaces';
 @Unique(['slug'])
 export class Post {
   @PrimaryGeneratedColumn()
-  id?: number;
+  id: number;
 
   @Column()
   @IsNotEmpty()
@@ -56,11 +56,11 @@ export class Post {
   user: User;
 
   @CreateDateColumn()
-  createdAt?: Date;
+  createdAt: Date;
 
   @UpdateDateColumn()
-  updatedAt?: Date;
+  updatedAt: Date;
 
   @DeleteDateColumn()
-  deletedAt?: Date;
+  deletedAt: Date;
 }
