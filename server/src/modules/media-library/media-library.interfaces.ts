@@ -9,9 +9,13 @@ namespace MediaLibraryInterfaces {
     upload: express.Handler;
   }
 
+  export interface FindAllFilters {
+    deleted?: boolean;
+  }
+
   export interface SafeMediaLibrary {
     id: number;
-    url?: string;
+    path?: string;
     alt?: string;
     caption?: string;
     size?: number;

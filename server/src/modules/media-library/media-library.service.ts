@@ -1,35 +1,36 @@
 import { ValidationError } from 'class-validator';
-import { getRepository } from 'typeorm';
+import { FindConditions, FindManyOptions, getRepository, IsNull, Not } from 'typeorm';
 import { ResourceValidationError } from '../../exceptions';
 import MediaLibraryInterfaces from './media-library.interfaces';
 import { MediaLibrary } from './models/MediaLibrary';
 
 const service = {
   helpers: {
-    safeMediaLibrary(mediaLibrary: MediaLibrary): MediaLibraryInterfaces.SafeMediaLibrary {
+    safeMediaLibrary(mediaFile: MediaLibrary): MediaLibraryInterfaces.SafeMediaLibrary {
       return {
-        id: mediaLibrary.id,
-        alt: mediaLibrary.alt,
-        caption: mediaLibrary.caption,
-        size: mediaLibrary.size,
-        provider: mediaLibrary.provider,
-        width: mediaLibrary.width,
-        height: mediaLibrary.height,
-        mimetype: mediaLibrary.mimetype,
-        createdAt: mediaLibrary.createdAt,
-        updatedAt: mediaLibrary.updatedAt,
-        deletedAt: mediaLibrary.deletedAt,
+        id: mediaFile.id,
+        alt: mediaFile.alt,
+        caption: mediaFile.caption,
+        size: mediaFile.size,
+        provider: mediaFile.provider,
+        path: mediaFile.path,
+        width: mediaFile.width,
+        height: mediaFile.height,
+        mimetype: mediaFile.mimetype,
+        createdAt: mediaFile.createdAt,
+        updatedAt: mediaFile.updatedAt,
+        deletedAt: mediaFile.deletedAt,
       };
     },
 
-    validate(file?: MediaLibraryInterfaces.File): ValidationError[] {
+    validate(propertyName: string, file?: MediaLibraryInterfaces.File): ValidationError[] {
       const errors: ValidationError[] = [];
 
       if (!file) {
         errors.push({
-          property: 'file',
+          property: propertyName,
           constraints: {
-            isNotEmpty: `file should not be empty`,
+            isNotEmpty: `${propertyName} should not be empty`,
           },
         });
       }
@@ -42,8 +43,29 @@ const service = {
     mediaLibrary: getRepository(MediaLibrary),
   },
 
-  async create(file?: MediaLibraryInterfaces.File): Promise<MediaLibraryInterfaces.SafeMediaLibrary> {
-    const errors = service.helpers.validate(file);
+  async findAll(filters?: MediaLibraryInterfaces.FindAllFilters): Promise<MediaLibraryInterfaces.SafeMediaLibrary[]> {
+    const findConditions: FindConditions<MediaLibrary> = {};
+
+    if (typeof filters?.deleted !== 'undefined') {
+      findConditions.deletedAt = filters.deleted ? Not(IsNull()) : IsNull();
+    }
+
+    const findManyOptions: FindManyOptions<MediaLibrary> = {
+      where: findConditions,
+      order: { createdAt: 'DESC' },
+      withDeleted: filters?.deleted,
+    };
+
+    const mediaLibrary = await service.repositories.mediaLibrary.find(findManyOptions);
+
+    return mediaLibrary.map((mediaFile) => service.helpers.safeMediaLibrary(mediaFile));
+  },
+
+  async create(
+    propertyName: string,
+    file?: MediaLibraryInterfaces.File,
+  ): Promise<MediaLibraryInterfaces.SafeMediaLibrary> {
+    const errors = service.helpers.validate(propertyName, file);
 
     if (errors.length || !file) {
       throw new ResourceValidationError('media-library', errors);
@@ -52,7 +74,7 @@ const service = {
     const alt = file.originalname.replace(/\.[^.]+$/, '');
     const { fieldname, mimetype, size, destination, filename, path } = file;
 
-    const mediaLibrary = await service.repositories.mediaLibrary.save(
+    const mediaFile = await service.repositories.mediaLibrary.save(
       service.repositories.mediaLibrary.create({
         alt,
         path,
@@ -64,7 +86,7 @@ const service = {
       }),
     );
 
-    return service.helpers.safeMediaLibrary(mediaLibrary);
+    return service.helpers.safeMediaLibrary(mediaFile);
   },
 };
 

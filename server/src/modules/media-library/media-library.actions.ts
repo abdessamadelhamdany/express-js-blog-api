@@ -7,7 +7,10 @@ import localProvider from './providers/local.provider';
 export default {
   async index(_: Request, res: Response, next: NextFunction) {
     try {
+      const mediaLibrary = await mediaLibraryService.findAll();
+
       res.status(StatusCodes.OK).json({
+        data: { mediaLibrary },
         status: { code: StatusCodes.OK, phrase: ReasonPhrases.OK },
       });
     } catch (error) {
@@ -25,10 +28,10 @@ export default {
       }
 
       try {
-        const mediaLibrary = await mediaLibraryService.create(req.file);
+        const mediaFile = await mediaLibraryService.create('photo', req.file);
 
         res.status(StatusCodes.CREATED).json({
-          data: { mediaLibrary },
+          data: { mediaFile },
           status: { code: StatusCodes.CREATED, phrase: ReasonPhrases.CREATED },
         });
       } catch (error) {
