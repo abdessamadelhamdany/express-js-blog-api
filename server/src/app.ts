@@ -15,9 +15,14 @@ export default class App {
 
   public constructor() {
     this.defaultApp = express();
+    this.registerStaticDirs();
     this.registerMiddlewares();
     this.registerModules();
     this.registerDefaultRoutes();
+  }
+
+  private registerStaticDirs() {
+    this.defaultApp.use('/static', express.static(path.join(__dirname, '../static')));
   }
 
   private defaultHandler(_: Request, res: Response) {

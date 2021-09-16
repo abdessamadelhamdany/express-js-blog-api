@@ -1,8 +1,7 @@
-import express from 'express';
+import express, { Express } from 'express';
 
 namespace MediaLibraryInterfaces {
-  export interface File {}
-  export interface Photo {}
+  export type File = Express.Multer.File;
   export interface Folder {}
 
   export interface IMediaLibraryActions {
