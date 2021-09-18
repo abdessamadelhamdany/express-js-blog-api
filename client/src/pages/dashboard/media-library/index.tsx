@@ -1,10 +1,10 @@
 import { GetServerSideProps } from 'next';
-import { Container, Main } from '@/src/core-ui/layouts';
-import { DashboardLayout } from '@/src/layouts';
 import { FormEvent, useEffect, useState } from 'react';
 import axios, { AxiosError, AxiosResponse } from 'axios';
-import { MediaLibrary } from '@/src/interfaces/models/MediaLibrary';
+import { DashboardLayout } from '@/src/layouts';
 import { useValidationState } from '@/src/hooks';
+import { MediaLibrary } from '@/src/interfaces/models/MediaLibrary';
+import { Container, Header, Main, Section } from '@/src/core-ui/layouts';
 import {
   FormError,
   Input,
@@ -17,8 +17,7 @@ import {
   FormSubmit,
 } from '@/src/core-ui/forms';
 import { Title } from '@/src/core-ui/typography';
-import { Flex } from '@/src/core-ui/actions';
-import ResponsiveImage from '@/src/components/common/ResponsiveImage';
+import MediaFiles from '@/src/components/pages/dashboard/media-library/MediaFiles';
 
 export default function MediaLibraryHome() {
   const [hasError, getError, setErrors] = useValidationState([]);
@@ -54,37 +53,34 @@ export default function MediaLibraryHome() {
 
   return (
     <DashboardLayout>
-      <Main>
-        <Container>
-          <Title>Media Library</Title>
+      <Main bgColor="gray.200">
+        <Header>
+          <Container>
+            <Title marginless>Media Library</Title>
+          </Container>
+        </Header>
 
-          <Form onSubmit={onSubmit} encType="multipart/form-data" variant="middle">
-            <FormSection>
-              <FormRow>
-                <FormGroup>
-                  <Label htmlFor="photo">Upload photo</Label>
-                  <Input invalid={hasError('photo')} type="file" name="photo" />
-                  <FormError invalid={hasError('photo')}>{getError('photo') || 'no error, congrats!'}</FormError>
-                </FormGroup>
-              </FormRow>
-            </FormSection>
+        <Section>
+          <Container>
+            <Form onSubmit={onSubmit} encType="multipart/form-data" variant="middle">
+              <FormSection>
+                <FormRow>
+                  <FormGroup>
+                    <Label htmlFor="photo">Upload photo</Label>
+                    <Input invalid={hasError('photo')} type="file" name="photo" />
+                    <FormError invalid={hasError('photo')}>{getError('photo') || 'no error, congrats!'}</FormError>
+                  </FormGroup>
+                </FormRow>
+              </FormSection>
 
-            <FormFooter>
-              <FormSubmit>Upload</FormSubmit>
-            </FormFooter>
-          </Form>
-          <br />
+              <FormFooter>
+                <FormSubmit>Upload</FormSubmit>
+              </FormFooter>
+            </Form>
 
-          <Flex justify="space-between" style={{ gap: 10, flexWrap: 'wrap' }}>
-            {mediaLibrary.map((mediaFile) => {
-              return (
-                mediaFile.path && (
-                  <ResponsiveImage key={mediaFile.id} src={mediaFile.path} alt={mediaFile.alt} layout="fill" />
-                )
-              );
-            })}
-          </Flex>
-        </Container>
+            <MediaFiles mediaLibrary={mediaLibrary} />
+          </Container>
+        </Section>
       </Main>
     </DashboardLayout>
   );

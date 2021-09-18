@@ -1,4 +1,7 @@
 Todos
+User can delete picture
+User can change image details (alt) modal
+
 https://github.com/ocruzv/typescript-typeorm-express-starter/blob/master/src/controller/AuthController.ts
 https://quilljs.com/docs/download/
 

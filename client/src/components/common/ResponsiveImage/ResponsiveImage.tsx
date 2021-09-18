@@ -9,7 +9,7 @@ const ResponsiveImage: FC<Props> = (props) => {
   return (
     <ResponsiveImageWrapper>
       {/* eslint-disable-next-line jsx-a11y/alt-text */}
-      <Image {...props} {...{ loader: props.loader || imageLoader }} />
+      <Image {...props} {...{ layout: 'fill', loader: props.loader || imageLoader }} />
     </ResponsiveImageWrapper>
   );
 };

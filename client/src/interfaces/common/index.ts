@@ -1,3 +1,5 @@
+export type Variants = 'primary' | 'secondary' | 'info' | 'warn' | 'danger' | 'success';
+
 export interface ValidationError {
   property: string;
   constraints?: {

@@ -22,6 +22,9 @@ export default {
     const middleware = localProvider.single('photo');
 
     return middleware(req, res, async (error) => {
+      // https://www.youtube.com/watch?v=n-AuBy-z4_A
+      // https://www.npmjs.com/package/sharp
+      // Node JS Image Resize Before Saving || Sharp & Multer || Full Stack App #5
       if (error) {
         next(error);
         return;
