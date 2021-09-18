@@ -4,6 +4,8 @@ import { useValidationState } from '../hooks';
 import { MediaLibrary } from '../interfaces/models/MediaLibrary';
 
 export interface IMediaLibraryContext {
+  mediaFile: MediaLibrary;
+  setMediaFile: Dispatch<SetStateAction<MediaLibrary>>;
   mediaLibrary: MediaLibrary[];
   setMediaLibrary: Dispatch<SetStateAction<MediaLibrary[]>>;
   mediaUploader: (e: FormEvent<HTMLFormElement>) => void;
@@ -12,6 +14,8 @@ export interface IMediaLibraryContext {
 }
 
 const initialState: IMediaLibraryContext = {
+  mediaFile: {},
+  setMediaFile() {},
   mediaLibrary: [],
   setMediaLibrary() {},
   mediaUploader() {},
@@ -25,6 +29,7 @@ interface Props {}
 
 export const MediaLibraryProvider: FC<Props> = ({ children }) => {
   const [hasError, getError, setErrors] = useValidationState([]);
+  const [mediaFile, setMediaFile] = useState<MediaLibrary>({});
   const [mediaLibrary, setMediaLibrary] = useState<MediaLibrary[]>([]);
 
   const memoedValue = useMemo(() => {
@@ -46,13 +51,16 @@ export const MediaLibraryProvider: FC<Props> = ({ children }) => {
     };
 
     return {
+      mediaFile,
+      setMediaFile,
       mediaLibrary,
       setMediaLibrary,
       mediaUploader,
       hasError,
       getError,
     };
-  }, [mediaLibrary, hasError, getError, setErrors]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mediaFile, mediaLibrary]);
 
   return <MediaLibraryContext.Provider value={memoedValue}>{children}</MediaLibraryContext.Provider>;
 };

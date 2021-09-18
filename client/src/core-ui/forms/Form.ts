@@ -1,10 +1,15 @@
 import styled, { css } from 'styled-components';
 
 interface Props {
-  variant: 'middle';
+  variant?: 'full' | 'middle';
 }
 
 const variantStyles = {
+  full: css`
+    & {
+      width: 100%;
+    }
+  `,
   middle: css`
     & {
       margin: 0 auto;
@@ -16,5 +21,5 @@ const variantStyles = {
 export const Form = styled.form<Props>`
   width: 100%;
   padding: 14px;
-  ${({ variant }) => variantStyles[variant]}
+  ${({ variant }) => variantStyles[variant || 'all']}
 `;

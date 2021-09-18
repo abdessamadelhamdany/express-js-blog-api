@@ -120,7 +120,9 @@ export const PostProvider: FC = ({ children }) => {
     };
 
     return { post, setPost, posts, setPosts, saveDraft, savePublic, remove, softRemove, recover, hasError, getError };
-  }, [post, posts, hasError, getError, setErrors, router]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [post, posts]);
 
   return <PostContext.Provider value={memoedValue}>{children}</PostContext.Provider>;
 };
