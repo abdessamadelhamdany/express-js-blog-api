@@ -27,6 +27,36 @@ export const readableFileSize = (size?: number): string => {
   return fileSize(size || 0);
 };
 
+/** Image processing */
+export const loadImage = async (src: string | Blob): Promise<HTMLImageElement> => {
+  return new Promise((resolve, _) => {
+    const image = new Image();
+    image.onload = () => {
+      resolve(image);
+    };
+    image.src = typeof src === 'string' ? src : URL.createObjectURL(src);
+  });
+};
+
+export const getImageSize = async (image: HTMLImageElement): Promise<number> => {
+  const data = await fetch(image.src);
+  const blob = await data.blob();
+  return blob.size;
+};
+
+export const getBase64FromUrl = async (url: string): Promise<string | ArrayBuffer | null> => {
+  const data = await fetch(url);
+  const blob = await data.blob();
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(blob);
+    reader.onloadend = () => {
+      const base64data = reader.result;
+      resolve(base64data);
+    };
+  });
+};
+
 /** Styled components helpets */
 export function getVariantInfo(theme: DefaultTheme, variant?: Variants): string {
   return {

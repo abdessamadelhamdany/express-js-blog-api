@@ -1,4 +1,5 @@
 Todos
+When trying to delete check first if it's used in any article, and return the article title
 User can delete picture
 User can change image details (alt) modal
 

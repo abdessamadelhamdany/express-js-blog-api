@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const FormSubmit = styled.button.attrs({ type: 'submit' })`
+export const FormSubmit = styled.button.attrs(({ type = 'submit' }) => ({ type }))`
   padding: 11px 14px;
   min-width: 120px;
   font-size: ${({ theme }) => theme.font.size.sm.size};

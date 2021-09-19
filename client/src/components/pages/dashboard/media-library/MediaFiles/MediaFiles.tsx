@@ -22,11 +22,9 @@ export default function MediaFilesComponent({ mediaLibrary: initialMediaLibrary 
   const { mediaLibrary, setMediaLibrary } = useMediaLibrary();
 
   useEffect(() => {
-    console.log('called', setMediaLibrary);
     setMediaLibrary(initialMediaLibrary);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  console.log('mediaLibrary', mediaLibrary);
 
   return (
     <MediaFiles>

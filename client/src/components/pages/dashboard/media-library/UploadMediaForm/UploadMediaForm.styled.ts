@@ -1,5 +1,10 @@
 import styled from 'styled-components';
-import { Form as BaseForm, FormError, FormSubmit as BaseFormSubmit } from '@/src/core-ui/forms';
+import {
+  Form as BaseForm,
+  FormError,
+  FormSubmit as BaseFormSubmit,
+  FormFooter as BaseFormFooter,
+} from '@/src/core-ui/forms';
 
 export const Form = styled(BaseForm)`
   display: flex;
@@ -43,7 +48,11 @@ export const FormLabel = styled.label<{ invalid?: boolean }>`
   }
 `;
 
-export const FormPreview = styled.div``;
+export const FormPreview = styled.div`
+  width: 100%;
+  margin: 0 auto;
+  max-width: 30rem;
+`;
 
 export const FormPlaceholder = styled.div`
   flex-grow: 1;
@@ -58,8 +67,20 @@ export const FormPlaceholder = styled.div`
   }
 `;
 
-export const FormCaption = styled.div``;
+export const FormCaption = styled.div`
+  width: 100%;
+`;
 
 export const FormSubmit = styled(BaseFormSubmit)`
   width: 100%;
+`;
+
+export const FormAction = styled(BaseFormSubmit).attrs({ type: 'button' })`
+  width: 100%;
+`;
+
+export const FormFooter = styled(BaseFormFooter)`
+  row-gap: 1rem;
+  display: flex;
+  flex-direction: column;
 `;

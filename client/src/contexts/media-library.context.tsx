@@ -11,16 +11,22 @@ export interface IMediaLibraryContext {
   mediaUploader: (e: FormEvent<HTMLFormElement>) => void;
   hasError: (key: string) => boolean;
   getError: (key: string) => string | undefined;
+  resetErrors: () => void;
 }
 
 const initialState: IMediaLibraryContext = {
-  mediaFile: {},
+  mediaFile: {
+    alt: '',
+    caption: '',
+    width: 720,
+  },
   setMediaFile() {},
   mediaLibrary: [],
   setMediaLibrary() {},
   mediaUploader() {},
   hasError: () => false,
   getError: () => '',
+  resetErrors: () => {},
 };
 
 export const MediaLibraryContext = createContext<IMediaLibraryContext>(initialState);
@@ -29,10 +35,14 @@ interface Props {}
 
 export const MediaLibraryProvider: FC<Props> = ({ children }) => {
   const [hasError, getError, setErrors] = useValidationState([]);
-  const [mediaFile, setMediaFile] = useState<MediaLibrary>({});
-  const [mediaLibrary, setMediaLibrary] = useState<MediaLibrary[]>([]);
+  const [mediaFile, setMediaFile] = useState<MediaLibrary>(initialState.mediaFile);
+  const [mediaLibrary, setMediaLibrary] = useState<MediaLibrary[]>(initialState.mediaLibrary);
 
   const memoedValue = useMemo(() => {
+    const resetErrors = () => {
+      setErrors([]);
+    };
+
     const mediaUploader = (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
 
@@ -58,6 +68,7 @@ export const MediaLibraryProvider: FC<Props> = ({ children }) => {
       mediaUploader,
       hasError,
       getError,
+      resetErrors,
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mediaFile, mediaLibrary]);
