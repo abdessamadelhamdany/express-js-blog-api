@@ -1,9 +1,19 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { createContext, Dispatch, FC, FormEvent, SetStateAction, useMemo, useState } from 'react';
 import { useValidationState } from '../hooks';
+import { ValidationError } from '../interfaces';
 import { MediaLibrary } from '../interfaces/models/MediaLibrary';
+import { ResizedImage } from '../lib/media-library';
+
+export interface MediaLibraryUploadForm {
+  alt: string;
+  caption: string;
+  images: ResizedImage[];
+}
 
 export interface IMediaLibraryContext {
+  uploadForm: MediaLibraryUploadForm;
+  setUploadForm: Dispatch<SetStateAction<MediaLibraryUploadForm>>;
   mediaFile: MediaLibrary;
   setMediaFile: Dispatch<SetStateAction<MediaLibrary>>;
   mediaLibrary: MediaLibrary[];
@@ -11,22 +21,24 @@ export interface IMediaLibraryContext {
   mediaUploader: (e: FormEvent<HTMLFormElement>) => void;
   hasError: (key: string) => boolean;
   getError: (key: string) => string | undefined;
-  resetErrors: () => void;
+  setErrors: Dispatch<SetStateAction<ValidationError[]>>;
 }
 
 const initialState: IMediaLibraryContext = {
-  mediaFile: {
+  uploadForm: {
     alt: '',
     caption: '',
-    width: 720,
+    images: [],
   },
+  setUploadForm() {},
+  mediaFile: {},
   setMediaFile() {},
   mediaLibrary: [],
   setMediaLibrary() {},
   mediaUploader() {},
   hasError: () => false,
   getError: () => '',
-  resetErrors: () => {},
+  setErrors: () => {},
 };
 
 export const MediaLibraryContext = createContext<IMediaLibraryContext>(initialState);
@@ -37,12 +49,9 @@ export const MediaLibraryProvider: FC<Props> = ({ children }) => {
   const [hasError, getError, setErrors] = useValidationState([]);
   const [mediaFile, setMediaFile] = useState<MediaLibrary>(initialState.mediaFile);
   const [mediaLibrary, setMediaLibrary] = useState<MediaLibrary[]>(initialState.mediaLibrary);
+  const [uploadForm, setUploadForm] = useState<MediaLibraryUploadForm>(initialState.uploadForm);
 
   const memoedValue = useMemo(() => {
-    const resetErrors = () => {
-      setErrors([]);
-    };
-
     const mediaUploader = (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
 
@@ -61,6 +70,8 @@ export const MediaLibraryProvider: FC<Props> = ({ children }) => {
     };
 
     return {
+      uploadForm,
+      setUploadForm,
       mediaFile,
       setMediaFile,
       mediaLibrary,
@@ -68,10 +79,19 @@ export const MediaLibraryProvider: FC<Props> = ({ children }) => {
       mediaUploader,
       hasError,
       getError,
-      resetErrors,
+      setErrors,
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mediaFile, mediaLibrary]);
+  }, [
+    uploadForm,
+    setUploadForm,
+    mediaFile,
+    setMediaFile,
+    mediaLibrary,
+    setMediaLibrary,
+    hasError,
+    getError,
+    setErrors,
+  ]);
 
   return <MediaLibraryContext.Provider value={memoedValue}>{children}</MediaLibraryContext.Provider>;
 };

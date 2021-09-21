@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
-import { FormEvent, useState } from 'react';
+import { FormEvent } from 'react';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { DefaultLayout } from '@/src/layouts';
 import { Title } from '@/src/core-ui/typography';
@@ -31,9 +31,9 @@ export default function Register() {
     const data = Object.fromEntries(new FormData(event.currentTarget));
     axios
       .post('/api/login', data)
-      .then((res: AxiosResponse) => {
+      .then(async (res: AxiosResponse) => {
         setAuthUser(res.data.data.user);
-        router.push('/dashboard');
+        await router.push('/dashboard');
       })
       .catch((err: AxiosError) => {
         if (err.response && [400, 404].includes(err.response.status) && err.response.data.errors) {

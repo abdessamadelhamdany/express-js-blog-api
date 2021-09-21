@@ -1,7 +1,25 @@
 Todos
+https://github.com/svg/svgo
+https://imageoptim.com/mac
+https://www.npmjs.com/package/yoastseo
+
+/**
+* Steal their code (use service worker)
+*/
+// https://squoosh.app/editor
+
+optimize image on client then on the server create thumbnail version of it
+
+default
+thumbnail
+
+image type
+
 When trying to delete check first if it's used in any article, and return the article title
 User can delete picture
 User can change image details (alt) modal
+Move core ui to npm package, to share across all apps
+Add feedback form at the right bottom
 
 https://github.com/ocruzv/typescript-typeorm-express-starter/blob/master/src/controller/AuthController.ts
 https://quilljs.com/docs/download/

@@ -1,10 +1,10 @@
-import styled, { css } from 'styled-components';
+import styled, { css,FlattenSimpleInterpolation } from 'styled-components';
 
 interface Props {
   variant?: 'full' | 'middle';
 }
 
-const variantStyles = {
+const variantStyles:{[key:string]:FlattenSimpleInterpolation} = {
   full: css`
     & {
       width: 100%;

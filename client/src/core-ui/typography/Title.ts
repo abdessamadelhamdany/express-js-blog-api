@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 interface Attrs {
-  marginless: boolean;
+  marginless?: boolean;
 }
 
 export const Title = styled.h1<Attrs>`

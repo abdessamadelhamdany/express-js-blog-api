@@ -56,6 +56,7 @@ export const FormPreview = styled.div`
 
 export const FormPlaceholder = styled.div`
   flex-grow: 1;
+  padding: 4rem 0;
   display: flex;
   row-gap: 0.5rem;
   align-items: center;

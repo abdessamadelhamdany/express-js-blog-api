@@ -1,10 +1,10 @@
-import React from 'react';
+import Image from 'next/image';
+import React, { ChangeEvent, useRef, useState } from 'react';
 import { CloudUploadIcon } from '@heroicons/react/outline';
 import { FormError, Input, FormRow, FormGroup } from '@/src/core-ui/forms';
 import { useMediaLibrary } from '@/src/hooks/contexts/useMediaLibrary';
 import {
   Form,
-  FormCaption,
   FormSubmit,
   FormControls,
   FormLabel,
@@ -14,75 +14,165 @@ import {
   FormFooter,
 } from './UploadMediaForm.styled';
 import ResponsiveImage from '@/src/components/common/ResponsiveImage';
-import { resizeImage } from '@/src/lib/media-library';
+import { ResizedImage, resizeImage } from '@/src/lib/media-library';
+import { loadImage } from '@/src/lib/helpers';
 
 export default function UploadMediaFormComponent() {
-  const { mediaFile, setMediaFile, mediaUploader, resetErrors, hasError, getError } = useMediaLibrary();
+  const [widths, setWidth] = useState('460,700');
+  const imageFileInputRef = useRef<HTMLInputElement>(null);
+  const [originalImage, setOriginalImage] = useState<ResizedImage | undefined>();
+  const { uploadForm, setUploadForm, mediaUploader, setErrors, hasError, getError } = useMediaLibrary();
+
+  const clearState = () => {
+    setErrors([]);
+    setUploadForm((uF) => ({ ...uF, images: [] }));
+    setOriginalImage(undefined);
+    if (imageFileInputRef.current) {
+      imageFileInputRef.current.type = 'text';
+      imageFileInputRef.current.type = 'file';
+    }
+  };
 
   const optimizeImage = async () => {
-    resetErrors();
+    setErrors([]);
 
-    const resizedImage = await resizeImage('https://images.pexels.com/photos/1224789/pexels-photo-1224789.jpeg', {
-      width: mediaFile.width || 'auto',
+    if (!originalImage) {
+      setErrors([
+        {
+          property: 'photo',
+          constraints: {
+            isNotEmpty: 'Photo should not be empty',
+          },
+        },
+      ]);
+      return;
+    }
+
+    console.log(originalImage);
+
+    const resizedImages = await resizeImage(originalImage.src, {
+      widths: widths
+        .split(',')
+        .filter((w) => w.length > 0)
+        .map((w) => parseInt(w)),
     });
 
-    setMediaFile((mediaFile) => ({ ...mediaFile, path: resizedImage.src }));
+    setUploadForm((uF) => ({ ...uF, images: resizedImages }));
+  };
+
+  const onImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files?.length) {
+      return;
+    }
+
+    const file = e.target.files[0];
+    if (!file.type.startsWith('image/')) {
+      e.target.type = 'text';
+      e.target.type = 'file';
+
+      setOriginalImage(undefined);
+
+      setErrors([
+        {
+          property: 'photo',
+          constraints: {
+            isInvalidFileType: 'Photo must be an image.',
+          },
+        },
+      ]);
+      return;
+    }
+
+    const image = await loadImage(file);
+    setOriginalImage(image);
+
+    setErrors([]);
   };
 
   return (
     <>
       <Form onSubmit={mediaUploader} encType="multipart/form-data">
-        <FormControls>
-          <FormRow>
-            <FormGroup>
-              <Input invalid={hasError('alt')} type="text" name="alt" placeholder="Alt" />
-              <FormError invalid={hasError('alt')}>{getError('alt') || 'no error, congrats!'}</FormError>
-            </FormGroup>
-          </FormRow>
+        {originalImage && (
+          <FormControls>
+            <FormRow>
+              <FormGroup>
+                <Input invalid={hasError('alt')} type="text" name="alt" placeholder="Alt" />
+                <FormError invalid={hasError('alt')}>{getError('alt') || 'no error, congrats!'}</FormError>
+              </FormGroup>
+            </FormRow>
 
-          <FormRow>
-            <FormGroup>
-              <Input invalid={hasError('caption')} type="text" name="caption" placeholder="Caption" />
-              <FormError invalid={hasError('caption')}>{getError('caption') || 'no error, congrats!'}</FormError>
-            </FormGroup>
-          </FormRow>
+            <FormRow>
+              <FormGroup>
+                <Input invalid={hasError('caption')} type="text" name="caption" placeholder="Caption" />
+                <FormError invalid={hasError('caption')}>{getError('caption') || 'no error, congrats!'}</FormError>
+              </FormGroup>
+            </FormRow>
 
-          <FormRow>
-            <FormGroup>
-              <Input
-                invalid={hasError('width')}
-                type="text"
-                placeholder="Width"
-                value={mediaFile.width}
-                onChange={({ target: { value } }) => {
-                  const width = Number(value);
-                  console.log('value', value);
+            <FormRow>
+              <FormGroup>
+                <Input
+                  invalid={hasError('widths')}
+                  type="text"
+                  placeholder="Supported widths"
+                  value={widths}
+                  onChange={(e) => {
+                    let value = e.target.value;
+                    const backward = value.length < widths.length;
+                    const key = backward ? '' : value.replace(widths, '');
+                    const allowedKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '', ','];
 
-                  if (isNaN(width)) {
-                    return;
-                  }
+                    if (!allowedKeys.includes(key)) {
+                      return;
+                    }
 
-                  setMediaFile((mediaFile) => ({ ...mediaFile, width: Number(value) }));
-                }}
-              />
-              <FormError invalid={hasError('width')}>{getError('width') || 'no error, congrats!'}</FormError>
-            </FormGroup>
-          </FormRow>
+                    if (backward && value.endsWith(',')) {
+                      value = value.substr(0, value.length - 1);
+                    }
 
-          <FormFooter>
-            <FormAction type="button" onClick={optimizeImage}>
-              Optimize
-            </FormAction>
-            <FormSubmit>Upload</FormSubmit>
-          </FormFooter>
-        </FormControls>
+                    setWidth(value);
+                  }}
+                />
+                <FormError invalid={hasError('widths')}>{getError('widths') || 'no error, congrats!'}</FormError>
+              </FormGroup>
+            </FormRow>
+
+            <FormFooter>
+              <FormAction type="button" onClick={clearState}>
+                Clear
+              </FormAction>
+              <FormAction type="button" onClick={optimizeImage}>
+                Optimize
+              </FormAction>
+              <FormSubmit>Upload</FormSubmit>
+            </FormFooter>
+          </FormControls>
+        )}
 
         <FormLabel invalid={hasError('photo')}>
-          {mediaFile.path ? (
+          {uploadForm.images.length ? (
             <FormPreview>
-              {mediaFile.path && <ResponsiveImage src={mediaFile.path} alt={mediaFile.alt} />}
-
-              {mediaFile.caption && <FormCaption>{mediaFile.caption}</FormCaption>}
+              {uploadForm.images.map((image, idx) => (
+                <Image
+                  src={image.src}
+                  width={image.width}
+                  height={image.height}
+                  alt={uploadForm.alt}
+                  title={uploadForm.caption}
+                  key={idx}
+                  objectFit="cover"
+                />
+              ))}
+            </FormPreview>
+          ) : originalImage ? (
+            <FormPreview>
+              <Image
+                src={originalImage.src}
+                width={originalImage.width}
+                height={originalImage.height}
+                alt={uploadForm.alt}
+                title={uploadForm.caption}
+                objectFit="cover"
+              />
             </FormPreview>
           ) : (
             <FormPlaceholder>
@@ -92,14 +182,14 @@ export default function UploadMediaFormComponent() {
           )}
 
           <FormError invalid={hasError('photo')}>{getError('photo') || 'no error, congrats!'}</FormError>
-          <input type="file" name="photo" />
+          <input ref={imageFileInputRef} type="file" name="photo" onChange={onImageChange} />
         </FormLabel>
       </Form>
 
       <br />
       {/* <Form onSubmit={mediaUploader} encType="multipart/form-data" variant="middle">
         <div>Controls (caption, alt, rotation, resize)</div>
-        <div>Preview, (defaul image)</div>
+        <div>Preview, (default image)</div>
         <footer>confirm and upload</footer>
 
         <FormSection>
