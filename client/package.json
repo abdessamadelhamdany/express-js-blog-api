@@ -11,6 +11,7 @@
   "dependencies": {
     "@heroicons/react": "^1.0.4",
     "axios": "^0.21.4",
+    "compressorjs": "^1.0.7",
     "filesize": "^8.0.3",
     "framer-motion": "^4.1.17",
     "highlight.js": "^11.2.0",

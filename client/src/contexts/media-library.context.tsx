@@ -51,24 +51,25 @@ export const MediaLibraryProvider: FC<Props> = ({ children }) => {
   const [mediaLibrary, setMediaLibrary] = useState<MediaLibrary[]>(initialState.mediaLibrary);
   const [uploadForm, setUploadForm] = useState<MediaLibraryUploadForm>(initialState.uploadForm);
 
+  const mediaUploader = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.currentTarget);
+    console.log(formData, e.currentTarget);
+
+    // axios
+    //   .post('/api/media-library/upload', formData)
+    //   .then((res: AxiosResponse) => {
+    //     setMediaLibrary((mediaLibrary) => [res.data.data.mediaFile, ...mediaLibrary]);
+    //   })
+    //   .catch((err: AxiosError) => {
+    //     if (err.response && [400].includes(err.response.status) && err.response.data.errors) {
+    //       setErrors(err.response.data.errors);
+    //     }
+    //   });
+  };
+
   const memoedValue = useMemo(() => {
-    const mediaUploader = (e: FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-
-      const formData = new FormData(e.currentTarget);
-
-      axios
-        .post('/api/media-library/upload', formData)
-        .then((res: AxiosResponse) => {
-          setMediaLibrary((mediaLibrary) => [res.data.data.mediaFile, ...mediaLibrary]);
-        })
-        .catch((err: AxiosError) => {
-          if (err.response && [400].includes(err.response.status) && err.response.data.errors) {
-            setErrors(err.response.data.errors);
-          }
-        });
-    };
-
     return {
       uploadForm,
       setUploadForm,
