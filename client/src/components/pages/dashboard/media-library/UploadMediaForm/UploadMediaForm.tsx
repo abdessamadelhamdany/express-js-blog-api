@@ -12,10 +12,10 @@ import {
   FormPreview,
   FormAction,
   FormFooter,
+  FormPreviewHint,
 } from './UploadMediaForm.styled';
-import ResponsiveImage from '@/src/components/common/ResponsiveImage';
-import { ResizedImage, resizeImage } from '@/src/lib/media-library';
 import { loadImage } from '@/src/lib/helpers';
+import { ResizedImage, resizeImage } from '@/src/lib/media-library';
 
 export default function UploadMediaFormComponent() {
   const [widths, setWidth] = useState('460,700');
@@ -143,47 +143,47 @@ export default function UploadMediaFormComponent() {
               <FormAction type="button" onClick={optimizeImage}>
                 Optimize
               </FormAction>
-              <FormSubmit>Upload</FormSubmit>
+              <FormSubmit>Save</FormSubmit>
             </FormFooter>
           </FormControls>
         )}
 
-        <FormLabel invalid={hasError('photo')}>
-          {uploadForm.images.length ? (
-            <FormPreview>
-              {uploadForm.images.map((image, idx) => (
+        {uploadForm.images.length ? (
+          <FormPreview>
+            {uploadForm.images.map((image, idx) => (
+              <FormPreviewHint data-text={`${image.width}px`} key={idx}>
                 <Image
                   src={image.src}
                   width={image.width}
                   height={image.height}
                   alt={uploadForm.alt}
                   title={uploadForm.caption}
-                  key={idx}
                   objectFit="cover"
                 />
-              ))}
-            </FormPreview>
-          ) : originalImage ? (
-            <FormPreview>
-              <Image
-                src={originalImage.src}
-                width={originalImage.width}
-                height={originalImage.height}
-                alt={uploadForm.alt}
-                title={uploadForm.caption}
-                objectFit="cover"
-              />
-            </FormPreview>
-          ) : (
+              </FormPreviewHint>
+            ))}
+          </FormPreview>
+        ) : originalImage ? (
+          <FormPreview>
+            <Image
+              src={originalImage.src}
+              width={originalImage.width}
+              height={originalImage.height}
+              alt={uploadForm.alt}
+              title={uploadForm.caption}
+              objectFit="cover"
+            />
+          </FormPreview>
+        ) : (
+          <FormLabel invalid={hasError('photo')}>
             <FormPlaceholder>
               <CloudUploadIcon />
               <span>Choose a media file</span>
             </FormPlaceholder>
-          )}
-
-          <FormError invalid={hasError('photo')}>{getError('photo') || 'no error, congrats!'}</FormError>
-          <input ref={imageFileInputRef} type="file" name="photo" onChange={onImageChange} />
-        </FormLabel>
+            <FormError invalid={hasError('photo')}>{getError('photo') || 'no error, congrats!'}</FormError>
+            <input ref={imageFileInputRef} type="file" name="photo" accept="image/*" onChange={onImageChange} />
+          </FormLabel>
+        )}
       </Form>
 
       <br />

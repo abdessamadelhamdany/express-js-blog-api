@@ -1,0 +1,16 @@
+{
+  "name": "w3novices",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:abdessamadelhamdany/w3novices.git",
+  "author": "Abdessamad El Hamdany <abdessamadelhamdany@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "client:dev": "cd client && npm run dev",
+    "server:dev": "cd server && npm run dev",
+    "dev": "concurrently 'npm run server:dev' 'npm run client:dev'"
+  },
+  "devDependencies": {
+    "concurrently": "^6.2.1"
+  }
+}

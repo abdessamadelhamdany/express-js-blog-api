@@ -12,11 +12,11 @@ export const MediaFiles = styled.div`
   }
 
   @media ${screens.laptop} {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
   }
 
   @media ${screens.laptopL} {
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(4, 1fr);
   }
 `;
 

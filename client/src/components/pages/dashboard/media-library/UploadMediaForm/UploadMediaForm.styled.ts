@@ -5,12 +5,19 @@ import {
   FormSubmit as BaseFormSubmit,
   FormFooter as BaseFormFooter,
 } from '@/src/core-ui/forms';
+import { screens, size } from '@/src/styles/screens';
 
 export const Form = styled(BaseForm)`
+  width: 100%;
   display: flex;
+  margin: 0 auto;
   column-gap: 1.5rem;
   justify-content: space-between;
   background-color: ${({ theme }) => theme.color.global.white};
+
+  @media ${screens.laptop} {
+    max-width: ${size.laptop};
+  }
 `;
 
 export const FormControls = styled.div`
@@ -23,18 +30,32 @@ export const FormLabel = styled.label<{ invalid?: boolean }>`
   padding: 0.5rem;
   flex-grow: 1;
   flex-direction: column;
-  border: 1px solid ${({ invalid, theme }) => (invalid ? theme.color.others.danger[500] : theme.color.gray[700])};
+  border: 1px solid ${({ invalid, theme }) => (invalid ? theme.color.others.danger[300] : theme.color.gray[500])};
 
-  &:hover {
-    border-color: ${({ theme }) => theme.color.brand.primary};
+  &,
+  span,
+  svg {
+    transition: all 150ms;
+  }
 
-    svg {
-      stroke: ${({ invalid, theme }) => (invalid ? theme.color.others.danger[500] : theme.color.brand.primary)};
-    }
+  span {
+    color: ${({ invalid, theme }) => (invalid ? theme.color.others.danger[300] : theme.color.gray[500])};
   }
 
   svg {
-    stroke: ${({ invalid, theme }) => (invalid ? theme.color.others.danger[500] : theme.color.gray[700])};
+    stroke: ${({ invalid, theme }) => (invalid ? theme.color.others.danger[300] : theme.color.gray[500])};
+  }
+
+  &:hover {
+    border-color: ${({ invalid, theme }) => (invalid ? theme.color.others.danger[500] : theme.color.gray[900])};
+
+    span {
+      color: ${({ invalid, theme }) => (invalid ? theme.color.others.danger[500] : theme.color.gray[900])};
+    }
+
+    svg {
+      stroke: ${({ invalid, theme }) => (invalid ? theme.color.others.danger[500] : theme.color.gray[900])};
+    }
   }
 
   input {
@@ -50,8 +71,43 @@ export const FormLabel = styled.label<{ invalid?: boolean }>`
 
 export const FormPreview = styled.div`
   width: 100%;
+  gap: 1rem;
+  display: flex;
   margin: 0 auto;
+  flex-wrap: wrap;
   max-width: 30rem;
+  align-items: center;
+  justify-content: flex-start;
+  max-height: 24rem;
+  overflow-y: auto;
+
+  ::-webkit-scrollbar {
+    width: 0;
+  }
+`;
+
+export const FormPreviewHint = styled.div`
+  display: flex;
+  position: relative;
+
+  &::before {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 5px;
+    padding: 5px;
+    opacity: 0.5;
+    background: ${({ theme }) => theme.color.global.white};
+    transition: opacity 150ms;
+    z-index: 3;
+  }
+
+  &:hover {
+    &::before {
+      opacity: 1;
+    }
+  }
 `;
 
 export const FormPlaceholder = styled.div`
