@@ -88,14 +88,14 @@ const processImage = async (image: Blob, resizeWidth: number | number[] = [460, 
   }
 
   const resizedImages = await resizeImage(image, resizeWidth);
-  const compressedImages: Blob[] = [];
 
+  const compressedImages: Blob[] = [];
   for (const resizedImage of resizedImages) {
     const compressedImage = await compressImage(resizedImage);
     compressedImages.push(compressedImage);
   }
 
-  return resizedImages;
+  return compressedImages;
 };
 
 /**
