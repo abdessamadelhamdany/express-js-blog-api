@@ -3,10 +3,11 @@ https://github.com/svg/svgo
 https://imageoptim.com/mac
 https://www.npmjs.com/package/yoastseo
 
-/**
-* Steal their code (use service worker)
-*/
-// https://squoosh.app/editor
+/\*\*
+
+- Steal their code (use service worker)
+  \*/
+  // https://squoosh.app/editor
 
 optimize image on client then on the server create thumbnail version of it
 

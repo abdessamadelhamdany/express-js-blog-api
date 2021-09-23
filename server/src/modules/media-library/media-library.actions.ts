@@ -3,6 +3,7 @@ import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import mediaLibraryService from './media-library.service';
 import MediaLibraryInterfaces from './media-library.interfaces';
 import localProvider from './providers/local.provider';
+import { ResourceValidationError } from 'src/exceptions';
 
 export default {
   async index(_: Request, res: Response, next: NextFunction) {
@@ -28,7 +29,11 @@ export default {
       }
 
       try {
-        const mediaLibrary = await mediaLibraryService.create('photos', { ...req.body, processedImages: req.files });
+        const mediaLibrary = await mediaLibraryService.create({
+          alt: req.body.alt,
+          caption: req.body.caption,
+          processedImages: req.files as MediaLibraryInterfaces.File[],
+        });
 
         res.status(StatusCodes.CREATED).json({
           data: { mediaLibrary },

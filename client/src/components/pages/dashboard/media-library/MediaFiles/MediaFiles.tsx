@@ -22,20 +22,34 @@ export default function MediaFilesComponent({ mediaLibrary: initialMediaLibrary 
   const { mediaLibrary, setMediaLibrary } = useMediaLibrary();
 
   useEffect(() => {
-    setMediaLibrary(initialMediaLibrary);
+    setMediaLibrary(
+      initialMediaLibrary.map((mediaLibraryItem) => {
+        if (mediaLibraryItem.mediaFiles) {
+          mediaLibraryItem.mediaFiles = [
+            mediaLibraryItem.mediaFiles.reduce((previous, current) => {
+              const currentWidth = current.width || 0;
+              const previousWidth = previous.width || 0;
+
+              return currentWidth > previousWidth ? current : previous;
+            }),
+          ];
+        }
+        return mediaLibraryItem;
+      })
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <MediaFiles>
-      {mediaLibrary.map((mediaFile) => {
-        return (
-          mediaFile.path && (
-            <MediaFile key={mediaFile.id}>
-              <ResponsiveImage src={mediaFile.path} alt={mediaFile.alt} />
+      {mediaLibrary.map((mediaLib, idx) => (
+        <div key={idx}>
+          {mediaLib.mediaFiles && mediaLib.mediaFiles.length > 0 && mediaLib.mediaFiles[0].path && (
+            <MediaFile key={mediaLib.id}>
+              <ResponsiveImage src={mediaLib.mediaFiles[0].path} alt={mediaLib.alt} />
               <MediaFileDetail>
-                <MediaFileTitle>{mediaFile.caption || mediaFile.alt}</MediaFileTitle>
-                <MediaFileSize>{readableFileSize(mediaFile.size)}</MediaFileSize>
+                <MediaFileTitle>{mediaLib.caption || mediaLib.alt}</MediaFileTitle>
+                <MediaFileSize>{readableFileSize(mediaLib.mediaFiles[0].size)}</MediaFileSize>
               </MediaFileDetail>
               <MediaFileActions>
                 <MediaFileAction variant="success">
@@ -46,9 +60,9 @@ export default function MediaFilesComponent({ mediaLibrary: initialMediaLibrary 
                 </MediaFileAction>
               </MediaFileActions>
             </MediaFile>
-          )
-        );
-      })}
+          )}
+        </div>
+      ))}
     </MediaFiles>
   );
 }

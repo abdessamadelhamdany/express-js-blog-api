@@ -16,7 +16,7 @@ namespace MediaLibraryInterfaces {
   export interface UploadParams {
     alt: string;
     caption: string;
-    processedImages: File[] | { [fieldname: string]: Express.Multer.File[] } | undefined;
+    processedImages: File[];
   }
 
   export interface SafeMediaLibrary {

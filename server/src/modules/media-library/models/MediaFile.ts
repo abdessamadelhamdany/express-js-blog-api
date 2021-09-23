@@ -5,28 +5,32 @@ import {
   DeleteDateColumn,
   UpdateDateColumn,
   PrimaryGeneratedColumn,
-  OneToMany,
+  ManyToOne,
 } from 'typeorm';
-import { MediaFile } from './MediaFile';
+import { MediaLibrary } from './MediaLibrary';
 
 @Entity()
-export class MediaLibrary {
+export class MediaFile {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ nullable: true })
-  alt: string;
+  mimetype: string;
 
   @Column({ nullable: true })
-  caption: string;
+  size: number;
 
-  @Column({ default: 'local' })
-  provider: string;
+  @Column({ nullable: true })
+  path: string;
 
-  @OneToMany(() => MediaFile, (mediaFiles) => mediaFiles.mediaLibrary, {
-    cascade: true,
-  })
-  mediaFiles: MediaFile[];
+  @Column({ nullable: true })
+  width: number;
+
+  @Column({ nullable: true })
+  height: number;
+
+  @ManyToOne(() => MediaLibrary, (mediaLibrary) => mediaLibrary.mediaFiles)
+  mediaLibrary: MediaLibrary;
 
   @CreateDateColumn()
   createdAt: Date;

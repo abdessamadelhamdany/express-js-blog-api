@@ -8,12 +8,16 @@ import {
 import { screens, size } from '@/src/styles/screens';
 
 export const Form = styled(BaseForm)`
+  margin-bottom: 1rem;
+  background-color: ${({ theme }) => theme.color.global.white};
+`;
+
+export const FormContainer = styled.div`
   width: 100%;
   display: flex;
-  margin: 0 auto 1rem;
+  margin: 0 auto;
   column-gap: 1.5rem;
   justify-content: space-between;
-  background-color: ${({ theme }) => theme.color.global.white};
 
   @media ${screens.laptop} {
     max-width: ${size.laptop};

@@ -12,6 +12,7 @@ import {
   FormFooter,
   FormPreviewHint,
   FormAction,
+  FormContainer,
 } from './UploadMediaForm.styled';
 import { readableFileSize } from '@/src/lib/helpers';
 import { useMediaLibrary } from '@/src/hooks/contexts/useMediaLibrary';
@@ -22,16 +23,6 @@ export default function UploadMediaFormComponent() {
   const [previewImages, setPreviewImages] = useState<PreviewImage[]>([]);
   const { blobToImageElement, validateImage, processImage } = useImageProcessing();
   const { setErrors, hasError, getError, uploadForm, setUploadForm, submitUploadForm } = useMediaLibrary();
-
-  const onFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    try {
-      await submitUploadForm();
-    } catch (err: any) {
-      console.error(err.message);
-    }
-  };
 
   const onImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
     // Make sure file is not empty
@@ -66,7 +57,7 @@ export default function UploadMediaFormComponent() {
 
     // Processing image
     const processedImages = await processImage(file);
-    setUploadForm((uF) => ({ ...uF, processedImages }));
+    setUploadForm((uF) => ({ ...uF, filename: file.name, processedImages }));
 
     // Set preview images
     const prevImages: PreviewImage[] = [];
@@ -78,80 +69,92 @@ export default function UploadMediaFormComponent() {
     setPreviewImages(prevImages);
   };
 
+  const clearForm = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.type = 'text';
+      fileInputRef.current.type = 'file';
+    }
+
+    setPreviewImages([]);
+    setUploadForm((uF) => ({ ...uF, processedImages: [] }));
+  };
+
+  const onFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      await submitUploadForm();
+      clearForm();
+    } catch (err: any) {
+      console.error(err.message);
+    }
+  };
+
   return (
     <>
       <Form onSubmit={onFormSubmit} encType="multipart/form-data">
-        <FormControls>
-          <FormRow>
-            <FormGroup>
-              <Input
-                invalid={hasError('alt')}
-                type="text"
-                value={uploadForm.alt}
-                placeholder="Alt"
-                onChange={(e) => setUploadForm((uF) => ({ ...uF, alt: e.target.value }))}
-              />
-              <FormError invalid={hasError('alt')}>{getError('alt') || 'no error, congrats!'}</FormError>
-            </FormGroup>
-          </FormRow>
-
-          <FormRow>
-            <FormGroup>
-              <Input
-                invalid={hasError('caption')}
-                type="text"
-                value={uploadForm.caption}
-                placeholder="Caption"
-                onChange={(e) => setUploadForm((uF) => ({ ...uF, caption: e.target.value }))}
-              />
-              <FormError invalid={hasError('caption')}>{getError('caption') || 'no error, congrats!'}</FormError>
-            </FormGroup>
-          </FormRow>
-
-          <FormFooter>
-            <FormAction
-              type="button"
-              onClick={(e) => {
-                if (fileInputRef.current) {
-                  fileInputRef.current.type = 'text';
-                  fileInputRef.current.type = 'file';
-                }
-
-                setPreviewImages([]);
-                setUploadForm((uF) => ({ ...uF, processedImages: [] }));
-              }}
-            >
-              Clear
-            </FormAction>
-            <FormSubmit>Upload</FormSubmit>
-          </FormFooter>
-        </FormControls>
-
-        {previewImages.length > 0 ? (
-          <FormPreview>
-            {previewImages.map((previewImage, idx) => (
-              <FormPreviewHint data-text={`${previewImage.width}px/${readableFileSize(previewImage.size)}`} key={idx}>
-                <Image
-                  src={previewImage.src}
-                  width={previewImage.width}
-                  height={previewImage.height}
-                  alt={uploadForm.alt}
-                  title={uploadForm.caption}
-                  objectFit="cover"
+        <FormContainer>
+          <FormControls>
+            <FormRow>
+              <FormGroup>
+                <Input
+                  invalid={hasError('alt')}
+                  type="text"
+                  value={uploadForm.alt}
+                  placeholder="Alt"
+                  onChange={(e) => setUploadForm((uF) => ({ ...uF, alt: e.target.value }))}
                 />
-              </FormPreviewHint>
-            ))}
-          </FormPreview>
-        ) : (
-          <FormLabel invalid={hasError('photo')}>
-            <FormPlaceholder>
-              <CloudUploadIcon />
-              <span>Choose a media file</span>
-            </FormPlaceholder>
-            <FormError invalid={hasError('photo')}>{getError('photo') || 'no error, congrats!'}</FormError>
-            <input ref={fileInputRef} type="file" name="photo" accept="image/*" onChange={onImageChange} />
-          </FormLabel>
-        )}
+                <FormError invalid={hasError('alt')}>{getError('alt') || 'no error, congrats!'}</FormError>
+              </FormGroup>
+            </FormRow>
+
+            <FormRow>
+              <FormGroup>
+                <Input
+                  invalid={hasError('caption')}
+                  type="text"
+                  value={uploadForm.caption}
+                  placeholder="Caption"
+                  onChange={(e) => setUploadForm((uF) => ({ ...uF, caption: e.target.value }))}
+                />
+                <FormError invalid={hasError('caption')}>{getError('caption') || 'no error, congrats!'}</FormError>
+              </FormGroup>
+            </FormRow>
+
+            <FormFooter>
+              <FormAction type="button" onClick={clearForm}>
+                Clear
+              </FormAction>
+              <FormSubmit>Upload</FormSubmit>
+            </FormFooter>
+          </FormControls>
+
+          {previewImages.length > 0 ? (
+            <FormPreview>
+              {previewImages.map((previewImage, idx) => (
+                <FormPreviewHint data-text={`${previewImage.width}px/${readableFileSize(previewImage.size)}`} key={idx}>
+                  <Image
+                    src={previewImage.src}
+                    width={previewImage.width}
+                    height={previewImage.height}
+                    alt={uploadForm.alt}
+                    title={uploadForm.caption}
+                    objectFit="cover"
+                  />
+                </FormPreviewHint>
+              ))}
+            </FormPreview>
+          ) : (
+            <FormLabel invalid={hasError('photo')}>
+              <FormPlaceholder>
+                <CloudUploadIcon />
+                <span>Choose a media file</span>
+              </FormPlaceholder>
+              <FormError invalid={hasError('photo')}>{getError('photo') || 'no error, congrats!'}</FormError>
+              <input ref={fileInputRef} type="file" name="photo" accept="image/*" onChange={onImageChange} />
+            </FormLabel>
+          )}
+        </FormContainer>
       </Form>
     </>
   );

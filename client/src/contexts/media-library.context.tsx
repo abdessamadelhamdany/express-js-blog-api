@@ -7,6 +7,7 @@ import { MediaLibrary } from '../interfaces/models/MediaLibrary';
 export interface MediaLibraryUploadForm {
   alt: string;
   caption: string;
+  filename: string;
   processedImages: Blob[];
 }
 
@@ -27,6 +28,7 @@ const initialState: IMediaLibraryContext = {
   uploadForm: {
     alt: '',
     caption: '',
+    filename: '',
     processedImages: [],
   },
   setUploadForm() {},
@@ -55,14 +57,25 @@ export const MediaLibraryProvider: FC<Props> = ({ children }) => {
       const data = new FormData();
       data.append('alt', uploadForm.alt);
       data.append('caption', uploadForm.caption);
-      uploadForm.processedImages.forEach((photo) => data.append('photos', photo));
+      uploadForm.processedImages.forEach((photo) => data.append('photos', photo, uploadForm.filename));
 
       axios
         .post('/api/media-library/upload', data)
         .then((res: AxiosResponse) => {
-          console.log('Response data:', res.data.data.mediaLibrary);
+          let uploadedMediaLibrary: MediaLibrary = res.data.data.mediaLibrary;
 
-          setMediaLibrary((mediaLibrary) => [...res.data.data.mediaLibrary, ...mediaLibrary]);
+          if (uploadedMediaLibrary.mediaFiles) {
+            uploadedMediaLibrary.mediaFiles = [
+              uploadedMediaLibrary.mediaFiles.reduce((previous, current) => {
+                const currentWidth = current.width || 0;
+                const previousWidth = previous.width || 0;
+
+                return currentWidth > previousWidth ? current : previous;
+              }),
+            ];
+          }
+
+          setMediaLibrary((mediaLibrary) => [uploadedMediaLibrary, ...mediaLibrary]);
         })
         .catch((err: AxiosError) => {
           if (err.response && [400].includes(err.response.status) && err.response.data.errors) {
