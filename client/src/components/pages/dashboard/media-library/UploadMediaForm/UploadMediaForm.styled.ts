@@ -10,7 +10,7 @@ import { screens, size } from '@/src/styles/screens';
 export const Form = styled(BaseForm)`
   width: 100%;
   display: flex;
-  margin: 0 auto;
+  margin: 0 auto 1rem;
   column-gap: 1.5rem;
   justify-content: space-between;
   background-color: ${({ theme }) => theme.color.global.white};
@@ -78,11 +78,12 @@ export const FormPreview = styled.div`
   max-width: 30rem;
   align-items: center;
   justify-content: flex-start;
-  max-height: 24rem;
+  max-height: 20rem;
   overflow-y: auto;
+  padding-right: 4px;
 
   ::-webkit-scrollbar {
-    width: 0;
+    width: 5px;
   }
 `;
 

@@ -13,6 +13,12 @@ namespace MediaLibraryInterfaces {
     deleted?: boolean;
   }
 
+  export interface UploadParams {
+    alt: string;
+    caption: string;
+    processedImages: File[] | { [fieldname: string]: Express.Multer.File[] } | undefined;
+  }
+
   export interface SafeMediaLibrary {
     id: number;
     path?: string;

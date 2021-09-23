@@ -1,3 +1,4 @@
+import sizeOf from 'image-size';
 import { ValidationError } from 'class-validator';
 import { FindConditions, FindManyOptions, getRepository, IsNull, Not } from 'typeorm';
 import { ResourceValidationError } from '../../exceptions';
@@ -63,30 +64,54 @@ const service = {
 
   async create(
     propertyName: string,
-    file?: MediaLibraryInterfaces.File,
-  ): Promise<MediaLibraryInterfaces.SafeMediaLibrary> {
-    const errors = service.helpers.validate(propertyName, file);
+    params: MediaLibraryInterfaces.UploadParams,
+  ): Promise<MediaLibraryInterfaces.SafeMediaLibrary[]> {
+    let errors: ValidationError[] = [];
+    const mediaLibrary: MediaLibraryInterfaces.SafeMediaLibrary[] = [];
 
-    if (errors.length || !file) {
+    if (params.processedImages?.length === 0) {
+      errors.push({
+        property: propertyName,
+        constraints: {
+          isNotEmpty: `${propertyName} should not be empty`,
+        },
+      });
       throw new ResourceValidationError('media-library', errors);
     }
 
-    const alt = file.originalname.replace(/\.[^.]+$/, '');
-    const { fieldname, mimetype, size, destination, filename, path } = file;
+    if (Array.isArray(params.processedImages)) {
+      for (const file of params.processedImages) {
+        errors = service.helpers.validate(propertyName, file);
 
-    const mediaFile = await service.repositories.mediaLibrary.save(
-      service.repositories.mediaLibrary.create({
-        alt,
-        path,
-        size,
-        filename,
-        mimetype,
-        fieldname,
-        destination,
-      }),
-    );
+        if (errors.length || !file) {
+          throw new ResourceValidationError('media-library', errors);
+        }
 
-    return service.helpers.safeMediaLibrary(mediaFile);
+        const { fieldname, mimetype, size, destination, filename, path } = file;
+
+        const { width, height } = sizeOf(path);
+
+        // can be changed to insert, for single query
+        const mediaFile = await service.repositories.mediaLibrary.save(
+          service.repositories.mediaLibrary.create({
+            path,
+            size,
+            width,
+            height,
+            filename,
+            mimetype,
+            fieldname,
+            destination,
+            caption: params.caption,
+            alt: params.alt || file.originalname.replace(/\.[^.]+$/, ''),
+          }),
+        );
+
+        mediaLibrary.push(service.helpers.safeMediaLibrary(mediaFile));
+      }
+    }
+
+    return mediaLibrary;
   },
 };
 

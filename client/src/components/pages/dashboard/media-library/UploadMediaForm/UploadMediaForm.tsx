@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import React, { ChangeEvent, useRef, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useRef, useState } from 'react';
 import { CloudUploadIcon } from '@heroicons/react/outline';
 import { FormError, Input, FormRow, FormGroup, FormSection, Label } from '@/src/core-ui/forms';
 import {
@@ -13,19 +13,24 @@ import {
   FormPreviewHint,
   FormAction,
 } from './UploadMediaForm.styled';
-import { PreviewImage, useImageProcessing } from '@/src/hooks/useImageProcessing';
-import { useMediaLibrary } from '@/src/hooks/contexts/useMediaLibrary';
 import { readableFileSize } from '@/src/lib/helpers';
+import { useMediaLibrary } from '@/src/hooks/contexts/useMediaLibrary';
+import { PreviewImage, useImageProcessing } from '@/src/hooks/useImageProcessing';
 
 export default function UploadMediaFormComponent() {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { blobToImageElement, validateImage, processImage } = useImageProcessing();
-  const { setErrors, hasError, getError, uploadForm, setUploadForm } = useMediaLibrary();
-  const [processedImages, setProcessedImages] = useState<Blob[]>([]);
   const [previewImages, setPreviewImages] = useState<PreviewImage[]>([]);
+  const { blobToImageElement, validateImage, processImage } = useImageProcessing();
+  const { setErrors, hasError, getError, uploadForm, setUploadForm, submitUploadForm } = useMediaLibrary();
 
-  const mediaUploader = () => {
-    console.log(processedImages);
+  const onFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      await submitUploadForm();
+    } catch (err: any) {
+      console.error(err.message);
+    }
   };
 
   const onImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -60,24 +65,22 @@ export default function UploadMediaFormComponent() {
     }
 
     // Processing image
-    const procImages = await processImage(file);
-    setProcessedImages(procImages);
+    const processedImages = await processImage(file);
+    setUploadForm((uF) => ({ ...uF, processedImages }));
 
     // Set preview images
     const prevImages: PreviewImage[] = [];
-    for (const procImage of procImages) {
-      const prevImage = await blobToImageElement(procImage);
+    for (const processedImage of processedImages) {
+      const prevImage = await blobToImageElement(processedImage);
       prevImages.push(prevImage);
     }
-
-    console.log('prevImages', prevImages);
 
     setPreviewImages(prevImages);
   };
 
   return (
     <>
-      <Form onSubmit={mediaUploader} encType="multipart/form-data">
+      <Form onSubmit={onFormSubmit} encType="multipart/form-data">
         <FormControls>
           <FormRow>
             <FormGroup>
@@ -115,7 +118,7 @@ export default function UploadMediaFormComponent() {
                 }
 
                 setPreviewImages([]);
-                setProcessedImages([]);
+                setUploadForm((uF) => ({ ...uF, processedImages: [] }));
               }}
             >
               Clear

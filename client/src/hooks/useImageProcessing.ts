@@ -82,7 +82,7 @@ const compressImage = async (image: Blob, quality: number = 0.75): Promise<Blob>
  * @param image image that will be processed
  * @param width processed images width
  */
-const processImage = async (image: Blob, resizeWidth: number | number[] = [460, 720]): Promise<Blob[]> => {
+const processImage = async (image: Blob, resizeWidth: number | number[] = [468, 768]): Promise<Blob[]> => {
   if (typeof resizeWidth === 'number') {
     resizeWidth = [resizeWidth];
   }

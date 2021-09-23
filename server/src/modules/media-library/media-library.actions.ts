@@ -19,22 +19,19 @@ export default {
   },
 
   async upload(req: Request, res: Response, next: NextFunction) {
-    const middleware = localProvider.single('photo');
+    const middleware = localProvider.array('photos');
 
     return middleware(req, res, async (error) => {
-      // https://www.youtube.com/watch?v=n-AuBy-z4_A
-      // https://www.npmjs.com/package/sharp
-      // Node JS Image Resize Before Saving || Sharp & Multer || Full Stack App #5
       if (error) {
         next(error);
         return;
       }
 
       try {
-        const mediaFile = await mediaLibraryService.create('photo', req.file);
+        const mediaLibrary = await mediaLibraryService.create('photos', { ...req.body, processedImages: req.files });
 
         res.status(StatusCodes.CREATED).json({
-          data: { mediaFile },
+          data: { mediaLibrary },
           status: { code: StatusCodes.CREATED, phrase: ReasonPhrases.CREATED },
         });
       } catch (error) {

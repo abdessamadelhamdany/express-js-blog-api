@@ -39,7 +39,7 @@ const upload = multer({
 
 const localProvider = {
   single: (fieldName: string) => upload.single(fieldName),
-  array: (fieldname: string, maxCount: number = 24) => upload.array(fieldname, maxCount),
+  array: (fieldname: string, maxCount: number = 6) => upload.array(fieldname, maxCount),
 };
 
 export default localProvider;
