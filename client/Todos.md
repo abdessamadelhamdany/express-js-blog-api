@@ -2,7 +2,29 @@ Todos
 https://github.com/svg/svgo
 https://imageoptim.com/mac
 https://www.npmjs.com/package/yoastseo
+https://www.npmjs.com/package/limiter
+https://www.youtube.com/watch?v=gdauQEr-Jls
 
+https://github.com/quilljs/quill/issues/90
+https://github.com/quilljs/quill/issues/1089
+
+When sharing posts:
+?utm_campaign=post-f99d8130c9&utm_medium=email&utm_source=ih-series-stories
+
+Make programmers community
+Learn together with other learners
+Make friends, through direct messages
+People can choose if they want every member to contact them
+All this features are paid
+
+Use font from this one
+https://nesslabs.com/topic/life
+
+titles, navlinks, buttons, subtitle
+https://fonts.google.com/noto/specimen/Noto+Sans
+
+paragraph, links
+https://fonts.google.com/noto/specimen/Noto+Serif
 /\*\*
 
 - Steal their code (use service worker)
@@ -36,6 +58,9 @@ https://github.com/gauti123456/ReactWysiwygEditor
 https://medium.com/p/ddca76d395e0/edit
 
 https://www.youtube.com/watch?v=CmuUQymjbRo&list=PLN3n1USn4xllb05dQVmRbVtGP2aM4seVq
+
+Inspiration for the editor
+https://hemingwayapp.com/
 
 We need settings page, where we show everything related to managing projects
 users settings, informations, billing infos

@@ -1,21 +1,30 @@
+import 'quill/dist/quill.snow.css';
 import { debounce } from 'lodash';
-import 'quill/dist/quill.bubble.css';
 import React, { useEffect, useRef } from 'react';
 import Quill, { QuillOptionsStatic } from 'quill';
-import { Editor } from './W3Editor.styled';
+import { Editor, EditorToolbar, EditorWrapper } from './W3Editor.styled';
 import { randomQuote } from '@/src/lib/quotes';
 import { HLJS_LANGUAGES } from '@/src/lib/constants';
 
-var quillOptions: QuillOptionsStatic = {
-  theme: 'bubble',
+const imageHandler = (e: any) => {
+  console.log('imageHandler', e);
+};
+
+const linkHandler = (e: any) => {
+  console.log('linkHandler', e);
+};
+
+const quillOptions: QuillOptionsStatic = {
+  theme: 'snow',
   modules: {
     syntax: true,
-    toolbar: [
-      ['bold', 'italic', 'underline'],
-      ['link', 'image'],
-      [{ header: [1, 2, 3, 4, 5, 6, false] }],
-      ['blockquote', 'code-block'],
-    ],
+    toolbar: {
+      container: '#w3editor-toolbar',
+      handlers: {
+        link: linkHandler,
+        image: imageHandler,
+      },
+    },
   },
   placeholder: randomQuote(),
 };
@@ -52,5 +61,40 @@ export default function W3Editor({ content, placeholder, setContent }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return <Editor ref={ref} />;
+  return (
+    <EditorWrapper>
+      <EditorToolbar id="w3editor-toolbar">
+        <span className="ql-formats">
+          <button className="ql-bold"></button>
+          <button className="ql-italic"></button>
+          <button className="ql-code"></button>
+        </span>
+
+        <span className="ql-formats">
+          <select className="ql-header" defaultValue="0">
+            <option value="0"></option>
+            <option value="3"></option>
+            <option value="2"></option>
+            <option value="1"></option>
+          </select>
+          <button className="ql-blockquote"></button>
+          <button className="ql-code-block"></button>
+        </span>
+
+        <span className="ql-formats">
+          <button className="ql-list" value="ordered"></button>
+          <button className="ql-list" value="bullet"></button>
+          <select className="ql-align"></select>
+        </span>
+
+        <span className="ql-formats">
+          <button className="ql-link"></button>
+          <button className="ql-image"></button>
+          <button className="ql-video"></button>
+        </span>
+      </EditorToolbar>
+
+      <Editor ref={ref}></Editor>
+    </EditorWrapper>
+  );
 }
