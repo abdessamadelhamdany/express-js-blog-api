@@ -19,7 +19,7 @@ interface Props {
 }
 
 export default function MediaFilesComponent({ mediaLibrary: initialMediaLibrary }: Props) {
-  const { mediaLibrary, setMediaLibrary } = useMediaLibrary();
+  const { mediaLibrary, setMediaLibrary, mediaFile, setMediaFile } = useMediaLibrary();
 
   useEffect(() => {
     setMediaLibrary(
@@ -45,7 +45,15 @@ export default function MediaFilesComponent({ mediaLibrary: initialMediaLibrary 
       {mediaLibrary.map((mediaLib, idx) => (
         <div key={idx}>
           {mediaLib.mediaFiles && mediaLib.mediaFiles.length > 0 && mediaLib.mediaFiles[0].path && (
-            <MediaFile key={mediaLib.id}>
+            <MediaFile
+              key={mediaLib.id}
+              className={mediaFile.id === mediaLib.mediaFiles[0].id ? 'active' : ''}
+              onClick={() => {
+                if (mediaLib.mediaFiles && mediaLib.mediaFiles.length > 0) {
+                  setMediaFile(mediaLib.mediaFiles[0]);
+                }
+              }}
+            >
               <ResponsiveImage src={mediaLib.mediaFiles[0].path} alt={mediaLib.alt} />
               <MediaFileDetail>
                 <MediaFileTitle>{mediaLib.caption || mediaLib.alt}</MediaFileTitle>

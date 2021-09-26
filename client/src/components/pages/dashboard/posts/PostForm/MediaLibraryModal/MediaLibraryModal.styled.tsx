@@ -27,10 +27,28 @@ export const MediaLibraryModalContent = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100%;
   margin: 0 auto;
+  max-height: 100%;
   max-width: 58rem;
   background-color: white;
+`;
+
+export const MediaLibraryModalTabs = styled.div`
+  display: flex;
+  padding: 0 14px 1rem;
+  align-items: center;
+`;
+
+export const MediaLibraryModalTab = styled.button`
+  border: none;
+  padding: 0.68rem 1.15rem;
+  border-bottom: 1px solid transparent;
+  background-color: transparent;
+
+  &.active {
+    background-color: ${({ theme }) => theme.color.gray[200]};
+    border-bottom-color: ${({ theme }) => theme.color.gray[300]};
+  }
 `;
 
 export const UploadMediaFormWrapper = styled.div``;

@@ -20,7 +20,7 @@ interface Props {
 export default function W3Editor({ content, placeholder, setContent }: Props) {
   const editorRef = useRef(null);
   const toolbarRef = useRef(null);
-  const { isMediaLibraryModalOpen, setIsMediaLibraryModalOpen } = useMediaLibrary();
+  const { isMediaLibraryModalOpen, setIsMediaLibraryModalOpen, mediaFile } = useMediaLibrary();
 
   useEffect(() => {
     const imageHandler = (e: any) => {
@@ -119,6 +119,11 @@ export default function W3Editor({ content, placeholder, setContent }: Props) {
             <button className="ql-link"></button>
             <button className="ql-image"></button>
             <button className="ql-video"></button>
+          </span>
+
+          <span className="ql-formats">
+            <button className="ql-script" value="sub"></button>
+            <button className="ql-script" value="super"></button>
           </span>
         </EditorToolbar>
 

@@ -27,8 +27,17 @@ export const MediaFile = styled.div`
   row-gap: 5px;
   display: flex;
   padding: 0.5rem;
+  cursor: pointer;
   flex-direction: column;
-  background-color: #ffffff;
+  transition: all 150ms;
+  border: 1px solid transparent;
+  background-color: white;
+
+  &:hover,
+  &.active {
+    border-color: ${({ theme }) => theme.color.gray[500]};
+    background-color: ${({ theme }) => theme.color.gray[200]};
+  }
 `;
 
 export const MediaFileDetail = styled.div`

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { XIcon } from '@heroicons/react/outline';
 import { MediaLibrary } from '@/src/interfaces';
 import { Container, Section } from '@/src/core-ui/layouts';
@@ -7,6 +7,8 @@ import {
   MediaLibraryModalClose,
   MediaLibraryModalContent,
   MediaLibraryModalHeader,
+  MediaLibraryModalTab,
+  MediaLibraryModalTabs,
   MediaLibraryModalWrapper,
   UploadMediaFormWrapper,
 } from './MediaLibraryModal.styled';
@@ -14,6 +16,7 @@ import { MediaFiles, UploadMediaForm } from '@/src/components/pages/dashboard/me
 import { useMediaLibrary } from '@/src/hooks/contexts/useMediaLibrary';
 
 export default function MediaLibraryModal({ mediaLibrary }: { mediaLibrary: MediaLibrary[] }) {
+  const [activeTab, setActiveTab] = useState<'media-files' | 'upload-file'>('media-files');
   const { isMediaLibraryModalOpen, setIsMediaLibraryModalOpen } = useMediaLibrary();
 
   return isMediaLibraryModalOpen ? (
@@ -25,13 +28,32 @@ export default function MediaLibraryModal({ mediaLibrary }: { mediaLibrary: Medi
           </MediaLibraryModalClose>
         </MediaLibraryModalHeader>
 
-        <UploadMediaFormWrapper>
-          <UploadMediaForm />
-        </UploadMediaFormWrapper>
+        <MediaLibraryModalTabs>
+          <MediaLibraryModalTab
+            className={activeTab === 'media-files' ? 'active' : ''}
+            onClick={() => setActiveTab('media-files')}
+          >
+            Media Files
+          </MediaLibraryModalTab>
+          <MediaLibraryModalTab
+            className={activeTab === 'upload-file' ? 'active' : ''}
+            onClick={() => setActiveTab('upload-file')}
+          >
+            Upload New
+          </MediaLibraryModalTab>
+        </MediaLibraryModalTabs>
 
-        <MediaFilesWrapper>
-          <MediaFiles mediaLibrary={mediaLibrary} />
-        </MediaFilesWrapper>
+        {activeTab === 'upload-file' && (
+          <UploadMediaFormWrapper>
+            <UploadMediaForm />
+          </UploadMediaFormWrapper>
+        )}
+
+        {activeTab === 'media-files' && (
+          <MediaFilesWrapper>
+            <MediaFiles mediaLibrary={mediaLibrary} />
+          </MediaFilesWrapper>
+        )}
       </MediaLibraryModalContent>
     </MediaLibraryModalWrapper>
   ) : null;
