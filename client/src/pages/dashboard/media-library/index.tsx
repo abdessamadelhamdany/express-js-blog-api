@@ -1,12 +1,11 @@
-import axios, { AxiosResponse } from 'axios';
 import { GetServerSideProps } from 'next';
+import axios, { AxiosResponse } from 'axios';
 import { DashboardLayout } from '@/src/layouts';
 import { Title } from '@/src/core-ui/typography';
 import { MediaLibraryProvider } from '@/src/contexts';
 import { MediaLibrary } from '@/src/interfaces/models/MediaLibrary';
 import { Container, Header, Main, Section } from '@/src/core-ui/layouts';
-import MediaFiles from '@/src/components/pages/dashboard/media-library/MediaFiles';
-import UploadMediaForm from '@/src/components/pages/dashboard/media-library/UploadMediaForm';
+import { MediaFiles, UploadMediaForm } from '@/src/components/pages/dashboard/media-library';
 
 export default function MediaLibraryHome({ mediaLibrary }: { mediaLibrary: MediaLibrary[] }) {
   return (

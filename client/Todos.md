@@ -5,9 +5,6 @@ https://www.npmjs.com/package/yoastseo
 https://www.npmjs.com/package/limiter
 https://www.youtube.com/watch?v=gdauQEr-Jls
 
-https://github.com/quilljs/quill/issues/90
-https://github.com/quilljs/quill/issues/1089
-
 When sharing posts:
 ?utm_campaign=post-f99d8130c9&utm_medium=email&utm_source=ih-series-stories
 
@@ -17,7 +14,7 @@ Make friends, through direct messages
 People can choose if they want every member to contact them
 All this features are paid
 
-Use font from this one
+Use font from this one, for reading articles (public)
 https://nesslabs.com/topic/life
 
 titles, navlinks, buttons, subtitle
@@ -45,7 +42,6 @@ Move core ui to npm package, to share across all apps
 Add feedback form at the right bottom
 
 https://github.com/ocruzv/typescript-typeorm-express-starter/blob/master/src/controller/AuthController.ts
-https://quilljs.com/docs/download/
 
 https://openid.net/connect/
 

@@ -8,10 +8,10 @@ export interface Post {
   title: string;
   slug: string;
   slugEditedByUser?: boolean;
-  thumbnail: string;
-  description: string;
-  excerpt: string;
-  content: string;
+  thumbnail?: string;
+  description?: string;
+  excerpt?: string;
+  content?: string;
   viewCount?: number;
   status?: PostStatus;
   createdAt?: Date;

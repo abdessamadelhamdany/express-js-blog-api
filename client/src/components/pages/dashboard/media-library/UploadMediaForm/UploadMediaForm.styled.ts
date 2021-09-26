@@ -86,7 +86,7 @@ export const FormPreview = styled.div`
   overflow-y: auto;
   padding-right: 4px;
 
-  ::-webkit-scrollbar {
+  &::-webkit-scrollbar {
     width: 5px;
   }
 `;

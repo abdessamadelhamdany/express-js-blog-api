@@ -12,6 +12,8 @@ export interface MediaLibraryUploadForm {
 }
 
 export interface IMediaLibraryContext {
+  isMediaLibraryModalOpen: boolean;
+  setIsMediaLibraryModalOpen: Dispatch<SetStateAction<boolean>>;
   uploadForm: MediaLibraryUploadForm;
   setUploadForm: Dispatch<SetStateAction<MediaLibraryUploadForm>>;
   mediaFile: MediaLibrary;
@@ -25,6 +27,8 @@ export interface IMediaLibraryContext {
 }
 
 const initialState: IMediaLibraryContext = {
+  isMediaLibraryModalOpen: false,
+  setIsMediaLibraryModalOpen() {},
   uploadForm: {
     alt: '',
     caption: '',
@@ -51,6 +55,7 @@ export const MediaLibraryProvider: FC<Props> = ({ children }) => {
   const [mediaFile, setMediaFile] = useState<MediaLibrary>(initialState.mediaFile);
   const [mediaLibrary, setMediaLibrary] = useState<MediaLibrary[]>(initialState.mediaLibrary);
   const [uploadForm, setUploadForm] = useState<MediaLibraryUploadForm>(initialState.uploadForm);
+  const [isMediaLibraryModalOpen, setIsMediaLibraryModalOpen] = useState<boolean>(initialState.isMediaLibraryModalOpen);
 
   const memoedValue = useMemo(() => {
     const submitUploadForm = () => {
@@ -85,6 +90,8 @@ export const MediaLibraryProvider: FC<Props> = ({ children }) => {
     };
 
     return {
+      isMediaLibraryModalOpen,
+      setIsMediaLibraryModalOpen,
       uploadForm,
       setUploadForm,
       mediaFile,
@@ -97,6 +104,8 @@ export const MediaLibraryProvider: FC<Props> = ({ children }) => {
       setErrors,
     };
   }, [
+    isMediaLibraryModalOpen,
+    setIsMediaLibraryModalOpen,
     uploadForm,
     setUploadForm,
     mediaFile,

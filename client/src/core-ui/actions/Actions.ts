@@ -46,6 +46,7 @@ export const IconAction = styled.button<IconActionAttrs>`
   padding: 0 14px;
   display: flex;
   align-items: center;
+  justify-content: center;
   background-color: transparent;
   color: ${({ theme, variant }) => getVariantInfo(theme, variant)};
 
