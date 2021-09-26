@@ -35,8 +35,9 @@ export const MediaLibraryModalContent = styled.div`
 
 export const MediaLibraryModalTabs = styled.div`
   display: flex;
-  padding: 0 14px 1rem;
+  padding: 14px 1rem;
   align-items: center;
+  background-color: white;
 `;
 
 export const MediaLibraryModalTab = styled.button`

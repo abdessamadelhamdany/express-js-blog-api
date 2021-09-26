@@ -1,11 +1,13 @@
 import 'quill/dist/quill.snow.css';
+import Quill from 'quill';
 import { debounce } from 'lodash';
 import React, { useEffect, useRef } from 'react';
-import Quill, { QuillOptionsStatic } from 'quill';
-import { Editor, EditorToolbar, EditorWrapper } from './W3Editor.styled';
 import { randomQuote } from '@/src/lib/quotes';
 import { HLJS_LANGUAGES } from '@/src/lib/constants';
 import { useMediaLibrary } from '@/src/hooks/contexts/useMediaLibrary';
+import { Editor, EditorToolbar, EditorWrapper } from './W3Editor.styled';
+
+let quill: Quill;
 
 window.hljs.configure({
   languages: HLJS_LANGUAGES,
@@ -20,63 +22,32 @@ interface Props {
 export default function W3Editor({ content, placeholder, setContent }: Props) {
   const editorRef = useRef(null);
   const toolbarRef = useRef(null);
-  const { isMediaLibraryModalOpen, setIsMediaLibraryModalOpen, mediaFile } = useMediaLibrary();
+  const { setIsMediaLibraryModalOpen, insertedImage, setInsertedImage } = useMediaLibrary();
 
   useEffect(() => {
-    const imageHandler = (e: any) => {
-      setIsMediaLibraryModalOpen(true);
-      console.log('isMediaLibraryModalOpen', isMediaLibraryModalOpen);
-
-      // const input = document.createElement('input');
-      // input.setAttribute('type', 'file');
-      // input.setAttribute('accept', 'image/*');
-      // input.click();
-      // input.onhange = (e: InputEvent) => {
-      //   const file = e.target.files[0];
-      //   const reader = new window.FileReader();
-      //   reader.readAsDataURL(file);
-      // reader.addEventListener('load', () => {
-      //   let imageUpload = new Upload({
-      //     uri: reader.result,
-      //     type: file.type,
-      //     size: file.size,
-      //     fileName: file.name,
-      //     source: 'text editor'
-      //   })
-      //   imageUpload
-      //     .save()
-      //     .then(data => {
-      //       const range = quill.getSelection()
-      //       quill.insertEmbed(range.index, 'image', env.siteUrl + '/api/upload/' + data.fileName)
-      //     })
-      // }, false)
-      // };
-      // uploaded.then
-      // this.insertToEditor(imageUrl);
-    };
-
-    const linkHandler = (e: any) => {
-      console.log('linkHandler', e);
-    };
-
-    const quillOptions: QuillOptionsStatic = {
+    quill = new Quill(editorRef.current || '', {
       theme: 'snow',
       modules: {
         syntax: true,
         toolbar: {
           container: toolbarRef.current,
           handlers: {
-            link: linkHandler,
-            image: imageHandler,
+            link(e: any) {
+              console.log('linkHandler', e);
+            },
+            image() {
+              setIsMediaLibraryModalOpen(true);
+            },
           },
         },
       },
       placeholder: placeholder ?? randomQuote(),
-    };
+    });
 
-    const quill = new Quill(editorRef.current || '', quillOptions);
+    /** Initialize editor content */
     quill.clipboard.dangerouslyPasteHTML(0, content);
 
+    /** Syncronize editor content state */
     quill.on(
       'text-change',
       debounce(() => {
@@ -87,6 +58,16 @@ export default function W3Editor({ content, placeholder, setContent }: Props) {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (typeof insertedImage !== 'undefined') {
+      const range = quill.getSelection();
+      quill.insertEmbed(range.index, 'image', `/${insertedImage}`);
+      quill.setSelection(range.index + 1, 0);
+
+      setInsertedImage(undefined);
+    }
+  }, [insertedImage, setInsertedImage]);
 
   return (
     <>
@@ -100,10 +81,10 @@ export default function W3Editor({ content, placeholder, setContent }: Props) {
 
           <span className="ql-formats">
             <select className="ql-header" defaultValue="0">
-              <option value="0"></option>
-              <option value="3"></option>
-              <option value="2"></option>
-              <option value="1"></option>
+              <option value="0">P</option>
+              <option value="4">H4</option>
+              <option value="3">H3</option>
+              <option value="2">H2</option>
             </select>
             <button className="ql-blockquote"></button>
             <button className="ql-code-block"></button>
@@ -127,7 +108,7 @@ export default function W3Editor({ content, placeholder, setContent }: Props) {
           </span>
         </EditorToolbar>
 
-        <Editor ref={editorRef}></Editor>
+        <Editor ref={editorRef} onClick={() => quill.focus()}></Editor>
       </EditorWrapper>
     </>
   );

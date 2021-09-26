@@ -5,6 +5,9 @@ https://www.npmjs.com/package/yoastseo
 https://www.npmjs.com/package/limiter
 https://www.youtube.com/watch?v=gdauQEr-Jls
 
+Quilljs
+https://github.com/quilljs/quill/blob/develop/docs/_includes/standalone/full.html
+
 When sharing posts:
 ?utm_campaign=post-f99d8130c9&utm_medium=email&utm_source=ih-series-stories
 

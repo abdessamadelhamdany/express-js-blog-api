@@ -6,8 +6,15 @@ import { MediaLibraryProvider } from '@/src/contexts';
 import { MediaLibrary } from '@/src/interfaces/models/MediaLibrary';
 import { Container, Header, Main, Section } from '@/src/core-ui/layouts';
 import { MediaFiles, UploadMediaForm } from '@/src/components/pages/dashboard/media-library';
+import { useState } from 'react';
+import {
+  MediaLibraryModalTabs,
+  MediaLibraryModalTab,
+} from '@/src/components/pages/dashboard/posts/PostForm/MediaLibraryModal/MediaLibraryModal.styled';
 
 export default function MediaLibraryHome({ mediaLibrary }: { mediaLibrary: MediaLibrary[] }) {
+  const [activeTab, setActiveTab] = useState<'media-files' | 'upload-file'>('media-files');
+
   return (
     <MediaLibraryProvider>
       <DashboardLayout>
@@ -20,8 +27,24 @@ export default function MediaLibraryHome({ mediaLibrary }: { mediaLibrary: Media
 
           <Section>
             <Container>
-              <UploadMediaForm />
-              <MediaFiles mediaLibrary={mediaLibrary} />
+              <MediaLibraryModalTabs>
+                <MediaLibraryModalTab
+                  className={activeTab === 'media-files' ? 'active' : ''}
+                  onClick={() => setActiveTab('media-files')}
+                >
+                  Media Files
+                </MediaLibraryModalTab>
+                <MediaLibraryModalTab
+                  className={activeTab === 'upload-file' ? 'active' : ''}
+                  onClick={() => setActiveTab('upload-file')}
+                >
+                  Upload New
+                </MediaLibraryModalTab>
+              </MediaLibraryModalTabs>
+
+              {activeTab === 'upload-file' && <UploadMediaForm mediaUploaded={() => setActiveTab('media-files')} />}
+
+              {activeTab === 'media-files' && <MediaFiles mediaLibrary={mediaLibrary} />}
             </Container>
           </Section>
         </Main>

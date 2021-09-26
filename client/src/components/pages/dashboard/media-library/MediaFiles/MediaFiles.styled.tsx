@@ -4,9 +4,9 @@ import styled from 'styled-components';
 
 export const MediaFiles = styled.div`
   gap: 1rem;
-  padding: 6px;
   display: grid;
   grid-template-columns: 1fr;
+  background-color: white;
 
   @media ${screens.tablet} {
     grid-template-columns: repeat(2, 1fr);

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import matcher from 'matcher';
-import { ServerStyleSheet } from 'styled-components';
+import { ServerStyleSheet, StyleSheetManager } from 'styled-components';
 import Document, { DocumentContext, Html, Head, Main, NextScript } from 'next/document';
 import { User } from '../interfaces';
 import { routesConfig } from '../config';
@@ -45,7 +45,11 @@ export default class MyDocument extends Document {
 
               /** Assign extra pageProps and return the App component */
               props.pageProps.authUser = authUser;
-              return sheet.collectStyles(<App {...props} />);
+              return sheet.collectStyles(
+                <StyleSheetManager disableVendorPrefixes={process.env.NODE_ENV === 'development'}>
+                  <App {...props} />
+                </StyleSheetManager>
+              );
             },
         });
 

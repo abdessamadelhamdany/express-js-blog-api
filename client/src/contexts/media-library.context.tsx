@@ -12,6 +12,8 @@ export interface MediaLibraryUploadForm {
 }
 
 export interface IMediaLibraryContext {
+  insertedImage: string | undefined;
+  setInsertedImage: Dispatch<SetStateAction<string | undefined>>;
   isMediaLibraryModalOpen: boolean;
   setIsMediaLibraryModalOpen: Dispatch<SetStateAction<boolean>>;
   uploadForm: MediaLibraryUploadForm;
@@ -27,6 +29,8 @@ export interface IMediaLibraryContext {
 }
 
 const initialState: IMediaLibraryContext = {
+  insertedImage: undefined,
+  setInsertedImage() {},
   isMediaLibraryModalOpen: false,
   setIsMediaLibraryModalOpen() {},
   uploadForm: {
@@ -53,43 +57,50 @@ interface Props {}
 export const MediaLibraryProvider: FC<Props> = ({ children }) => {
   const [hasError, getError, setErrors] = useValidationState([]);
   const [mediaFile, setMediaFile] = useState<MediaLibrary>(initialState.mediaFile);
+  const [insertedImage, setInsertedImage] = useState<string | undefined>(undefined);
   const [mediaLibrary, setMediaLibrary] = useState<MediaLibrary[]>(initialState.mediaLibrary);
   const [uploadForm, setUploadForm] = useState<MediaLibraryUploadForm>(initialState.uploadForm);
   const [isMediaLibraryModalOpen, setIsMediaLibraryModalOpen] = useState<boolean>(initialState.isMediaLibraryModalOpen);
 
   const memoedValue = useMemo(() => {
     const submitUploadForm = () => {
-      const data = new FormData();
-      data.append('alt', uploadForm.alt);
-      data.append('caption', uploadForm.caption);
-      uploadForm.processedImages.forEach((photo) => data.append('photos', photo, uploadForm.filename));
+      return new Promise((resolve, reject) => {
+        const data = new FormData();
+        data.append('alt', uploadForm.alt);
+        data.append('caption', uploadForm.caption);
+        uploadForm.processedImages.forEach((photo) => data.append('photos', photo, uploadForm.filename));
 
-      axios
-        .post('/api/media-library/upload', data)
-        .then((res: AxiosResponse) => {
-          let uploadedMediaLibrary: MediaLibrary = res.data.data.mediaLibrary;
+        axios
+          .post('/api/media-library/upload', data)
+          .then((res: AxiosResponse) => {
+            let uploadedMediaLibrary: MediaLibrary = res.data.data.mediaLibrary;
 
-          if (uploadedMediaLibrary.mediaFiles) {
-            uploadedMediaLibrary.mediaFiles = [
-              uploadedMediaLibrary.mediaFiles.reduce((previous, current) => {
-                const currentWidth = current.width || 0;
-                const previousWidth = previous.width || 0;
+            if (uploadedMediaLibrary.mediaFiles) {
+              uploadedMediaLibrary.mediaFiles = [
+                uploadedMediaLibrary.mediaFiles.reduce((previous, current) => {
+                  const currentWidth = current.width || 0;
+                  const previousWidth = previous.width || 0;
 
-                return currentWidth > previousWidth ? current : previous;
-              }),
-            ];
-          }
+                  return currentWidth > previousWidth ? current : previous;
+                }),
+              ];
+            }
 
-          setMediaLibrary((mediaLibrary) => [uploadedMediaLibrary, ...mediaLibrary]);
-        })
-        .catch((err: AxiosError) => {
-          if (err.response && [400].includes(err.response.status) && err.response.data.errors) {
-            setErrors(err.response.data.errors);
-          }
-        });
+            setMediaLibrary((mediaLibrary) => [uploadedMediaLibrary, ...mediaLibrary]);
+            resolve(res);
+          })
+          .catch((err: AxiosError) => {
+            if (err.response && [400].includes(err.response.status) && err.response.data.errors) {
+              setErrors(err.response.data.errors);
+            }
+            reject(err);
+          });
+      });
     };
 
     return {
+      insertedImage,
+      setInsertedImage,
       isMediaLibraryModalOpen,
       setIsMediaLibraryModalOpen,
       uploadForm,
@@ -104,6 +115,8 @@ export const MediaLibraryProvider: FC<Props> = ({ children }) => {
       setErrors,
     };
   }, [
+    insertedImage,
+    setInsertedImage,
     isMediaLibraryModalOpen,
     setIsMediaLibraryModalOpen,
     uploadForm,

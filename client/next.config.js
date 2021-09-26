@@ -7,6 +7,10 @@ module.exports = {
         source: '/api/:path*',
         destination: `${process.env.API_URL}/:path*`,
       },
+      {
+        source: '/static/:path*',
+        destination: `${process.env.API_URL}/static/:path*`,
+      },
     ];
   },
   webpack(config) {

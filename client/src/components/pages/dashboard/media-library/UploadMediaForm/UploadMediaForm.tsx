@@ -18,7 +18,11 @@ import { readableFileSize } from '@/src/lib/helpers';
 import { useMediaLibrary } from '@/src/hooks/contexts/useMediaLibrary';
 import { PreviewImage, useImageProcessing } from '@/src/hooks/useImageProcessing';
 
-export default function UploadMediaFormComponent() {
+interface Props {
+  onMediaUploaded?: () => void;
+}
+
+export default function UploadMediaFormComponent({ onMediaUploaded }: Props) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [previewImages, setPreviewImages] = useState<PreviewImage[]>([]);
   const { blobToImageElement, validateImage, processImage } = useImageProcessing();
@@ -85,6 +89,7 @@ export default function UploadMediaFormComponent() {
     try {
       await submitUploadForm();
       clearForm();
+      onMediaUploaded && onMediaUploaded();
     } catch (err: any) {
       console.error(err.message);
     }

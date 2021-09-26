@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { XIcon } from '@heroicons/react/outline';
 import { MediaLibrary } from '@/src/interfaces';
-import { Container, Section } from '@/src/core-ui/layouts';
 import {
   MediaFilesWrapper,
   MediaLibraryModalClose,
@@ -15,7 +14,11 @@ import {
 import { MediaFiles, UploadMediaForm } from '@/src/components/pages/dashboard/media-library';
 import { useMediaLibrary } from '@/src/hooks/contexts/useMediaLibrary';
 
-export default function MediaLibraryModal({ mediaLibrary }: { mediaLibrary: MediaLibrary[] }) {
+interface Props {
+  mediaLibrary: MediaLibrary[];
+}
+
+export default function MediaLibraryModal({ mediaLibrary }: Props) {
   const [activeTab, setActiveTab] = useState<'media-files' | 'upload-file'>('media-files');
   const { isMediaLibraryModalOpen, setIsMediaLibraryModalOpen } = useMediaLibrary();
 
@@ -45,7 +48,7 @@ export default function MediaLibraryModal({ mediaLibrary }: { mediaLibrary: Medi
 
         {activeTab === 'upload-file' && (
           <UploadMediaFormWrapper>
-            <UploadMediaForm />
+            <UploadMediaForm onMediaUploaded={() => setActiveTab('media-files')} />
           </UploadMediaFormWrapper>
         )}
 

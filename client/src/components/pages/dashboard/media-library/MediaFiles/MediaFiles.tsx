@@ -19,7 +19,8 @@ interface Props {
 }
 
 export default function MediaFilesComponent({ mediaLibrary: initialMediaLibrary }: Props) {
-  const { mediaLibrary, setMediaLibrary, mediaFile, setMediaFile } = useMediaLibrary();
+  const { mediaLibrary, setMediaLibrary, mediaFile, setMediaFile, setInsertedImage, setIsMediaLibraryModalOpen } =
+    useMediaLibrary();
 
   useEffect(() => {
     setMediaLibrary(
@@ -51,6 +52,8 @@ export default function MediaFilesComponent({ mediaLibrary: initialMediaLibrary 
               onClick={() => {
                 if (mediaLib.mediaFiles && mediaLib.mediaFiles.length > 0) {
                   setMediaFile(mediaLib.mediaFiles[0]);
+                  setInsertedImage(mediaLib.mediaFiles[0].path);
+                  setIsMediaLibraryModalOpen(false);
                 }
               }}
             >
