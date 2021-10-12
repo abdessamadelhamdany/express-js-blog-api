@@ -28,7 +28,9 @@ export default {
         throw `File "${module}.actions.ts" was not found or is not a module.`;
       }
 
-      moduleRoutes.forEach((route) => {
+      moduleRoutes.forEach((moduleRoute) => {
+        const route = { ...moduleRoute };
+
         if (typeof route.action === 'string') {
           if (typeof moduleActions[route.action] === 'undefined') {
             throw `Action "${route.action}" was not found on "${module}.actions.ts" file.`;

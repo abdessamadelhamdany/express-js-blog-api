@@ -6,7 +6,7 @@ import PostsInterfaces from './posts.interfaces';
 import { ResourceValidationError } from '../../exceptions';
 
 export default {
-  async index(_: Request, res: Response, next: NewableFunction) {
+  async index(_: Request, res: Response, next: NextFunction) {
     try {
       const posts = await postsService.findAll({ status: PostsInterfaces.PostStatus.PUBLIC });
 
@@ -19,7 +19,7 @@ export default {
     }
   },
 
-  async drafted(_: Request, res: Response, next: NewableFunction) {
+  async drafted(_: Request, res: Response, next: NextFunction) {
     try {
       const posts = await postsService.findAll({ status: PostsInterfaces.PostStatus.DRAFT });
 
@@ -32,7 +32,7 @@ export default {
     }
   },
 
-  async deleted(_: Request, res: Response, next: NewableFunction) {
+  async deleted(_: Request, res: Response, next: NextFunction) {
     try {
       const posts = await postsService.findAll({ deleted: true });
 
@@ -45,7 +45,7 @@ export default {
     }
   },
 
-  async show(req: Request, res: Response, next: NewableFunction) {
+  async show(req: Request, res: Response, next: NextFunction) {
     try {
       const id = parseInt(req.params.id || '0', 10);
       if (isNaN(id)) {
